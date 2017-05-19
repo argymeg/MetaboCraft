@@ -58,7 +58,7 @@ function buildThis(){
     }
 
     var points = bresenham([backx, backy], [frontx,fronty]);
-    for(var l = 0; l < points.length; l++){
+    for(var l = 2; l < points.length - 1; l++){
       this.move('pointzero');
       this.right(points[l][0]);
       this.up(points[l][1]);
