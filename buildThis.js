@@ -1,3 +1,4 @@
+var bresenham = require('bresenham-js');
 
 var data = {molecules:[],reactions:[]};
 data.molecules.push({name:"caffeine",type:"brown",x:0,y:0});
@@ -32,13 +33,12 @@ function buildThis(){
   }
 
   for(var j = 0; j < data.reactions.length; j++){
-
     var reMat;
     if(data.reactions[j].type === "blue"){
       reMat = 22;
     }
     else if(data.reactions[j].type === "purple"){
-      reMat = 203;
+      reMat = 201;
     }
     else if(data.reactions[j].type === "grey"){
       reMat = 1;
@@ -56,13 +56,39 @@ function buildThis(){
         backy = data.molecules[k].y;
       }
     }
-    this.right(backx);
-    this.up(backy);
 
-    var xDist = frontx - backx;
-    var yDist = fronty - backy;
+    var points = bresenham([backx, backy], [frontx,fronty]);
+    for(var l = 0; l < points.length; l++){
+      this.move('pointzero');
+      this.right(points[l][0]);
+      this.up(points[l][1]);
+      this.box(reMat);
+    }
+    this.move('pointzero')
+  }
+}
+var Drone = require('drone');
+Drone.extend(buildThis);
 
 
+//    this.right(backx);
+//    this.up(backy);
+//    var xDist = frontx - backx;
+//    var yDist = fronty - backy;
+//    var slope = yDist - xDist;
+
+/*
+    for(var l = 0 ; l < frontx - backx; l++){
+      this.box(reMat);
+      this.right(1);
+    }
+    for(var m = 0 ; m < fronty - backy; m++){
+      this.box(reMat);
+      this.up(1);
+    }
+*/
+
+/*
 
     var maxDimension = Math.max(xDist,yDist);
 
@@ -78,21 +104,32 @@ function buildThis(){
         yDist--;
       }
     }
+*/
 
 
 /*
-    for(var l = 0 ; l < frontx - backx; l++){
-      this.box(reMat);
-      this.right(1);
+    if(xDist > yDist){
+      var chunkSize = Math.floor(1 + (xDist / (yDist + 1)));
+      for (var o = 0; o < xDist / chunkSize; o++){
+        for(var p = 0; p < chunkSize; p++){
+          this.box(reMat);
+          this.right(1);
+        }
+        this.box(reMat);
+        this.up(1);
+      }
     }
-    for(var m = 0 ; m < fronty - backy; m++){
-      this.box(reMat);
-      this.up(1);
+    else {
+      var chunkSize = Math.floor((yDist / (xDist + 1)));
+      for (var o = 0; o < yDist / chunkSize; o++){
+        for(var p = 0; p < chunkSize; p++){
+          this.box(reMat);
+          this.up(1);
+          echo('gone up!' + p);
+        }
+        this.box(reMat);
+        this.right(1);
+        echo('went right!' + o)
+      }
     }
-    */
-    this.move('pointzero')
-  }
-}
-
-var Drone = require('drone');
-Drone.extend(buildThis);
+*/
