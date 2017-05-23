@@ -1,13 +1,16 @@
 var bresenham = require('bresenham-js');
 
 var data = {molecules:[],reactions:[]};
-data.molecules.push({name:"caffeine",type:"brown",x:0,y:0});
-data.molecules.push({name:"atropine",type:"white",x:10,y:0});
-data.molecules.push({name:"holine",type:"red",x:10,y:15});
+data.molecules.push({name:"caffeine",type:"brown",x:0,y:0,z:0});
+data.molecules.push({name:"atropine",type:"white",x:10,y:0,z:0});
+data.molecules.push({name:"holine",type:"red",x:10,y:15,z:0});
+data.molecules.push({name:"valine",type:"yellow",x:6,y:10,z:10});
 
 data.reactions.push({from:"caffeine",to:"atropine",type:"blue"});
 data.reactions.push({from:"caffeine",to:"holine",type:"purple"});
-data.reactions.push({from:"atropine",to:"holine",type:"grey"})
+data.reactions.push({from:"atropine",to:"holine",type:"grey"});
+data.reactions.push({from:"atropine",to:"valine",type:"purple"});
+data.reactions.push({from:"holine",to:"valine",type:"blue"});
 
 function buildThis(){
 
@@ -24,9 +27,13 @@ function buildThis(){
     else if(data.molecules[i].type === "red"){
       material = 152;
     }
+    else if(data.molecules[i].type === "yellow"){
+      material = 41;
+    }
 
     this.right(data.molecules[i].x);
     this.up(data.molecules[i].y);
+    this.fwd(data.molecules[i].z);
 
     this.box(material,2,2,2);
     this.move('pointzero');
@@ -44,24 +51,27 @@ function buildThis(){
       reMat = 1;
     }
 
-    var frontx, fronty, backx, backy;
+    var frontx, fronty, backx, backy, frontz, backz;
 
     for (var k = 0; k < data.molecules.length; k++){
       if(data.reactions[j].to === data.molecules[k].name){
         frontx = data.molecules[k].x;
         fronty = data.molecules[k].y;
+        frontz = data.molecules[k].z;
       }
       else if(data.reactions[j].from === data.molecules[k].name){
         backx = data.molecules[k].x;
         backy = data.molecules[k].y;
+        backz = data.molecules[k].z;
       }
     }
 
-    var points = bresenham([backx, backy], [frontx,fronty]);
+    var points = bresenham([backx, backy, backz], [frontx, fronty, frontz]);
     for(var l = 2; l < points.length - 1; l++){
       this.move('pointzero');
       this.right(points[l][0]);
       this.up(points[l][1]);
+      this.fwd(points[l][2]);
       this.box(reMat);
     }
     this.move('pointzero')
