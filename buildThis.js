@@ -68,18 +68,18 @@ function buildThis(){
 
     if((frontx - backx === 0) && (fronty - backy === 0)){
       this.move('pointzero');
-      this.right(backx).up(backy).fwd(backz);
-      this.box(reMat, 1, 1, frontz - backz);
+      this.right(backx).up(backy).fwd(backz + 2);
+      this.box(reMat, 1, 1, frontz - backz - 2);
     }
     else if ((frontx - backx === 0) && (frontz - backz === 0)) {
       this.move('pointzero');
-      this.right(backx).up(backy).fwd(backz);
-      this.box(reMat, 1, fronty - backy, 1);
+      this.right(backx).up(backy + 2).fwd(backz);
+      this.box(reMat, 1, fronty - backy -2, 1);
     }
     else if ((fronty - backy === 0) && (frontz - backz === 0)) {
       this.move('pointzero');
-      this.right(backx).up(backy).fwd(backz);
-      this.box(reMat, frontx - backx, 1, 1);
+      this.right(backx + 2).up(backy).fwd(backz);
+      this.box(reMat, frontx - backx -2, 1, 1);
     }
     else{
       var points = bresenham([backx, backy, backz], [frontx, fronty, frontz]);
