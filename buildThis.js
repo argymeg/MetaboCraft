@@ -44,8 +44,8 @@ function buildThis(){
     this.up(data.molecules[i].y);
     this.fwd(data.molecules[i].z);
 
-    //Draw node as 2x2x2 cube
-    this.cuboidX(material, '', 2, 2, 2, true);
+    //Draw node as 3x3x3 cube
+    this.cuboidX(material, '', 3, 3, 3, true);
     this.move('pointzero');
   }
 
@@ -86,22 +86,22 @@ function buildThis(){
     //Adds complexity but is probably measurably cheaper. Revisit.
     if((frontx - backx === 0) && (fronty - backy === 0)){
       this.move('pointzero');
-      this.right(backx).up(backy).fwd(backz + 2);
-      this.cuboidX(reMat, '', 1, 1, frontz - backz - 2, true);
+      this.right(backx).up(backy).fwd(backz + 3);
+      this.cuboidX(reMat, '', 1, 1, frontz - backz - 3, true);
     }
     else if ((frontx - backx === 0) && (frontz - backz === 0)) {
       this.move('pointzero');
-      this.right(backx).up(backy + 2).fwd(backz);
-      this.cuboidX(reMat, '', 1, fronty - backy - 2, 1, true);
+      this.right(backx).up(backy + 3).fwd(backz);
+      this.cuboidX(reMat, '', 1, fronty - backy - 3, 1, true);
     }
     else if ((fronty - backy === 0) && (frontz - backz === 0)) {
       this.move('pointzero');
-      this.right(backx + 2).up(backy).fwd(backz);
-      this.cuboidX(reMat, '', frontx - backx - 2, 1, 1, true);
+      this.right(backx + 3).up(backy).fwd(backz);
+      this.cuboidX(reMat, '', frontx - backx - 3, 1, 1, true);
     }
     else{
       var points = bresenham([backx, backy, backz], [frontx, fronty, frontz]);
-      for(var l = 2; l < points.length - 1; l++){
+      for(var l = 3; l < points.length - 1; l++){
         this.move('pointzero');
         this.right(points[l][0]);
         this.up(points[l][1]);
