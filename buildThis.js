@@ -69,17 +69,17 @@ function buildThis(){
     if((frontx - backx === 0) && (fronty - backy === 0)){
       this.move('pointzero');
       this.right(backx).up(backy).fwd(backz + 2);
-      this.box(reMat, 1, 1, frontz - backz - 2);
+      this.cuboidX(reMat, '', 1, 1, frontz - backz - 2, true);
     }
     else if ((frontx - backx === 0) && (frontz - backz === 0)) {
       this.move('pointzero');
       this.right(backx).up(backy + 2).fwd(backz);
-      this.box(reMat, 1, fronty - backy -2, 1);
+      this.cuboidX(reMat, '', 1, fronty - backy - 2, 1, true);
     }
     else if ((fronty - backy === 0) && (frontz - backz === 0)) {
       this.move('pointzero');
       this.right(backx + 2).up(backy).fwd(backz);
-      this.box(reMat, frontx - backx -2, 1, 1);
+      this.cuboidX(reMat, '', frontx - backx - 2, 1, 1, true);
     }
     else{
       var points = bresenham([backx, backy, backz], [frontx, fronty, frontz]);
@@ -88,7 +88,7 @@ function buildThis(){
         this.right(points[l][0]);
         this.up(points[l][1]);
         this.fwd(points[l][2]);
-        this.box(reMat);
+        this.cuboidX(reMat, '', 1, 1, 1, true);
       }
     }
     this.move('pointzero')
