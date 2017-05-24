@@ -1,5 +1,8 @@
 var bresenham = require('bresenham-js');
+var Drone = require('drone');
 
+//Placeholder imaginary data, TODO: pull externally
+//Current assumption, first node in the graph is 0,0,0. Will that scale?
 var data = {molecules:[],reactions:[]};
 data.molecules.push({name:"caffeine",type:"brown",x:0,y:0,z:0});
 data.molecules.push({name:"atropine",type:"white",x:10,y:0,z:0});
@@ -15,8 +18,13 @@ data.reactions.push({from:"holine",to:"valine",type:"blue"});
 function buildThis(){
 
   this.chkpt('pointzero');
+
+  /*
+    Main node drawing loop!
+  */
   for(var i = 0; i < data.molecules.length; i++){
 
+    //Assign material to node types, TODO: pull externally
     var material;
     if(data.molecules[i].type === "brown"){
       material = 3;
@@ -31,16 +39,23 @@ function buildThis(){
       material = 41;
     }
 
+    //Move drone to node coordinates
     this.right(data.molecules[i].x);
     this.up(data.molecules[i].y);
     this.fwd(data.molecules[i].z);
 
-    this.box(material,2,2,2);
+    //Draw node as 2x2x2 cube
+    this.cuboidX(material, '', 2, 2, 2, true);
     this.move('pointzero');
   }
 
+  /*
+    Main edge drawing loop!
+  */
   for(var j = 0; j < data.reactions.length; j++){
     var reMat;
+
+    //Assign material to edge types, TODO: pull externally
     if(data.reactions[j].type === "blue"){
       reMat = 22;
     }
@@ -51,8 +66,8 @@ function buildThis(){
       reMat = 1;
     }
 
+    //Set start and end coordinates for this edge
     var frontx, fronty, backx, backy, frontz, backz;
-
     for (var k = 0; k < data.molecules.length; k++){
       if(data.reactions[j].to === data.molecules[k].name){
         frontx = data.molecules[k].x;
@@ -66,6 +81,9 @@ function buildThis(){
       }
     }
 
+    //Draw edge as a whole if it is a straight line
+    //Otherwise call bresenham and draw block by block
+    //Adds complexity but is probably measurably cheaper. Revisit.
     if((frontx - backx === 0) && (fronty - backy === 0)){
       this.move('pointzero');
       this.right(backx).up(backy).fwd(backz + 2);
@@ -94,69 +112,4 @@ function buildThis(){
     this.move('pointzero')
   }
 }
-var Drone = require('drone');
 Drone.extend(buildThis);
-
-
-//    this.right(backx);
-//    this.up(backy);
-//    var xDist = frontx - backx;
-//    var yDist = fronty - backy;
-//    var slope = yDist - xDist;
-
-/*
-    for(var l = 0 ; l < frontx - backx; l++){
-      this.box(reMat);
-      this.right(1);
-    }
-    for(var m = 0 ; m < fronty - backy; m++){
-      this.box(reMat);
-      this.up(1);
-    }
-*/
-
-/*
-
-    var maxDimension = Math.max(xDist,yDist);
-
-    for(var n = 0; n < maxDimension; n++)
-    {
-      this.box(reMat);
-      if(xDist > 0){
-        this.right(1);
-        xDist--;
-      }
-      if(yDist > 0){
-        this.up(1);
-        yDist--;
-      }
-    }
-*/
-
-
-/*
-    if(xDist > yDist){
-      var chunkSize = Math.floor(1 + (xDist / (yDist + 1)));
-      for (var o = 0; o < xDist / chunkSize; o++){
-        for(var p = 0; p < chunkSize; p++){
-          this.box(reMat);
-          this.right(1);
-        }
-        this.box(reMat);
-        this.up(1);
-      }
-    }
-    else {
-      var chunkSize = Math.floor((yDist / (xDist + 1)));
-      for (var o = 0; o < yDist / chunkSize; o++){
-        for(var p = 0; p < chunkSize; p++){
-          this.box(reMat);
-          this.up(1);
-          echo('gone up!' + p);
-        }
-        this.box(reMat);
-        this.right(1);
-        echo('went right!' + o)
-      }
-    }
-*/
