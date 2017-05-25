@@ -1,40 +1,16 @@
 var bresenham = require('bresenham-js');
 var Drone = require('drone');
-var http = require('http');
 
-var nodes;
-var edges;
+function storeAndBuildThis(){
 
-function pullAndBuildThis(){
-  startPulling(this);
-}
+console.log(typeof(this));
 
-function startPulling(dronea){
-
-  http.request('http://localhost:8080/nodes.json',
-  function(responseCode, responseBody){
-    nodes = JSON.parse(responseBody);
-    console.log(typeof(nodes));
-    keepPulling(dronea);
-  });
-}
-
-function keepPulling(droneb){
-
-  console.log(typeof(nodes));
-  http.request('http://localhost:8080/edges.json',
-  function(responseCode, responseBody){
-    edges = JSON.parse(responseBody);
-    actuallyBuild(droneb);
-  });
-
-}
-
-function actuallyBuild(dronec){
-  dronec.chkpt('pointzero');
+  var nodes = persist('nodes',[]);
+  var edges = persist('edges',[]);
+  this.chkpt('pointzero');
 
   /*
-    Main node drawing loop!
+  Main node drawing loop!
   */
   for(var i = 0; i < nodes.length; i++){
 
@@ -54,17 +30,17 @@ function actuallyBuild(dronec){
     }
 
     //Move drone to node coordinates
-    dronec.right(nodes[i].x);
-    dronec.up(nodes[i].y);
-    dronec.fwd(nodes[i].z);
+    this.right(nodes[i].x);
+    this.up(nodes[i].y);
+    this.fwd(nodes[i].z);
 
     //Draw node as 2x2x2 cube
-    dronec.cuboidX(material, '', 2, 2, 2, true);
-    dronec.move('pointzero');
+    this.box(material, 2, 2, 2);
+    this.move('pointzero');
   }
 
   /*
-    Main edge drawing loop!
+  Main edge drawing loop!
   */
   for(var j = 0; j < edges.length; j++){
     var reMat;
@@ -99,32 +75,42 @@ function actuallyBuild(dronec){
     //Otherwise call bresenham and draw block by block
     //Adds complexity but is probably measurably cheaper. Revisit.
     if((frontx - backx === 0) && (fronty - backy === 0)){
-      dronec.move('pointzero');
-      dronec.right(backx).up(backy).fwd(backz + 2);
-      dronec.cuboidX(reMat, '', 1, 1, frontz - backz - 2, true);
+      this.move('pointzero');
+      this.right(backx).up(backy).fwd(backz + 2);
+      this.cuboidX(reMat, '', 1, 1, frontz - backz - 2, true);
     }
     else if ((frontx - backx === 0) && (frontz - backz === 0)) {
-      dronec.move('pointzero');
-      dronec.right(backx).up(backy + 2).fwd(backz);
-      dronec.cuboidX(reMat, '', 1, fronty - backy - 2, 1, true);
+      this.move('pointzero');
+      this.right(backx).up(backy + 2).fwd(backz);
+      this.cuboidX(reMat, '', 1, fronty - backy - 2, 1, true);
     }
     else if ((fronty - backy === 0) && (frontz - backz === 0)) {
-      dronec.move('pointzero');
-      dronec.right(backx + 2).up(backy).fwd(backz);
-      dronec.cuboidX(reMat, '', frontx - backx - 2, 1, 1, true);
+      this.move('pointzero');
+      this.right(backx + 2).up(backy).fwd(backz);
+      this.cuboidX(reMat, '', frontx - backx - 2, 1, 1, true);
     }
     else{
       var points = bresenham([backx, backy, backz], [frontx, fronty, frontz]);
       for(var l = 2; l < points.length - 1; l++){
-        dronec.move('pointzero');
-        dronec.right(points[l][0]);
-        dronec.up(points[l][1]);
-        dronec.fwd(points[l][2]);
-        dronec.cuboidX(reMat, '', 1, 1, 1, true);
+        this.move('pointzero');
+        this.right(points[l][0]);
+        this.up(points[l][1]);
+        this.fwd(points[l][2]);
+        this.cuboidX(reMat, '', 1, 1, 1, true);
       }
     }
-    dronec.move('pointzero');
+    this.move('pointzero');
   }
 }
 
-Drone.extend(pullAndBuildThis);
+function keepPulling(){
+
+
+
+}
+
+function nowBuild(){
+
+}
+
+Drone.extend(storeAndBuildThis);
