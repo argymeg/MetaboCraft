@@ -1,0 +1,16 @@
+{
+  "nodes":[
+  	{"name":"caffeine"},
+  	{"name":"atropine"},
+  	{"name":"holine"},
+  	{"name":"valine"}
+  ],
+  "edges":[
+    {"from":"caffeine","to":"atropine"},
+    {"from":"caffeine","to":"holine"},
+    {"from":"atropine","to":"holine"},
+    {"from":"atropine","to":"valine"},
+    {"from":"holine","to":"valine"}
+  ]
+
+}
