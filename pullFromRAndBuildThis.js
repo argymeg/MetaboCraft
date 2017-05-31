@@ -10,7 +10,7 @@ function pullFromRAndBuildThis(){
 
 function startPulling(dronea){
 
-  http.request('http://localhost:8080/Rtests/outOfR5.json',
+  http.request('http://localhost:8080/Rtests/outOfR6.json',
   function(responseCode, responseBody){
     data = JSON.parse(responseBody);
     actuallyBuild(dronea);
@@ -50,6 +50,7 @@ function actuallyBuild(droneb){
 
     //Draw node as 2x2x2 cube
     droneb.cuboidX(material, '', 2, 2, 2, true);
+    droneb.wallsign(data.nodes[i].chemName);
     droneb.move('pointzero');
   }
 

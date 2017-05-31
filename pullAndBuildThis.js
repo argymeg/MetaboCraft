@@ -60,6 +60,7 @@ function actuallyBuild(dronec){
 
     //Draw node as 2x2x2 cube
     dronec.cuboidX(material, '', 2, 2, 2, true);
+    dronec.wallsign(nodes[i].name);
     dronec.move('pointzero');
   }
 
