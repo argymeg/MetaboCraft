@@ -25,17 +25,19 @@ function actuallyBuild(droneb){
   */
   for(var i = 0; i < data.nodes.length; i++){
 
-    //Hardcode materials for now
-    var material = 3;
-    /*
     //Assign material to node types, TODO: pull externally
-    var material;
-    if(data.nodes[i].type === "brown"){
+    var material, dim;
+    if(data.nodes[i].biologicalType === "metabolite"){
       material = 3;
+      dim = 2;
     }
-    else if(data.nodes[i].type === "white"){
+    else if(data.nodes[i].biologicalType === "reaction"){
       material = 35;
+      dim = 3;
     }
+
+    //Unused types
+    /*
     else if(data.nodes[i].type === "red"){
       material = 152;
     }
@@ -49,7 +51,7 @@ function actuallyBuild(droneb){
     droneb.fwd(parseInt(data.nodes[i].z));
 
     //Draw node as 2x2x2 cube
-    droneb.cuboidX(material, '', 3, 3, 3, true);
+    droneb.cuboidX(material, '', dim, dim, dim, true);
     droneb.wallsign(data.nodes[i].chemName);
     droneb.move('pointzero');
   }
@@ -92,38 +94,52 @@ function actuallyBuild(droneb){
       }
     }
 
-    //Draw edge as a whole if it is a straight line
-    //Otherwise call bresenham and draw block by block
-    //Adds complexity but is probably measurably cheaper. Revisit.
-    //UPDATE 01/06: in real data probably very few edges will be straight
-    //Shortlist for removal after settling on plotting algorithm.
-    if((frontx - backx === 0) && (fronty - backy === 0)){
+    var points = bresenham([backx, backy, backz], [frontx, fronty, frontz]);
+    for(var l = 2; l < points.length - 1; l++){
       droneb.move('pointzero');
-      droneb.right(backx).up(backy).fwd(backz + 2);
-      droneb.cuboidX(reMat, '', 1, 1, frontz - backz - 3, true);
+      droneb.right(points[l][0]);
+      droneb.up(points[l][1]);
+      droneb.fwd(points[l][2]);
+      droneb.cuboidX(reMat, '', 1, 1, 1, true);
     }
-    else if ((frontx - backx === 0) && (frontz - backz === 0)) {
-      droneb.move('pointzero');
-      droneb.right(backx).up(backy + 2).fwd(backz);
-      droneb.cuboidX(reMat, '', 1, fronty - backy - 3, 1, true);
-    }
-    else if ((fronty - backy === 0) && (frontz - backz === 0)) {
-      droneb.move('pointzero');
-      droneb.right(backx + 2).up(backy).fwd(backz);
-      droneb.cuboidX(reMat, '', frontx - backx - 3, 1, 1, true);
-    }
-    else{
-      var points = bresenham([backx, backy, backz], [frontx, fronty, frontz]);
-      for(var l = 3; l < points.length - 1; l++){
-        droneb.move('pointzero');
-        droneb.right(points[l][0]);
-        droneb.up(points[l][1]);
-        droneb.fwd(points[l][2]);
-        droneb.cuboidX(reMat, '', 1, 1, 1, true);
-      }
-    }
+
+
     droneb.move('pointzero');
   }
 }
 
 Drone.extend(pullFromRAndBuildThis);
+
+//Removed for now to make life easier
+/*
+//Draw edge as a whole if it is a straight line
+//Otherwise call bresenham and draw block by block
+//Adds complexity but is probably measurably cheaper. Revisit.
+//UPDATE 01/06: in real data probably very few edges will be straight
+//Shortlist for removal after settling on plotting algorithm.
+if((frontx - backx === 0) && (fronty - backy === 0)){
+  droneb.move('pointzero');
+  droneb.right(backx).up(backy).fwd(backz + 3);
+  droneb.cuboidX(reMat, '', 1, 1, frontz - backz - 3, true);
+}
+else if ((frontx - backx === 0) && (frontz - backz === 0)) {
+  droneb.move('pointzero');
+  droneb.right(backx).up(backy + 3).fwd(backz);
+  droneb.cuboidX(reMat, '', 1, fronty - backy - 3, 1, true);
+}
+else if ((fronty - backy === 0) && (frontz - backz === 0)) {
+  droneb.move('pointzero');
+  droneb.right(backx + 3).up(backy).fwd(backz);
+  droneb.cuboidX(reMat, '', frontx - backx - 3, 1, 1, true);
+}
+else{
+  var points = bresenham([backx, backy, backz], [frontx, fronty, frontz]);
+  for(var l = 3; l < points.length - 1; l++){
+    droneb.move('pointzero');
+    droneb.right(points[l][0]);
+    droneb.up(points[l][1]);
+    droneb.fwd(points[l][2]);
+    droneb.cuboidX(reMat, '', 1, 1, 1, true);
+  }
+}
+*/
