@@ -3,6 +3,36 @@
 library("igraph")
 library("jsonlite")
 
+duplicateCompoundsOld <- function(startAt, side){
+  target <- paste("allLinks$", side, sep="")
+  print(target)
+  eval(parse(text = target))
+  for(j in which(eval(parse(text = target)) == i)[startAt:sum(eval(parse(text = target)) == i)]){
+    print(allNodes[i+1,])
+    allNodes[length(allNodes$localID)+1,] <<- allNodes[i+1,]
+    #allNodes$localID <- as.character(allNodes$localID)
+    allNodes[length(allNodes$localID),]$localID <<- length(allNodes$localID) - 1
+    #allNodes$localID <- as.factor(allNodes$localID)
+    target <- paste("allLinks$", side, sep="")
+    (eval(parse(text = "allLinks$source")))[j] <<- allNodes[length(allNodes$localID),]$localID
+  }
+}
+
+duplicateSources <- function(startAt){
+    for(j in which(allLinks$source == i)[startAt:sum(allLinks$source == i)]){
+      allNodes[length(allNodes$localID)+1,] <<- allNodes[i+1,]
+      allNodes[length(allNodes$localID),]$localID <<- length(allNodes$localID) - 1
+      allLinks[j,]$source <<- allNodes[length(allNodes$localID),]$localID
+    }
+}
+duplicateTargets <- function(startAt){
+  for(j in which(allLinks$target == i)[startAt:sum(allLinks$target == i)]){
+    allNodes[length(allNodes$localID)+1,] <<- allNodes[i+1,]
+    allNodes[length(allNodes$localID),]$localID <<- length(allNodes$localID) - 1
+    allLinks[j,]$target <<- allNodes[length(allNodes$localID),]$localID
+  }
+}
+
 inputFile = "1755sterol.json"
 
 #Read input file, create graph from the source and target of each interaction, build layout
@@ -16,16 +46,34 @@ colnames(allNodes) <- c("localID","chemName","biologicalType")
 
 for(i in 0:(length(allNodes$localID)-1)){
   #print(paste(i,sum(allLinks$source == i),sep = " sep "))
-  if(sum(allLinks$source == i) > 1 && allNodes[i+1,]$biologicalType == "metabolite"){
-    #print(paste(i,allNodes[i+1,]$chemName,sum(allLinks$source == i),sep = " sep "))
-    for(j in which(allLinks$source == i)[2:sum(allLinks$source == i)]){
-      #print(allNodes[i+1,])
-      allNodes[length(allNodes$localID)+1,] <- allNodes[i+1,]
-      #allNodes$localID <- as.character(allNodes$localID)
-      allNodes[length(allNodes$localID),]$localID <- length(allNodes$localID) - 1
-      #allNodes$localID <- as.factor(allNodes$localID)
-      allLinks[j,]$source <- allNodes[length(allNodes$localID),]$localID
+  if(sum(allLinks$source == i) + sum(allLinks$target == i) > 1 && allNodes[i+1,]$biologicalType == "metabolite"){
+    if(sum(allLinks$source == i) > 1){
+      duplicateSources(2)
+      if(sum(allLinks$target == i) > 1){
+        duplicateTargets(1)
+      }
+    } else if (sum(allLinks$source == i) == 1){
+      duplicateTargets(1)
+    } else {
+      duplicateTargets(2)
     }
+    #print(paste(i,allNodes[i+1,]$chemName,sum(allLinks$source == i),sep = " sep "))
+#    for(j in which(allLinks$source == i)[2:sum(allLinks$source == i)]){
+#      #print(allNodes[i+1,])
+#      allNodes[length(allNodes$localID)+1,] <- allNodes[i+1,]
+#      #allNodes$localID <- as.character(allNodes$localID)
+#      allNodes[length(allNodes$localID),]$localID <- length(allNodes$localID) - 1
+#      #allNodes$localID <- as.factor(allNodes$localID)
+#      allLinks[j,]$source <- allNodes[length(allNodes$localID),]$localID
+#    }
+#    for(j in which(allLinks$target == i)[2:sum(allLinks$target == i)]){
+#      #print(allNodes[i+1,])
+#      allNodes[length(allNodes$localID)+1,] <- allNodes[i+1,]
+#      #allNodes$localID <- as.character(allNodes$localID)
+#      allNodes[length(allNodes$localID),]$localID <- length(allNodes$localID) - 1
+#      #allNodes$localID <- as.factor(allNodes$localID)
+#      allLinks[j,]$target <- allNodes[length(allNodes$localID),]$localID
+#    }
   }
 }
 sum(graphData$links$source == 28)
@@ -58,3 +106,4 @@ nodesout <- nodesout[order(as.integer(as.character(nodesout$name))),]
 edgesout <- as_data_frame(graph, what = "edges")
 
 write_json(list(nodes = nodesout, edges = edgesout), "outOfR6.json", pretty = TRUE)
+
