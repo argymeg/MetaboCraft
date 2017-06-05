@@ -27,20 +27,21 @@ function actuallyBuild(droneb){
 
     //Assign material to node types, TODO: pull externally
     var material, dim;
+
     if(data.nodes[i].biologicalType === "metabolite"){
-      material = 3;
+      material = 3; //dirt
       dim = 3;
     }
     else if(data.nodes[i].biologicalType === "reaction"){
-      material = 35;
+      material = 35; //wool
       dim = 4;
     }
     else if(data.nodes[i].biologicalType === "sideMetabolite"){
-      material = 152;
+      material = 152; //redstone
       dim = 2;
     }
     else{
-      echo('Undefined node type!')
+      echo('Undefined node type!');
       throw 'Undefined node type!';
     }
     /*
@@ -66,19 +67,21 @@ function actuallyBuild(droneb){
   */
   for(var j = 0; j < data.edges.length; j++){
 
-    //Hardcode materials for now
-    var reMat = 1;
-
-    /*
+    //Assign material to edge types, TODO: pull externally
     var reMat;
 
-    //Assign material to edge types, TODO: pull externally
-    if(data.edges[j].type === "blue"){
-      reMat = 22;
+    if(data.edges[j].linkType === "in"){
+      reMat = 22; //blue
     }
-    else if(data.edges[j].type === "purple"){
-      reMat = 201;
+    else if(data.edges[j].linkType === "out"){
+      reMat = 201; //purple
     }
+    else{
+      echo('Undefined edge type!');
+      throw 'Undefined edge type!';
+    }
+    /*
+    //Unused types
     else if(data.edges[j].type === "grey"){
       reMat = 1;
     }
