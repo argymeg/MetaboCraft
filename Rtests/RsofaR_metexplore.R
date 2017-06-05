@@ -31,11 +31,11 @@ duplicateTargets <- function(startAt){
 inputFile = "1755sterol.json"
 
 #Read input file, create graph from the source and target of each interaction, build layout
-#TODO1: differentiate between metabolites and reactions
-#TODO2: experiment with graphing algorithms. Drl looks promising for large networks but let's get there first.
+#TODO: experiment with graphing algorithms. Drl looks promising for large networks but let's get there first.
 graphData <- fromJSON(txt = inputFile)
 allLinks <- as.data.frame(cbind(graphData$links$source, graphData$links$target))
 colnames(allLinks) <- c("source","target")
+linkType <- graphData$links$interaction
 allNodes <- as.data.frame(cbind(c(0:(length(graphData$nodes$name) - 1)),graphData$nodes$name,graphData$nodes$biologicalType), stringsAsFactors = FALSE)
 colnames(allNodes) <- c("localID","chemName","biologicalType")
 
@@ -76,7 +76,7 @@ for(i in 1:length(nodesout$localID)){
 nodesout <- nodesout[order(as.integer(as.character(nodesout$localID))),]
 
 #Build the edge part of the output - just a list of edges for now
-edgesout <- as_data_frame(graph, what = "edges")
+edgesout <- as.data.frame(cbind(as_data_frame(graph, what = "edges"), linkType))
 
 write_json(list(nodes = nodesout, edges = edgesout), "outOfR6.json", pretty = TRUE)
 
