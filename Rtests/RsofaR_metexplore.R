@@ -48,6 +48,7 @@ colnames(allNodes) <- c("localID","chemName","biologicalType")
 #TODO2: IMPLEMENT LIST-BASED NODE FILTERING
 for(i in 0:(length(allNodes$localID) - 1)){
   if(sum(allLinks$source == i) + sum(allLinks$target == i) > 3 && allNodes[i+1,]$biologicalType == "metabolite"){
+    allNodes[i+1,]$biologicalType <- "sideMetabolite"
     if(sum(allLinks$source == i) > 1){
       duplicateSources(2)
       if(sum(allLinks$target == i) > 1){

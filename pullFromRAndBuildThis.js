@@ -29,28 +29,33 @@ function actuallyBuild(droneb){
     var material, dim;
     if(data.nodes[i].biologicalType === "metabolite"){
       material = 3;
-      dim = 2;
+      dim = 3;
     }
     else if(data.nodes[i].biologicalType === "reaction"){
       material = 35;
-      dim = 3;
+      dim = 4;
     }
-
-    //Unused types
-    /*
-    else if(data.nodes[i].type === "red"){
+    else if(data.nodes[i].biologicalType === "sideMetabolite"){
       material = 152;
+      dim = 2;
     }
+    else{
+      echo('Undefined node type!')
+      throw 'Undefined node type!';
+    }
+    /*
+    //Unused types
     else if(data.nodes[i].type === "yellow"){
       material = 41;
     }
     */
+
     //Move drone to node coordinates
     droneb.right(parseInt(data.nodes[i].x));
     droneb.up(parseInt(data.nodes[i].y));
     droneb.fwd(parseInt(data.nodes[i].z));
 
-    //Draw node as 2x2x2 cube
+    //Draw node as cube of arbitrary dimensions
     droneb.cuboidX(material, '', dim, dim, dim, true);
     droneb.wallsign(data.nodes[i].chemName);
     droneb.move('pointzero');
