@@ -96,11 +96,27 @@ function actuallyBuild(droneb){
         backx = parseInt(data.nodes[k].x);
         backy = parseInt(data.nodes[k].y);
         backz = parseInt(data.nodes[k].z);
+
+        if(data.nodes[k].biologicalType === "metabolite"){
+          backx += 3;
+          backy += 3;
+          backz += 3;
+        }
+        else if(data.nodes[k].biologicalType === "reaction"){
+          backx += 4;
+          backy += 4;
+          backz += 4;
+        }
+        else if(data.nodes[k].biologicalType === "sideMetabolite"){
+          backx += 2;
+          backy += 2;
+          backz += 2;
+        }
       }
     }
 
     var points = bresenham([backx, backy, backz], [frontx, fronty, frontz]);
-    for(var l = 2; l < points.length - 1; l++){
+    for(var l = 0; l < points.length - 1; l++){
       droneb.move('pointzero');
       droneb.right(points[l][0]);
       droneb.up(points[l][1]);
