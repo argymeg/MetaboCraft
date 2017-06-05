@@ -44,8 +44,10 @@ colnames(allNodes) <- c("localID","chemName","biologicalType")
 #Then if there are more occurrences in targets, duplicate them
 #Else, if there's only one occurrence in sources, leave that alone and duplicate targets
 #Else, duplicate all targets but the first
+#TODO1: PROPERLY DETERMINE THRESHOLD
+#TODO2: IMPLEMENT LIST-BASED NODE FILTERING
 for(i in 0:(length(allNodes$localID) - 1)){
-  if(sum(allLinks$source == i) + sum(allLinks$target == i) > 1 && allNodes[i+1,]$biologicalType == "metabolite"){
+  if(sum(allLinks$source == i) + sum(allLinks$target == i) > 3 && allNodes[i+1,]$biologicalType == "metabolite"){
     if(sum(allLinks$source == i) > 1){
       duplicateSources(2)
       if(sum(allLinks$target == i) > 1){
@@ -63,6 +65,7 @@ lo <- layout_(graph, with_fr(dim = 3),normalize(xmin=0,xmax=100))
 
 #Build the node part of the output, with node id, coordinates, chemical name. Sort output by id for readability.
 #TODO: as.integer(as.character) is rather ugly. Is there no better way?
+#UPDATE Mon 05/06: should not be needed anymore since disabling factors. Check during next cleanup.
 nodesout <- as.data.frame(cbind((as_data_frame(graph, what ="vertices")$name), lo[,1], lo[,2], lo[,3]))
 colnames(nodesout) <- c("localID", "x", "y", "z")
 for(i in 1:length(nodesout$localID)){
