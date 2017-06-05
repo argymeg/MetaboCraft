@@ -82,12 +82,12 @@ function actuallyBuild(droneb){
     //Set start and end coordinates for this edge
     var frontx, fronty, backx, backy, frontz, backz;
     for (var k = 0; k < data.nodes.length; k++){
-      if(data.edges[j].to === data.nodes[k].name){
+      if(data.edges[j].to === data.nodes[k].localID){
         frontx = parseInt(data.nodes[k].x);
         fronty = parseInt(data.nodes[k].y);
         frontz = parseInt(data.nodes[k].z);
       }
-      else if(data.edges[j].from === data.nodes[k].name){
+      else if(data.edges[j].from === data.nodes[k].localID){
         backx = parseInt(data.nodes[k].x);
         backy = parseInt(data.nodes[k].y);
         backz = parseInt(data.nodes[k].z);
