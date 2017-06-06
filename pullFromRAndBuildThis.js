@@ -10,7 +10,7 @@ function pullFromRAndBuildThis(){
 
 function startPulling(dronea){
 
-  http.request('http://localhost:8080/Rtests/outOfR6.json',
+  http.request('http://localhost:8080/Rtests/outOfR_argprol.json',
   function(responseCode, responseBody){
     data = JSON.parse(responseBody);
     actuallyBuild(dronea);

@@ -28,11 +28,11 @@ duplicateTargets <- function(startAt){
   }
 }
 
-inputFile = "1755sterol.json"
+inputFile = "argprolpretty.json"
 
 #Read input file, create graph from the source and target of each interaction, build layout
 #TODO: experiment with graphing algorithms. Drl looks promising for large networks but let's get there first.
-graphData <- fromJSON(txt = inputFile)
+argprolGraphData <- fromJSON(txt = inputFile)
 allLinks <- as.data.frame(cbind(graphData$links$source, graphData$links$target))
 colnames(allLinks) <- c("source","target")
 linkType <- graphData$links$interaction
@@ -78,5 +78,5 @@ nodesout <- nodesout[order(as.integer(as.character(nodesout$localID))),]
 #Build the edge part of the output - just a list of edges for now
 edgesout <- as.data.frame(cbind(as_data_frame(graph, what = "edges"), linkType))
 
-write_json(list(nodes = nodesout, edges = edgesout), "outOfR6.json", pretty = TRUE)
+write_json(list(nodes = nodesout, edges = edgesout), "outOfR_argprol.json", pretty = TRUE)
 
