@@ -2,7 +2,7 @@ var bresenham = require('bresenham-js');
 var Drone = require('drone');
 var http = require('http');
 
-var data;
+var data, changeData;
 
 function pullFromRAndBuildThis(){
   startPulling(this);
@@ -13,13 +13,18 @@ function startPulling(dronea){
   http.request('http://localhost:8080/Rtests/outOfR_argprol.json',
   function(responseCode, responseBody){
     data = JSON.parse(responseBody);
-    actuallyBuild(dronea);
+    http.request('http://localhost:8080/Rtests/outOfR_change.json',
+    function(responseCode, responseBody){
+      changeData = JSON.parse(responseBody);
+      actuallyBuild(dronea);
+    });
   });
 }
 
 function actuallyBuild(droneb){
   droneb.chkpt('pointzero');
 
+  console.log(changeData.length);
   /*
     Main node drawing loop!
   */
@@ -28,16 +33,35 @@ function actuallyBuild(droneb){
     //Assign material to node types, TODO: pull externally
     var material, dim;
 
+    //For now, loop over the entire change file for every metabolite node -
+    //will probably not scale too well.
+    //Two obvious ways out:
+    //1)Split loop into 3 parts: loop over all nodes to assign initial values
+    //then over all changed nodes to assign changes
+    //then over all nodes again to draw them
+    //2)Collate change data with core data in the input -
+    //minimise overhead at the expense of flexibility
+
     if(data.nodes[i].biologicalType === "metabolite"){
       material = 3; //dirt
       dim = 3;
+      for(var m = 0; m < changeData.length; m++){
+        if(data.nodes[i].localID == changeData[m].localID){
+          if(changeData[m].pos == true){
+            material = 133; //emerald
+          }
+          else {
+            material = 152; //redstone
+          }
+        }
+      }
     }
     else if(data.nodes[i].biologicalType === "reaction"){
       material = 35; //wool
       dim = 4;
     }
     else if(data.nodes[i].biologicalType === "sideMetabolite"){
-      material = 152; //redstone
+      material = 24; //sandstone
       dim = 2;
     }
     else{

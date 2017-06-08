@@ -47,7 +47,7 @@ colnames(allNodes) <- c("localID","chemName","biologicalType")
 #TODO1: PROPERLY DETERMINE THRESHOLD
 #TODO2: IMPLEMENT LIST-BASED NODE FILTERING
 for(i in 0:(length(allNodes$localID) - 1)){
-  if(sum(allLinks$source == i) + sum(allLinks$target == i) > 4 && allNodes[i+1,]$biologicalType == "metabolite"){
+  if(sum(allLinks$source == i) + sum(allLinks$target == i) > 5 && allNodes[i+1,]$biologicalType == "metabolite"){
     allNodes[i+1,]$biologicalType <- "sideMetabolite"
     if(sum(allLinks$source == i) > 1){
       duplicateSources(2)
