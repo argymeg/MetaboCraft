@@ -32,7 +32,7 @@ inputFile = "argprolpretty.json"
 
 #Read input file, create graph from the source and target of each interaction, build layout
 #TODO: experiment with graphing algorithms. Drl looks promising for large networks but let's get there first.
-argprolGraphData <- fromJSON(txt = inputFile)
+graphData <- fromJSON(txt = inputFile)
 allLinks <- as.data.frame(cbind(graphData$links$source, graphData$links$target))
 colnames(allLinks) <- c("source","target")
 linkType <- graphData$links$interaction
@@ -47,7 +47,7 @@ colnames(allNodes) <- c("localID","chemName","biologicalType")
 #TODO1: PROPERLY DETERMINE THRESHOLD
 #TODO2: IMPLEMENT LIST-BASED NODE FILTERING
 for(i in 0:(length(allNodes$localID) - 1)){
-  if(sum(allLinks$source == i) + sum(allLinks$target == i) > 3 && allNodes[i+1,]$biologicalType == "metabolite"){
+  if(sum(allLinks$source == i) + sum(allLinks$target == i) > 4 && allNodes[i+1,]$biologicalType == "metabolite"){
     allNodes[i+1,]$biologicalType <- "sideMetabolite"
     if(sum(allLinks$source == i) > 1){
       duplicateSources(2)
