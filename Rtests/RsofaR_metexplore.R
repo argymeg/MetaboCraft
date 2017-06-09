@@ -36,7 +36,7 @@ graphData <- fromJSON(txt = inputFile)
 allLinks <- as.data.frame(cbind(graphData$links$source, graphData$links$target))
 colnames(allLinks) <- c("source","target")
 linkType <- graphData$links$interaction
-allNodes <- as.data.frame(cbind(c(0:(length(graphData$nodes$name) - 1)),graphData$nodes$name,graphData$nodes$biologicalType), stringsAsFactors = FALSE)
+allNodes <- as.data.frame(cbind(c(0:(length(graphData$nodes$name) - 1)), graphData$nodes$name, graphData$nodes$biologicalType), stringsAsFactors = FALSE)
 colnames(allNodes) <- c("localID","chemName","biologicalType")
 
 #Only process node if it crosses the threshold for total number of connections - but we don't know how many times in each side.
@@ -62,17 +62,17 @@ for(i in 0:(length(allNodes$localID) - 1)){
   }
 }
 graph <- graph_from_data_frame(allLinks, directed = FALSE)
-lo <- layout_(graph, with_fr(dim = 3),normalize(xmin=0,xmax=100))
+lo <- layout_(graph, with_fr(dim = 3), normalize(xmin = 0, xmax = 100))
 
 #Build the node part of the output, with node id, coordinates, chemical name. Sort output by id for readability.
 #TODO: as.integer(as.character) is rather ugly. Is there no better way?
-#UPDATE Mon 05/06: should not be needed anymore since disabling factors. Check during next cleanup.
+#UPDATE Fri 09/06: have to disable more factors to fix this. Is there a reason not to?
 nodesout <- as.data.frame(cbind((as_data_frame(graph, what ="vertices")$name), lo[,1], lo[,2], lo[,3]))
 colnames(nodesout) <- c("localID", "x", "y", "z")
-for(i in 1:length(nodesout$localID)){
-  nodesout$chemName[i] <- as.character(allNodes$chemName[as.integer(as.character(nodesout$localID[i])) + 1])
-  nodesout$biologicalType[i] <- as.character(allNodes$biologicalType[as.integer(as.character(nodesout$localID[i])) + 1])
-}
+
+nodesout$chemName <- allNodes$chemName[as.integer(as.character(nodesout$localID)) + 1]
+nodesout$biologicalType <- allNodes$biologicalType[as.integer(as.character(nodesout$localID)) + 1]
+
 nodesout <- nodesout[order(as.integer(as.character(nodesout$localID))),]
 
 #Build the edge part of the output - just a list of edges for now
