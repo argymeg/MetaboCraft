@@ -37,8 +37,7 @@ sampleFrame$pos <- sampleFrame$l2fc > 1
 sampleFrame$neg <- sampleFrame$l2fc < -1
 
 #Create new data frame containing only node identifiers and positive or negative change
-#TODO1: Further condense output
-#TODO2: Use [] notation instead of subset
+#TODO: Use [] notation instead of subset
 transList <- as.list(transOut$result)
 names(transList) <- transOut$searchTerm
 nodeChange <- subset(nodesout, biologicalType == "metabolite", select = c("localID", "chemName"))
@@ -48,5 +47,6 @@ nodeChange$pos <- sampleFrame[nodeChange$KEGG,]$pos
 nodeChange$neg <- sampleFrame[nodeChange$KEGG,]$neg
 nodeChange <- subset(nodeChange, !is.na(pos))
 nodeChange <- subset(nodeChange, pos | neg)
+nodeChange <- subset(nodeChange, select = c("localID", "pos"))
 
 write_json((change = nodeChange), "outOfR_change.json", pretty = TRUE)
