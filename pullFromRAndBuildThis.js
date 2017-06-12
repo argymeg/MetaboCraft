@@ -24,7 +24,6 @@ function startPulling(dronea){
 function actuallyBuild(droneb){
   droneb.chkpt('pointzero');
 
-  console.log(changeData.length);
   /*
     Main node drawing loop!
   */
@@ -82,7 +81,19 @@ function actuallyBuild(droneb){
 
     //Draw node as cube of arbitrary dimensions
     droneb.cuboidX(material, '', dim, dim, dim, true);
-    droneb.wallsign(data.nodes[i].chemName);
+    droneb.wallsign(data.nodes[i].chemName); //Not needed any more, keeping for debugging
+
+    //Create invisible armor stand that displays the node name
+    droneb.up(Math.floor(dim / 2));
+    droneb.fwd(Math.floor(dim / 2));
+    var location = droneb.getLocation() ;
+    var ars = location.world.spawnEntity(location, org.bukkit.entity.EntityType.ARMOR_STAND)
+    ars.setVisible(false);
+    ars.setGravity(false);
+    ars.setInvulnerable(true);
+    ars.setCustomName(data.nodes[i].chemName);
+    ars.setCustomNameVisible(true);
+
     droneb.move('pointzero');
   }
 
