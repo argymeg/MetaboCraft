@@ -123,7 +123,7 @@ function actuallyBuild(droneb){
     */
 
     //Set start and end coordinates for this edge
-    var frontx, fronty, backx, backy, frontz, backz, frontname, backname;
+    var frontx, fronty, backx, backy, frontz, backz, frontname, backname, nDim;
     for (var k = 0; k < data.nodes.length; k++){
       if(data.edges[j].to === data.nodes[k].localID){
         frontx = parseInt(data.nodes[k].x);
@@ -138,19 +138,34 @@ function actuallyBuild(droneb){
         backname = data.nodes[k].chemName;
 
         if(data.nodes[k].biologicalType === "metabolite"){
-          backx += 3;
-          backy += 3;
-          backz += 3;
+          nDim = 3;
         }
         else if(data.nodes[k].biologicalType === "reaction"){
-          backx += 4;
-          backy += 4;
-          backz += 4;
+          nDim = 4;
         }
         else if(data.nodes[k].biologicalType === "sideMetabolite"){
-          backx += 2;
-          backy += 2;
-          backz += 2;
+          nDim = 2;
+        }
+
+        //Must do something in the in between cases, bring coords as close
+        //to reality as possible
+        if(frontx - backx > nDim){
+          backx += nDim;
+        }
+        else if(backx - frontx > nDim){
+          frontx += nDim;
+        }
+        if(fronty - backy > nDim){
+          backy += nDim;
+        }
+        else if (backy - fronty > nDim){
+          fronty += nDim;
+        }
+        if(frontz - backz > nDim){
+          backz += nDim
+        }
+        else if (backz - frontz > nDim){
+          frontz += nDim;
         }
       }
     }
