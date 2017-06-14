@@ -1,0 +1,49 @@
+library("igraph")
+library("jsonlite")
+
+pathList <- fromJSON("http://metexplore.toulouse.inra.fr:8080/metExploreWebService/biosources/1363/pathways")
+metList <- fromJSON("http://metexplore.toulouse.inra.fr:8080/metExploreWebService/graph/1363")$nodes
+
+pathMat <- matrix(data = 0, nrow = length(pathList$name), ncol = length(pathList$name), dimnames = list(pathList$name, pathList$name))
+
+#Make weighted graph
+for(i in metList$pathways){
+  if(length(unique(i)) > 1){
+    pathMat[unique(i),unique(i)] = pathMat[unique(i),unique(i)] + 1
+  }
+}
+diag(pathMat) <- 0
+
+pathMap <- graph_from_adjacency_matrix(pathMat, weighted = TRUE)
+mapLo <- layout_(pathMap, with_fr(dim = 2, weights = E(pathMap)$weight), normalize(xmin = 0, xmax = 100))
+
+plot(pathMap, layout = mapLo)
+
+#Make connected-or-not-graph
+for(i in metList$pathways){
+  if(length(unique(i)) > 1){
+    pathMat[unique(i),unique(i)] = 1
+  }
+}
+diag(pathMat) <- 0
+
+pathMap <- graph_from_adjacency_matrix(pathMat)
+mapLo <- layout_(pathMap, with_fr(dim = 2), normalize(xmin = 0, xmax = 100))
+
+plot(pathMap, layout = mapLo)
+
+#Make connected-or-not-graph with threshold
+for(i in metList$pathways){
+  if(length(unique(i)) > 1){
+    pathMat[unique(i),unique(i)] = pathMat[unique(i),unique(i)] + 1
+  }
+}
+diag(pathMat) <- 0
+
+pathMatThresh <- (pathMat > 20) * 1
+
+
+pathMap <- graph_from_adjacency_matrix(pathMatThresh, weighted = TRUE)
+mapLo <- layout_(pathMap, with_fr(dim = 2, weights = E(pathMap)$weight), normalize(xmin = 0, xmax = 100))
+
+plot(pathMap, layout = mapLo)
