@@ -81,7 +81,6 @@ function actuallyBuild(droneb){
 
     //Draw node as cube of arbitrary dimensions
     droneb.cuboidX(material, '', dim, dim, dim, true);
-    droneb.wallsign(data.nodes[i].chemName); //Not needed any more, keeping for debugging
 
     //Create invisible armor stand that displays the node name
     droneb.up(Math.floor(dim / 2));
