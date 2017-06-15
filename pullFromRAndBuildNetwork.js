@@ -42,7 +42,17 @@ function actuallyBuild(droneb){
 
     //Draw node as cube of arbitrary dimensions
     droneb.cuboidX(material, '', dim, dim, dim, true);
-    //droneb.wallsign(data.nodes[i].chemName);
+
+    droneb.up(Math.floor(dim / 2));
+    droneb.fwd(Math.floor(dim / 2));
+    var location = droneb.getLocation() ;
+    var ars = location.world.spawnEntity(location, org.bukkit.entity.EntityType.ARMOR_STAND)
+    ars.setVisible(false);
+    ars.setGravity(false);
+    ars.setInvulnerable(true);
+    ars.setCustomName(data.nodes[i].name);
+    ars.setCustomNameVisible(true);
+
     droneb.move('pointzero');
   }
 
