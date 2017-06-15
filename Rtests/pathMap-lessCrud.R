@@ -1,8 +1,8 @@
 library("igraph")
 library("jsonlite")
 
-pathList <- fromJSON("http://metexplore.toulouse.inra.fr:8080/metExploreWebService/biosources/1363/pathways")
 metList <- fromJSON("http://metexplore.toulouse.inra.fr:8080/metExploreWebService/graph/1363")$nodes
+pathList <- fromJSON("http://metexplore.toulouse.inra.fr:8080/metExploreWebService/biosources/1363/pathways")
 
 pathList <- pathList[-which(pathList$name == "Miscellaneous" | pathList$name == "Unassigned"),]
 pathMat <- matrix(data = 0, nrow = length(pathList$name), ncol = length(pathList$name), dimnames = list(pathList$name, pathList$name))
@@ -68,6 +68,26 @@ mapLo <- layout_(pathMap, with_fr(dim = 2, weights = E(pathMap)$weight), normali
 plot(pathMap, layout = mapLo)
 
 
+#Make graph with top 3 connections
+for(i in metList$pathways){
+  pList <- unique(i)[-which(unique(i) == "Miscellaneous" | unique(i) == "Unassigned")]
+  if(length(pList) > 1){
+    pathMat[pList,pList] = pathMat[pList,pList] + 1
+  }
+}
+diag(pathMat) <- 0
+
+pathMat <- t(apply(pathMat, 1, function(x){
+  (x >= min(tail(sort(x), 1)) & x > 0) * 1
+  }))
+
+pathMap <- graph_from_adjacency_matrix(pathMat, mode = "lower")
+mapLo <- layout_(pathMap, with_fr(dim = 2), normalize(xmin = 0, xmax = 150))
+
+plot(pathMap, layout = mapLo)
+
+
+#Write map to disk
 pathNodesOut <- as.data.frame(cbind((as_data_frame(pathMap, what ="vertices")$name), mapLo[,1], mapLo[,2]))
 colnames(pathNodesOut) <- c("name", "x", "z")
 pathEdgesOut <- as_data_frame(pathMap, what = "edges")
