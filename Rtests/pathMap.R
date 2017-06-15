@@ -63,3 +63,10 @@ pathMap <- graph_from_adjacency_matrix(pathMat, weighted = TRUE)
 mapLo <- layout_(pathMap, with_fr(dim = 2, weights = E(pathMap)$weight), normalize(xmin = 0, xmax = 100))
 
 plot(pathMap, layout = mapLo)
+
+
+pathNodesOut <- as.data.frame(cbind((as_data_frame(pathMap, what ="vertices")$name), mapLo[,1], mapLo[,2]))
+colnames(pathNodesOut) <- c("name", "x", "z")
+pathEdgesOut <- as_data_frame(pathMap, what = "edges")
+
+write_json(list(nodes = pathNodesOut, edges = pathEdgesOut), "outOfR_pathMap.json", pretty = TRUE)
