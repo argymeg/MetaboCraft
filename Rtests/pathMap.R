@@ -43,7 +43,23 @@ diag(pathMat) <- 0
 pathMatThresh <- (pathMat > 20) * 1
 
 
-pathMap <- graph_from_adjacency_matrix(pathMatThresh, weighted = TRUE)
+pathMap <- graph_from_adjacency_matrix(pathMat)
+mapLo <- layout_(pathMap, with_fr(dim = 2), normalize(xmin = 0, xmax = 100))
+
+plot(pathMap, layout = mapLo)
+
+#Make weighted graph with threshold
+for(i in metList$pathways){
+  if(length(unique(i)) > 1){
+    pathMat[unique(i),unique(i)] = pathMat[unique(i),unique(i)] + 1
+  }
+}
+diag(pathMat) <- 0
+pathMat <- pathMat - 50
+pathMat[pathMat < 0] <- 0
+
+
+pathMap <- graph_from_adjacency_matrix(pathMat, weighted = TRUE)
 mapLo <- layout_(pathMap, with_fr(dim = 2, weights = E(pathMap)$weight), normalize(xmin = 0, xmax = 100))
 
 plot(pathMap, layout = mapLo)
