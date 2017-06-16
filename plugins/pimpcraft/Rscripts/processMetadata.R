@@ -1,4 +1,8 @@
-#argprolGraphData <- fromJSON("http://metexplore.toulouse.inra.fr:8080/metExploreWebService/graph/1363/filteredbypathway?pathwayidlist=(123700)")
+#!/usr/local/bin/Rscript
+
+#Node data is taken directly from the R environment as the output of the previous script. Must fix.
+dataSource = "~/pimpcraft_working/data/pathos_KEGGlist2.csv"
+outputSink = "~/pimpcraft_working/data/outOfR_change.json"
 
 #Read entire lines from cts into data frame
 transOut <- data.frame(fromIdentifier = character(), searchTerm = character(), toIdentifier = character(), result = character(), stringsAsFactors = FALSE)
@@ -28,7 +32,7 @@ for (i in which(nodesout$biologicalType == "metabolite")){
 
 
 #Import sample data and calculate a crude metric of positive or negative change (more than 2-fold)
-sampleData <- read.csv("pathos_KEGGlist2.csv")
+sampleData <- read.csv(dataSource)
 sampleFrame <- as.data.frame(cbind(sampleData$Mean..24hrs_A, sampleData$Mean..24hrs_B))
 rownames(sampleFrame) <- sampleData$C14
 colnames(sampleFrame) <- c("A-24", "B-24")
@@ -49,4 +53,4 @@ nodeChange <- subset(nodeChange, !is.na(pos))
 nodeChange <- subset(nodeChange, pos | neg)
 nodeChange <- subset(nodeChange, select = c("localID", "pos"))
 
-write_json((change = nodeChange), "outOfR_change.json", pretty = TRUE)
+write_json((change = nodeChange), outputSink, pretty = TRUE)

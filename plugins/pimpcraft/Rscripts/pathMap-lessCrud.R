@@ -1,8 +1,15 @@
+#!/usr/local/bin/Rscript
+
 library("igraph")
 library("jsonlite")
 
-metList <- fromJSON("http://metexplore.toulouse.inra.fr:8080/metExploreWebService/graph/1363")$nodes
-pathList <- fromJSON("http://metexplore.toulouse.inra.fr:8080/metExploreWebService/biosources/1363/pathways")
+pathwayListSource <- "http://metexplore.toulouse.inra.fr:8080/metExploreWebService/biosources/1363/pathways"
+metaboliteListSource <- "http://metexplore.toulouse.inra.fr:8080/metExploreWebService/graph/1363"
+outputSink = "~/pimpcraft_working/data/outOfR_pathMap.json"
+
+
+pathList <- fromJSON(pathwayListSource)
+metList <- fromJSON(metaboliteListSource)$nodes
 
 pathList <- pathList[-which(pathList$name == "Miscellaneous" | pathList$name == "Unassigned"),]
 pathMat <- matrix(data = 0, nrow = length(pathList$name), ncol = length(pathList$name), dimnames = list(pathList$name, pathList$name))
@@ -92,4 +99,4 @@ pathNodesOut <- as.data.frame(cbind((as_data_frame(pathMap, what ="vertices")$na
 colnames(pathNodesOut) <- c("name", "x", "z")
 pathEdgesOut <- as_data_frame(pathMap, what = "edges")
 
-write_json(list(nodes = pathNodesOut, edges = pathEdgesOut), "outOfR_pathMap.json", pretty = TRUE)
+write_json(list(nodes = pathNodesOut, edges = pathEdgesOut), outputSink, pretty = TRUE)
