@@ -17,6 +17,8 @@ Revisit when it's time to merge builder and bulldozer. Should be more straightfo
 Update a few minutes later: I don't know what that says about my sanity,
 but it works now.
 Still, revisit at merge.
+Alternative if I decide not to merge scripts: implement a barebones "module"
+that just holds information.
 */
 var bresenham = require('bresenham-js');
 var Drone = require('drone');
