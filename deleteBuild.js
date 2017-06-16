@@ -13,6 +13,11 @@ Giving up on this for now. At any rate, persistence doesn't work unless you refr
 (and that's by design), which makes the whole think impractical.
 Revisit when it's time to merge builder and bulldozer. Should be more straightforward then.
 */
+/*
+Update a few minutes later: I don't know what that says about my sanity,
+but it works now.
+Still, revisit at merge.
+*/
 var bresenham = require('bresenham-js');
 var Drone = require('drone');
 var http = require('http');
