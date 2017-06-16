@@ -1,7 +1,5 @@
 //Modified version of Jonathan Faulch's bresenham-js (MIT-licensed).
 //Intended for use as a scriptcraft module only!
-//Working version is found in the modules folder,
-//having it here won't do for some reason.
 
 (function(root, propertyName)
 {
