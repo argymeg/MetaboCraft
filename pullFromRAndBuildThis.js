@@ -1,7 +1,8 @@
 var bresenham = require('bresenham-js');
 var Drone = require('drone');
 var http = require('http');
-
+var utils = require('utils');
+var droneCheck = persist('droneCheck',{});
 var data, changeData;
 
 function pullFromRAndBuildThis(){
@@ -22,6 +23,7 @@ function startPulling(dronea){
 }
 
 function actuallyBuild(droneb){
+  droneCheck.startPoint = utils.locationToJSON(droneb.getLocation());
   droneb.chkpt('pointzero');
 
   /*

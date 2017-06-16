@@ -5,10 +5,19 @@ effectively deleting the build
 For now this only works if player doesn't move at all after building.
 Also, it gives a /very/ weird Java error otherwise...
 */
+/*
+I swear to god, cross-my-heart-and-hope-to-die, this is the exact same
+code that worked an hour ago. Somehow it doesn't anymore. Location is stored in JSON and passed over,
+but after starting at the same points SOMEHOW the two drones DIVERGE!!!!!!!!!!!!!!!
+Giving up on this for now. At any rate, persistence doesn't work unless you refresh scriptcraft
+(and that's by design), which makes the whole think impractical.
+Revisit when it's time to merge builder and bulldozer. Should be more straightforward then.
+*/
 var bresenham = require('bresenham-js');
 var Drone = require('drone');
 var http = require('http');
-
+var utils = require('utils');
+var droneCheck = persist('droneCheck',{});
 var data;
 
 function deleteBuild(){
@@ -25,6 +34,7 @@ function startPulling(dronea){
 }
 
 function actuallyBuild(droneb){
+  droneb.move(utils.locationFromJSON(droneCheck.startPoint));
   droneb.chkpt('pointzero');
 
   /*
@@ -61,7 +71,7 @@ function actuallyBuild(droneb){
     droneb.up(Math.floor(dim / 2));
     droneb.fwd(Math.floor(dim / 2));
     var location = droneb.getLocation() ;
-    location.world.getNearbyEntities(location, 1, 1, 1)[0].remove();
+    location.world.getNearbyEntities(location, 1, 1, 1)[0].remove(); //Comment this to make the drone do its route for debugging
 
     droneb.move('pointzero');
   }
