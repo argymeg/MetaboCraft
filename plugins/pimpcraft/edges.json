@@ -1,7 +1,0 @@
-[
-  {"from":"caffeine","to":"atropine","type":"blue"},
-  {"from":"caffeine","to":"holine","type":"purple"},
-  {"from":"atropine","to":"holine","type":"grey"},
-  {"from":"atropine","to":"valine","type":"purple"},
-  {"from":"holine","to":"valine","type":"blue"}
-]
