@@ -188,6 +188,15 @@ function actuallyBuild(droneb){
 
 Drone.extend(pullFromRAndBuildThis);
 
+
+function buildPath(parameters, player){
+  var d = new Drone(player);
+  d.pullFromRAndBuildThis();
+}
+
+command(buildPath);
+
+
 //Removed for now to make life easier
 /*
 //Draw edge as a whole if it is a straight line

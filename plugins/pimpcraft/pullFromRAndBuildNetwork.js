@@ -109,3 +109,10 @@ function actuallyBuild(droneb){
 }
 
 Drone.extend(pullFromRAndBuildNetwork);
+
+function buildMap(parameters, player){
+  var d = new Drone(player);
+  d.pullFromRAndBuildNetwork();
+}
+
+command(buildMap);

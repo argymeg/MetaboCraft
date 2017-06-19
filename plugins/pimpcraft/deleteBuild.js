@@ -152,3 +152,10 @@ function actuallyBuild(droneb){
 }
 
 Drone.extend(deleteBuild);
+
+function deletePath(parameters, player){
+  var d = new Drone(player);
+  d.deleteBuild();
+}
+
+command(deletePath);
