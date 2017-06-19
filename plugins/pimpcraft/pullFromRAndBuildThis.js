@@ -4,11 +4,12 @@ var http = require('http');
 var utils = require('utils');
 var droneCheck = persist('droneCheck',{});
 var data, changeData;
+var dataSource;
 
-var dataSource = 'http://localhost:8080/outOfR_argprol.json';
-var changeDataSource = 'http://localhost:8080/outOfR_change.json';
+var changeDataSource = '';
 
-function pullFromRAndBuildThis(){
+function pullFromRAndBuildThis(pathID){
+  dataSource = 'http://localhost:8080/outOfR_' + pathID + '.json';
   startPulling(this);
 }
 
@@ -199,7 +200,7 @@ Drone.extend(pullFromRAndBuildThis);
 
 function buildPath(parameters, player){
   var d = new Drone(player);
-  d.pullFromRAndBuildThis();
+  d.pullFromRAndBuildThis(parameters[0]);
 }
 
 command(buildPath);
