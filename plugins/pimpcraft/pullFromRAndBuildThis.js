@@ -5,16 +5,19 @@ var utils = require('utils');
 var droneCheck = persist('droneCheck',{});
 var data, changeData;
 
+var dataSource = 'http://localhost:8080/outOfR_argprol.json';
+var changeDataSource = 'http://localhost:8080/outOfR_change.json';
+
 function pullFromRAndBuildThis(){
   startPulling(this);
 }
 
 function startPulling(dronea){
 
-  http.request('http://localhost:8080/Rtests/outOfR_argprol.json',
+  http.request(dataSource,
   function(responseCode, responseBody){
     data = JSON.parse(responseBody);
-    http.request('http://localhost:8080/Rtests/outOfR_change.json',
+    http.request(changeDataSource,
     function(responseCode, responseBody){
       changeData = JSON.parse(responseBody);
       actuallyBuild(dronea);

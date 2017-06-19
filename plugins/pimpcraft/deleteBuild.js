@@ -27,13 +27,16 @@ var utils = require('utils');
 var droneCheck = persist('droneCheck',{});
 var data;
 
+var dataSource = 'http://localhost:8080/outOfR_argprol.json';
+
+
 function deleteBuild(){
   startPulling(this);
 }
 
 function startPulling(dronea){
 
-  http.request('http://localhost:8080/Rtests/outOfR_argprol.json',
+  http.request(dataSource,
   function(responseCode, responseBody){
     data = JSON.parse(responseBody);
     actuallyBuild(dronea);

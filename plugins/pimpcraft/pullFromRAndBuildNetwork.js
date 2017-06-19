@@ -8,8 +8,9 @@ Should be merged with the pathway builder
 var bresenham = require('bresenham-js');
 var Drone = require('drone');
 var http = require('http');
-
 var data;
+
+var pathMapSource = 'http://localhost:8080/outOfR_pathMap.json'
 
 function pullFromRAndBuildNetwork(){
   startPulling(this);
@@ -17,7 +18,7 @@ function pullFromRAndBuildNetwork(){
 
 function startPulling(dronea){
 
-  http.request('http://localhost:8080/Rtests/outOfR_pathMap.json',
+  http.request(pathMapSource,
   function(responseCode, responseBody){
     data = JSON.parse(responseBody);
     actuallyBuild(dronea);
