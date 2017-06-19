@@ -9,10 +9,10 @@ var bresenham = require('bresenham-js');
 var Drone = require('drone');
 var http = require('http');
 var data;
+var pathMapSource;
 
-var pathMapSource = 'http://localhost:8080/outOfR_pathMap.json'
-
-function pullFromRAndBuildNetwork(){
+function pullFromRAndBuildNetwork(bioSource){
+  pathMapSource = 'http://localhost:8080/outOfR_pathMap_' + bioSource + '.json';
   startPulling(this);
 }
 
@@ -112,7 +112,7 @@ Drone.extend(pullFromRAndBuildNetwork);
 
 function buildMap(parameters, player){
   var d = new Drone(player);
-  d.pullFromRAndBuildNetwork();
+  d.pullFromRAndBuildNetwork(parameters[0]);
 }
 
 command(buildMap);
