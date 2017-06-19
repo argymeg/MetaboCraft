@@ -13,16 +13,22 @@ function pullFromRAndBuildThis(){
 }
 
 function startPulling(dronea){
-
   http.request(dataSource,
-  function(responseCode, responseBody){
-    data = JSON.parse(responseBody);
-    http.request(changeDataSource,
     function(responseCode, responseBody){
-      changeData = JSON.parse(responseBody);
-      actuallyBuild(dronea);
-    });
-  });
+      data = JSON.parse(responseBody);
+      if(changeDataSource){
+        http.request(changeDataSource,
+          function(responseCode, responseBody){
+            changeData = JSON.parse(responseBody);
+            actuallyBuild(dronea);
+          }
+        );
+      }
+      else{
+        actuallyBuild(dronea);
+      }
+    }
+  );
 }
 
 function actuallyBuild(droneb){
@@ -49,13 +55,15 @@ function actuallyBuild(droneb){
     if(data.nodes[i].biologicalType === "metabolite"){
       material = 3; //dirt
       dim = 3;
-      for(var m = 0; m < changeData.length; m++){
-        if(data.nodes[i].localID == changeData[m].localID){
-          if(changeData[m].pos == true){
-            material = 133; //emerald
-          }
-          else {
-            material = 152; //redstone
+      if(changeData){
+        for(var m = 0; m < changeData.length; m++){
+          if(data.nodes[i].localID == changeData[m].localID){
+            if(changeData[m].pos == true){
+              material = 133; //emerald
+            }
+            else {
+              material = 152; //redstone
+            }
           }
         }
       }
