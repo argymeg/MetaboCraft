@@ -8,8 +8,9 @@ bioSource <- commandArgs(trailingOnly = TRUE)[1]
 
 pathwayListSource <- paste0("http://metexplore.toulouse.inra.fr:8080/metExploreWebService/biosources/",bioSource,"/pathways")
 metaboliteListSource <- paste0("http://metexplore.toulouse.inra.fr:8080/metExploreWebService/graph/",bioSource)
-outputSink = paste0("~/pimpcraft_working/data/outOfR_pathMap_",bioSource,".json")
-
+mapOutSink = paste0("~/pimpcraft_working/data/outOfR_pathMap_",bioSource,".json")
+pathListOutSink = paste0("~/pimpcraft_working/data/outOfR_pathList_",bioSource,".json")
+  
 pathList <- fromJSON(pathwayListSource)
 metList <- fromJSON(metaboliteListSource)$nodes
 
@@ -39,4 +40,7 @@ pathNodesOut <- as.data.frame(cbind((as_data_frame(pathMap, what ="vertices")$na
 colnames(pathNodesOut) <- c("name", "x", "z")
 pathEdgesOut <- as_data_frame(pathMap, what = "edges")
 
-write_json(list(nodes = pathNodesOut, edges = pathEdgesOut), outputSink, pretty = TRUE)
+write_json(list(nodes = pathNodesOut, edges = pathEdgesOut), mapOutSink, pretty = TRUE)
+
+#Write pathway list to disk, needed for id translation in next step
+write_json(pathList, pathListOutSink, pretty = TRUE)
