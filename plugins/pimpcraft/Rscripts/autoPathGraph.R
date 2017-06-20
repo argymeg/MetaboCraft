@@ -37,7 +37,7 @@ pathList <- fromJSON(pathwayListSource)
 pathId <- pathList[which(pathList$name == pathName),]$id
 
 inputSource = paste0("http://metexplore.toulouse.inra.fr:8080/metExploreWebService/graph/1363/filteredbypathway?pathwayidlist=(", pathId, ")")
-outputSink = paste0("~/pimpcraft_working/data/outOfR_", pathId, ".json")
+outputSink = paste0("~/pimpcraft_working/data/outOfR_", pathName, ".json")
 
 #Read input file, create graph from the source and target of each interaction, build layout
 #TODO: experiment with graphing algorithms. Drl looks promising for large networks but let's get there first.
