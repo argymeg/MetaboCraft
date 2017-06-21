@@ -37,8 +37,9 @@ compaMat <- matrix(data = 0, nrow = length(pathList$name), ncol = length(compaLi
 #Create a matrix of pathways and compartments, assuming that if a metabolite belonging to a pathway
 #can be found in a compartment, so will the pathway. Should be fairly accurate since MetExplore has
 #different entries for metabolites in different compartments.
+#######Finds 0 pathways in the Golgi apparatus! Must mean something's not right... The "faulty" approact above did find some.
 for(i in 1:length(metList$name)){
-  if(metList[i,]$biologicalType == "metabolite" & !is.na(metList[i,]$compartment)){
+  if(metList[i,]$biologicalType == "metabolite"){
     for(j in metList[i,]$pathways){
       pList <- unique(j)[-which(unique(j) == "Miscellaneous" | unique(j) == "Unassigned")]
       compaMat[pList,metList[i,]$compartment] <- 1
