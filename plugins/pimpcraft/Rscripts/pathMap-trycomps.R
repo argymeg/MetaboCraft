@@ -28,9 +28,9 @@ for(i in 1:length(metListTrunc$name)){
 }
 
 
-#Make graph with top 3 connections
+#Make graph with top 2 connections
 for(i in metList$pathways){
-  pList <- unique(i)[-which(unique(i) == "Miscellaneous" | unique(i) == "Unassigned")]
+  pList <- setdiff(i, excludedPaths)
   if(length(pList) > 1){
     pathMat[pList,pList] = pathMat[pList,pList] + 1
   }
@@ -38,7 +38,7 @@ for(i in metList$pathways){
 diag(pathMat) <- 0
 
 pathMat <- t(apply(pathMat, 1, function(x){
-  (x >= min(tail(sort(x), 1)) & x > 0) * 1
+  (x >= min(tail(sort(x), 2)) & x > 0) * 1
   }))
 
 pathMap <- graph_from_adjacency_matrix(pathMat, mode = "lower")
