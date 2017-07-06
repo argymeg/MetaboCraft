@@ -5,33 +5,28 @@ library("jsonlite")
 
 compartmentWanted <- "mitochondrion"
 
-compaListSource <- "http://metexplore.toulouse.inra.fr:8080/metExploreWebService/biosources/1363/compartments"
-compaLinkSource <- "http://metexplore.toulouse.inra.fr:8080/metExploreWebService/link/1363/compartments/metabolites"
+
 pathwayListSource <- "http://metexplore.toulouse.inra.fr:8080/metExploreWebService/biosources/1363/pathways"
 metaboliteListSource <- "http://metexplore.toulouse.inra.fr:8080/metExploreWebService/graph/1363"
 outputSink = "~/pimpcraft_working/data/outOfR_pathMap_1363.json"
 
-compaList <- fromJSON(compaListSource)
-compaLinks <- fromJSON(compaLinkSource)
 pathList <- fromJSON(pathwayListSource)
 metList <- fromJSON(metaboliteListSource)$nodes
 
-pathList <- pathList[-which(pathList$name == "Miscellaneous" | pathList$name == "Unassigned"),]
-compaMat <- matrix(data = 0, nrow = length(pathList$name), ncol = length(compaList$name), dimnames = list(pathList$name, compaList$name))
+pathList <- pathList[-which(pathList$name == excludedPaths),]
+compaMat <- matrix(data = 0, nrow = length(pathList$name), ncol = length(compartmentWanted), dimnames = list(pathList$name, compartmentWanted))
 
 #Create a matrix of pathways and compartments, assuming that if a metabolite belonging to a pathway
 #can be found in a compartment, so will the pathway. Should be fairly accurate since MetExplore has
 #different entries for metabolites in different compartments.
 excludedPaths <- c("Unassigned","Miscellaneous")
-metListTrunc <- metList[metList$biologicalType == "metabolite",]
-for(i in 1:length(metListTrunc$name)){
-  compaMat[setdiff(metListTrunc[i,]$pathways[[1]], excludedPaths), metListTrunc[i,]$compartment] <- 1
+metListSubset <- metList[metList$compartment == compartmentWanted & metList$biologicalType == "metabolite",]
+for(i in 1:length(metListSubset$name)){
+  compaMat[setdiff(metListSubset[i,]$pathways[[1]], excludedPaths), compartmentWanted] <- 1
 }
 
-pathListWanted <- pathList[compaMat[,"mitochondrion"] == 1,]
+pathListWanted <- pathList[compaMat[,compartmentWanted] == 1,]
 pathMat <- matrix(data = 0, nrow = length(pathListWanted$name), ncol = length(pathListWanted$name), dimnames = list(pathListWanted$name, pathListWanted$name))
-
-metListSubset <- metList[metList$compartment == compartmentWanted & metList$biologicalType == "metabolite",]
 
 #Make graph with top 2 connections
 for(i in metListSubset$pathways){
