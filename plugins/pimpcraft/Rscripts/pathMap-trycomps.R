@@ -18,33 +18,13 @@ pathList <- pathList[-which(pathList$name == "Miscellaneous" | pathList$name == 
 pathMat <- matrix(data = 0, nrow = length(pathList$name), ncol = length(pathList$name), dimnames = list(pathList$name, pathList$name))
 compaMat <- matrix(data = 0, nrow = length(pathList$name), ncol = length(compaList$name), dimnames = list(pathList$name, compaList$name))
 
-#xx <- 1
-#yy <- 1
-#for(i in 1:length(metList$name)){
-#  #print(paste(metList[i,]$biologicalType, metList[i,]$compartment, sep = "sep"))
-#  if(metList[i,]$biologicalType == "metabolite" & !is.na(metList[i,]$compartment)){
-#    for(j in metList[i,]$pathways){
-#      if(j != "Miscellaneous" & j != "Unassigned"){
-#        tryCatch({
-#          compaMat[j,metList[i,]$compartment] <- 1
-#          yy <<- yy + 1
-#        }, error = function(e){print(e);print(j);xx <<- xx + 1})
-#      }
-#    }
-#  }
-#}
-
 #Create a matrix of pathways and compartments, assuming that if a metabolite belonging to a pathway
 #can be found in a compartment, so will the pathway. Should be fairly accurate since MetExplore has
 #different entries for metabolites in different compartments.
-#######Finds 0 pathways in the Golgi apparatus! Must mean something's not right... The "faulty" approact above did find some.
-for(i in 1:length(metList$name)){
-  if(metList[i,]$biologicalType == "metabolite"){
-    for(j in metList[i,]$pathways){
-      pList <- unique(j)[-which(unique(j) == "Miscellaneous" | unique(j) == "Unassigned")]
-      compaMat[pList,metList[i,]$compartment] <- 1
-    }
-  }
+excludedPaths <- c("Unassigned","Miscellaneous")
+metListTrunc <- metList[metList$biologicalType == "metabolite",]
+for(i in 1:length(metListTrunc$name)){
+  compaMat[setdiff(metListTrunc[i,]$pathways[[1]], excludedPaths), metListTrunc[i,]$compartment] <- 1
 }
 
 
