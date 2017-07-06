@@ -3,11 +3,13 @@
 library("igraph")
 library("jsonlite")
 
+compartmentWanted <- "mitochondrion"
+
 compaListSource <- "http://metexplore.toulouse.inra.fr:8080/metExploreWebService/biosources/1363/compartments"
 compaLinkSource <- "http://metexplore.toulouse.inra.fr:8080/metExploreWebService/link/1363/compartments/metabolites"
 pathwayListSource <- "http://metexplore.toulouse.inra.fr:8080/metExploreWebService/biosources/1363/pathways"
 metaboliteListSource <- "http://metexplore.toulouse.inra.fr:8080/metExploreWebService/graph/1363"
-outputSink = "~/pimpcraft_working/data/outOfR_pathMap.json"
+outputSink = "~/pimpcraft_working/data/outOfR_pathMap_1363.json"
 
 compaList <- fromJSON(compaListSource)
 compaLinks <- fromJSON(compaLinkSource)
@@ -15,7 +17,6 @@ pathList <- fromJSON(pathwayListSource)
 metList <- fromJSON(metaboliteListSource)$nodes
 
 pathList <- pathList[-which(pathList$name == "Miscellaneous" | pathList$name == "Unassigned"),]
-pathMat <- matrix(data = 0, nrow = length(pathList$name), ncol = length(pathList$name), dimnames = list(pathList$name, pathList$name))
 compaMat <- matrix(data = 0, nrow = length(pathList$name), ncol = length(compaList$name), dimnames = list(pathList$name, compaList$name))
 
 #Create a matrix of pathways and compartments, assuming that if a metabolite belonging to a pathway
@@ -27,9 +28,13 @@ for(i in 1:length(metListTrunc$name)){
   compaMat[setdiff(metListTrunc[i,]$pathways[[1]], excludedPaths), metListTrunc[i,]$compartment] <- 1
 }
 
+pathListWanted <- pathList[compaMat[,"mitochondrion"] == 1,]
+pathMat <- matrix(data = 0, nrow = length(pathListWanted$name), ncol = length(pathListWanted$name), dimnames = list(pathListWanted$name, pathListWanted$name))
+
+metListSubset <- metList[metList$compartment == compartmentWanted & metList$biologicalType == "metabolite",]
 
 #Make graph with top 2 connections
-for(i in metList$pathways){
+for(i in metListSubset$pathways){
   pList <- setdiff(i, excludedPaths)
   if(length(pList) > 1){
     pathMat[pList,pList] = pathMat[pList,pList] + 1
