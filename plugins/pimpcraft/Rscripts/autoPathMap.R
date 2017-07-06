@@ -4,8 +4,12 @@
 library("igraph")
 library("jsonlite")
 
-bioSource <- commandArgs(trailingOnly = TRUE)[1]
+excludedPaths <- c("Unassigned","Miscellaneous")
 
+bioSource <- commandArgs(trailingOnly = TRUE)[1]
+compartmentWanted <- commandArgs(trailingOnly = TRUE)[2]
+
+#compaListSource <- paste0("http://metexplore.toulouse.inra.fr:8080/metExploreWebService/biosources/",bioSource,"/compartments") #Keep for future error checking
 pathwayListSource <- paste0("http://metexplore.toulouse.inra.fr:8080/metExploreWebService/biosources/",bioSource,"/pathways")
 metaboliteListSource <- paste0("http://metexplore.toulouse.inra.fr:8080/metExploreWebService/graph/",bioSource)
 mapOutSink = paste0("~/pimpcraft_working/data/outOfR_pathMap_",bioSource,".json")
@@ -14,13 +18,26 @@ pathListOutSink = paste0("~/pimpcraft_working/data/outOfR_pathList_",bioSource,"
 pathList <- fromJSON(pathwayListSource)
 metList <- fromJSON(metaboliteListSource)$nodes
 
-pathList <- pathList[-which(pathList$name == "Miscellaneous" | pathList$name == "Unassigned"),]
-pathMat <- matrix(data = 0, nrow = length(pathList$name), ncol = length(pathList$name), dimnames = list(pathList$name, pathList$name))
+pathList <- pathList[-which(pathList$name == excludedPaths),]
 
+if(!is.na(compartmentWanted)){
+  metList <- metList[metList$compartment == compartmentWanted & metList$biologicalType == "metabolite",]
+  
+  #Create a list (matrix) of pathways found in the selected compartment
+  compaMat <- matrix(data = 0, nrow = length(pathList$name), ncol = length(compartmentWanted), dimnames = list(pathList$name, compartmentWanted))
+  for(i in 1:length(metList$name)){
+    compaMat[setdiff(metList[i,]$pathways[[1]], excludedPaths), compartmentWanted] <- 1
+  }
+  
+  pathList <- pathList[compaMat[,compartmentWanted] == 1,]
+} else {
+  metList <- metList[metList$biologicalType == "metabolite",]
+}
+pathMat <- matrix(data = 0, nrow = length(pathList$name), ncol = length(pathList$name), dimnames = list(pathList$name, pathList$name))
 
 #Make graph with top 2 connections
 for(i in metList$pathways){
-  pList <- unique(i)[-which(unique(i) == "Miscellaneous" | unique(i) == "Unassigned")]
+  pList <- setdiff(i, excludedPaths)
   if(length(pList) > 1){
     pathMat[pList,pList] = pathMat[pList,pList] + 1
   }
