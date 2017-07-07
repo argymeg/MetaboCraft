@@ -45,8 +45,8 @@ graphData <- fromJSON(inputSource)
 allLinks <- as.data.frame(cbind(graphData$links$source, graphData$links$target))
 colnames(allLinks) <- c("source","target")
 linkType <- graphData$links$interaction
-allNodes <- as.data.frame(cbind(c(0:(length(graphData$nodes$name) - 1)), graphData$nodes$name, graphData$nodes$biologicalType), stringsAsFactors = FALSE)
-colnames(allNodes) <- c("localID","chemName","biologicalType")
+allNodes <- as.data.frame(cbind(c(0:(length(graphData$nodes$name) - 1)), graphData$nodes$name, graphData$nodes$biologicalType, graphData$nodes$id), stringsAsFactors = FALSE)
+colnames(allNodes) <- c("localID","chemName","biologicalType","globalID")
 
 #Only process node if it crosses the threshold for total number of connections - but we don't know how many times in each side.
 #If there's more than one occurrence in sources, duplicate all but the first
@@ -81,6 +81,7 @@ colnames(nodesout) <- c("localID", "x", "y", "z")
 
 nodesout$chemName <- allNodes$chemName[as.integer(as.character(nodesout$localID)) + 1]
 nodesout$biologicalType <- allNodes$biologicalType[as.integer(as.character(nodesout$localID)) + 1]
+nodesout$globalID <- allNodes$globalID[as.integer(as.character(nodesout$localID)) + 1]
 
 nodesout <- nodesout[order(as.integer(as.character(nodesout$localID))),]
 
