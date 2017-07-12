@@ -2,14 +2,16 @@
 
 library("jsonlite")
 
-bioSource <- commandArgs(trailingOnly = TRUE)[1]
-mdataFile <- commandArgs(trailingOnly = TRUE)[2]
+#playerName <- commandArgs(trailingOnly = TRUE)[1]
+#mdataFile <- commandArgs(trailingOnly = TRUE)[2]
+#alias <- commandArgs(trailingOnly = TRUE)[3]
 
-#bioSource <- 1363
+#playerName <- argymeg
 #mdataFile <- "pathos_KEGGlist3-withink.csv"
+#alias <- testdata
 
-metadataSource = paste0("~/pimpcraft_working/data/", mdataFile)
-outputSink = paste0("~/pimpcraft_working/data/outOfR_change_", bioSource, ".json")
+#metadataSource = paste0("~/pimpcraft_working/data/", mdataFile)
+outputSink = paste0("~/pimpcraft_working/data/outOfR_change_", playerName, "-", alias, ".json")
 
 #Import sample data and calculate a crude metric of positive or negative change (more than 2-fold)
 sampleData <- read.csv(metadataSource)
