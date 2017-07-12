@@ -6,13 +6,15 @@ var droneCheck = persist('droneCheck',{});
 var data, changeData;
 var dataSource, changeDataSource;
 
-function pullFromRAndBuildThis(pathID, hasChangeData){
+function pullFromRAndBuildThis(bioSource, pathName, hasChangeData){
   changeDataSource = null; //Otherwise it uses changeData from the last run
   changeData = null;
 
-  dataSource = 'http://localhost:8080/outOfR_' + pathID + '.json';
+  pathName = pathName.replace(/ /g, "%20");
+  dataSource = 'http://localhost:32908/pathgraph?biosource=' + bioSource + '&pathname=' + pathName;
+
   if(hasChangeData){
-    changeDataSource = 'http://localhost:8080/outOfR_change_' + pathID + '.json';
+    changeDataSource = 'http://localhost:8080/outOfR_change_' + pathName + '.json';
   }
   startPulling(this);
 }
@@ -204,7 +206,7 @@ Drone.extend(pullFromRAndBuildThis);
 
 function buildPath(parameters, player){
   var d = new Drone(player);
-  d.pullFromRAndBuildThis(parameters[0], parameters[1]);
+  d.pullFromRAndBuildThis(parameters[0], parameters[1], parameters[2]);
 }
 
 command(buildPath);
