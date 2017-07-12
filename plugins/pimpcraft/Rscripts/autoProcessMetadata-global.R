@@ -3,15 +3,13 @@
 library("jsonlite")
 
 bioSource <- commandArgs(trailingOnly = TRUE)[1]
-pathName <- commandArgs(trailingOnly = TRUE)[2]
-mdataFile <- commandArgs(trailingOnly = TRUE)[3]
+mdataFile <- commandArgs(trailingOnly = TRUE)[2]
 
 #bioSource <- 1363
-#pathName<- "Arginine and Proline Metabolism"
 #mdataFile <- "pathos_KEGGlist3-withink.csv"
 
 metadataSource = paste0("~/pimpcraft_working/data/", mdataFile)
-outputSink = paste0("~/pimpcraft_working/data/outOfR_change_", pathName, ".json")
+outputSink = paste0("~/pimpcraft_working/data/outOfR_change_", bioSource, ".json")
 
 #Import sample data and calculate a crude metric of positive or negative change (more than 2-fold)
 sampleData <- read.csv(metadataSource)
