@@ -8,7 +8,7 @@ cDataFile <- commandArgs(trailingOnly = TRUE)[3]
 
 bioSource <- 1363
 pathName<- "Arginine and Proline Metabolism"
-cDataFile <- "outputSink3.json"
+cDataFile <- paste0("~/pimpcraft_working/data/outOfR_change_", bioSource, ".json")
 
 cData <- fromJSON(cDataFile)
 
@@ -25,3 +25,9 @@ pathGraph <- pathGraph[pathGraph$biologicalType == "metabolite",]
 rownames(pathGraph) <- pathGraph$globalID
 inchiList$localID <- pathGraph[inchiList$idMetabolite,"localID"]
 inchiList <- subset(inchiList, !is.na(localID))
+
+rownames(cData) <- cData$ink
+inchiList$pos <- cData[inchiList$inchikey,"pos"]
+
+changed <- inchiList[,c("localID","pos")]
+changed <- subset(changed, !is.na(pos))
