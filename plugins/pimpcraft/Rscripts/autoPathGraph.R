@@ -3,8 +3,8 @@
 library("igraph")
 library("jsonlite")
 
-bioSource <- commandArgs(trailingOnly = TRUE)[1]
-pathName <- commandArgs(trailingOnly = TRUE)[2]
+#bioSource <- commandArgs(trailingOnly = TRUE)[1]
+#pathName <- commandArgs(trailingOnly = TRUE)[2]
 
 #Small but crucial bit of duplicated code - could conceivably cause issues
 #TODO: find a way to dynamically choose which set of nodes to apply duplication to.
@@ -31,8 +31,7 @@ duplicateTargets <- function(startAt){
   }
 }
 
-
-pathwayListSource <- paste0("http://localhost:8080/outOfR_pathList_", bioSource, ".json")
+pathwayListSource <- paste0("http://metexplore.toulouse.inra.fr:8080/metExploreWebService/biosources/",bioSource,"/pathways")
 pathList <- fromJSON(pathwayListSource)
 pathId <- pathList[which(pathList$name == pathName),]$id
 
@@ -88,5 +87,6 @@ nodesout <- nodesout[order(as.integer(as.character(nodesout$localID))),]
 #Build the edge part of the output - just a list of edges for now
 edgesout <- as.data.frame(cbind(as_data_frame(graph, what = "edges"), linkType))
 
-write_json(list(nodes = nodesout, edges = edgesout), outputSink, pretty = TRUE)
+graphOut <- list(nodes = nodesout, edges = edgesout)
+write_json(graphOut, outputSink, pretty = TRUE)
 

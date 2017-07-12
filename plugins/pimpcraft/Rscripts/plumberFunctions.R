@@ -7,3 +7,11 @@ function(biosource, compartment = NA){
   source("autoPathMap-simplegrid.R", local = TRUE)
   return(mapOut)
 }
+
+#* @get /pathgraph
+function(biosource, pathname){
+  bioSource <- biosource
+  pathName <- pathname
+  source("autoPathGraph.R", local = TRUE)
+  return(graphOut)
+}
