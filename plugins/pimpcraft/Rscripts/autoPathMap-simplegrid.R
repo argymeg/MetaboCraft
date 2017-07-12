@@ -47,7 +47,7 @@ for(i in metList$pathways){
 diag(pathMat) <- 0
 
 pathMap <- graph_from_adjacency_matrix(pathMat, weighted = TRUE)
-mapLo <- layout_(pathMap, on_grid(dim = 2), normalize(xmin = 0, xmax = 100))
+mapLo <- layout_(pathMap, on_grid(dim = 2), normalize(xmin = 0, xmax = length(pathList$name) / 2))
 
 #plot(pathMap, layout = mapLo, edge.lty = 0, edge.arrow.mode = 0)
 
