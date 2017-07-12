@@ -6,8 +6,8 @@ library("jsonlite")
 
 excludedPaths <- c("Unassigned","Miscellaneous")
 
-bioSource <- commandArgs(trailingOnly = TRUE)[1]
-compartmentWanted <- commandArgs(trailingOnly = TRUE)[2]
+#bioSource <- commandArgs(trailingOnly = TRUE)[1]
+#compartmentWanted <- commandArgs(trailingOnly = TRUE)[2]
 
 #bioSource <- 1363
 
@@ -56,7 +56,8 @@ mapLo <- layout_(pathMap, on_grid(dim = 2), normalize(xmin = 0, xmax = 100))
 pathNodesOut <- as.data.frame(cbind((as_data_frame(pathMap, what ="vertices")$name), mapLo[,1], mapLo[,2]))
 colnames(pathNodesOut) <- c("name", "x", "z")
 
-write_json(list(nodes = pathNodesOut), mapOutSink, pretty = TRUE)
+mapOut <- list(nodes = pathNodesOut)
+write_json(mapOut, mapOutSink, pretty = TRUE)
 
 #Write pathway list to disk, needed for id translation in next step
 #write_json(pathList, pathListOutSink, pretty = TRUE)
