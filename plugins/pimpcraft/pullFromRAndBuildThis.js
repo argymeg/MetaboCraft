@@ -2,19 +2,20 @@ var bresenham = require('bresenham-js');
 var Drone = require('drone');
 var http = require('http');
 var utils = require('utils');
+var store = require('storage');
 var droneCheck = persist('droneCheck',{});
 var data, changeData;
 var dataSource, changeDataSource;
 
-function pullFromRAndBuildThis(bioSource, pathName, hasChangeData){
+function pullFromRAndBuildThis(bioSource, pathName, changeDataAlias){
   changeDataSource = null; //Otherwise it uses changeData from the last run
   changeData = null;
 
   pathName = pathName.replace(/ /g, "%20");
   dataSource = 'http://localhost:32908/pathgraph?biosource=' + bioSource + '&pathname=' + pathName;
 
-  if(hasChangeData){
-    changeDataSource = 'http://localhost:8080/outOfR_change_' + pathName + '.json';
+  if(changeDataAlias){
+    changeDataSource = 'http://localhost:8080/outOfR_change_' + changeDataAlias + '.json';
   }
   startPulling(this);
 }
@@ -64,7 +65,7 @@ function actuallyBuild(droneb){
       dim = 3;
       if(changeData){
         for(var m = 0; m < changeData.length; m++){
-          if(data.nodes[i].localID == changeData[m].localID){
+          if(data.nodes[i].ink == changeData[m].ink){ //NOT ACTUALLY THERE YET!
             if(changeData[m].pos == true){
               material = 133; //emerald
             }
@@ -209,7 +210,13 @@ function buildPath(parameters, player){
   d.pullFromRAndBuildThis(parameters[0], parameters[1], parameters[2]);
 }
 
+function addMyData(parameters, player){
+  var d = new Drone(player);
+  d.pullFromRAndBuildThis(store[player.name]['bioSource'], store[player.name]['lastPath'], parameters[0]);
+}
+
 command(buildPath);
+command(addMyData);
 
 
 //Removed for now to make life easier
