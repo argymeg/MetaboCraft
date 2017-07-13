@@ -1,5 +1,7 @@
 //Builds the graph of a pathway selected in the map
 
+var store = require('storage');
+
 function myNodeClickHook(event){
   var player = event.player;
   if(event.getAction() == 'RIGHT_CLICK_BLOCK'){
@@ -10,7 +12,7 @@ function myNodeClickHook(event){
         selection = selection.replace(/ /g, "%20");
 
         var d = new Drone(player);
-        d.pullFromRAndBuildThis(selection);
+        d.pullFromRAndBuildThis(store[player.name]['bioSource'], selection);
       }
     }
   }
