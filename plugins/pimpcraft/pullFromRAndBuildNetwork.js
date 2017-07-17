@@ -7,6 +7,7 @@ Should be merged with the pathway builder
 
 var Drone = require('drone');
 var http = require('http');
+var store = require('storage');
 var data;
 var pathMapSource;
 
@@ -64,7 +65,7 @@ Drone.extend(pullFromRAndBuildNetwork);
 
 function buildMap(parameters, player){
   var d = new Drone(player);
-  d.pullFromRAndBuildNetwork(parameters[0], parameters[1]);
+  d.pullFromRAndBuildNetwork(store[player.name]['bioSource'], parameters[0]);
 }
 
 command(buildMap);

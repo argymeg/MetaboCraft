@@ -7,15 +7,15 @@ var droneCheck = persist('droneCheck',{});
 var data, changeData;
 var dataSource, changeDataSource;
 
-function pullFromRAndBuildThis(bioSource, pathName, changeDataAlias){
+function pullFromRAndBuildThis(bioSource, pathName, playerName){
   changeDataSource = null; //Otherwise it uses changeData from the last run
   changeData = null;
 
   pathName = pathName.replace(/ /g, "%20");
   dataSource = 'http://localhost:32908/pathgraph?biosource=' + bioSource + '&pathname=' + pathName;
 
-  if(changeDataAlias){
-    changeDataSource = 'http://localhost:8080/outOfR_change_' + changeDataAlias + '.json';
+  if(store[playerName]['changeDataEnabled']){
+    changeDataSource = 'http://localhost:32908/getplayerfile?file=' + store[playerName]['currentFile'];
   }
   startPulling(this);
 }
@@ -207,16 +207,10 @@ Drone.extend(pullFromRAndBuildThis);
 
 function buildPath(parameters, player){
   var d = new Drone(player);
-  d.pullFromRAndBuildThis(parameters[0], parameters[1], parameters[2]);
-}
-
-function addMyData(parameters, player){
-  var d = new Drone(player);
-  d.pullFromRAndBuildThis(store[player.name]['bioSource'], store[player.name]['lastPath'], parameters[0]);
+  d.pullFromRAndBuildThis(store[player.name]['bioSource'], parameters[0], player.name);
 }
 
 command(buildPath);
-command(addMyData);
 
 
 //Removed for now to make life easier

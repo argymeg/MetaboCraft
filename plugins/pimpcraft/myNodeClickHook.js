@@ -11,10 +11,8 @@ function myNodeClickHook(event){
         var selection = location.world.getNearbyEntities(location, 2, 2, 2)[0].getCustomName();
         selection = selection.replace(/ /g, "%20");
 
-        store[player.name]['lastPath'] = selection;
-
         var d = new Drone(player);
-        d.pullFromRAndBuildThis(store[player.name]['bioSource'], selection);
+        d.pullFromRAndBuildThis(store[player.name]['bioSource'], selection, player.name);
       }
     }
   }
