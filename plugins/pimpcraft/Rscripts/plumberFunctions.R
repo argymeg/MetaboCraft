@@ -15,3 +15,9 @@ function(biosource, pathname){
   source("autoPathGraph.R", local = TRUE)
   return(graphOut)
 }
+
+#* @get /listplayerfiles
+function(player){
+  #return(list.files(pattern = paste0("^", player)))
+  return(list.files(path = "~/pimpcraft_working/data/", pattern = paste0("^outOfR_change_", player)))
+}
