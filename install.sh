@@ -9,7 +9,7 @@ then
   exit
 fi
 
-if [ -d "server" ]
+if [ -d "spigot" ]
 then
   printf "You seem to be running the installer in a directory containing\nan existing installation. This will be WIPED if you proceed.\n" | tee -a install.log
   printf "Proceed? [y/N] "
@@ -21,35 +21,22 @@ then
 fi
 
 echo "Checking for dependencies..."
-for i in curl java
+for i in curl java screen Rscript
 do
   if which $i > /dev/null 2>&1
   then
     echo "Checking for $i... OK" | tee -a install.log
   else
-    echo "Missing build dependency: $i. You cannot proceed with installation!" | tee -a install.log
+    echo "Missing dependency: $i. You cannot proceed with installation!" | tee -a install.log
     exit
   fi
 done
 
-for i in screen Rscript #more?
-do
-  if which $i > /dev/null 2>&1
-  then
-    echo "Checking for $i... OK" | tee -a install.log
-  else
-    printf "Missing runtime dependency: $i. You can proceed with installation,\nbut you will need to install this before running PiMPCraft!\n" | tee -a install.log
-    printf "Proceed? [Y/n] "
-    read answer
-    if [ "$answer" = "n" ]
-    then
-      exit
-    fi
-  fi
-done
+STARTDIR=$PWD
 
-mkdir server > /dev/null 2>&1
-cd server
+mkdir cache > /dev/null 2>&1
+mkdir spigot > /dev/null 2>&1
+cd spigot
 
 echo "Downloading BuildTools..." | tee -a ../install.log
 curl -f -o BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar 2>> ../install.log
@@ -58,41 +45,44 @@ java -jar BuildTools.jar --rev 1.11.2 >> ../install.log 2>&1
 echo "Cleaning up build environment..." | tee -a ../install.log
 ls | grep -v spigot- | xargs rm -r
 echo "eula=true" > eula.txt
-#Must also create server.properties!
+printf "allow-nether=false\ngamemode=1\nlevel-type=FLAT\nspawn-monsters=false\nspawn-npcs=false\nspawn-animals=false\ngenerate-structures=false\npvp=false" > server.properties
 
 echo "Downloading ScriptCraft..." | tee -a ../install.log
 mkdir plugins
 curl -f -o plugins/scriptcraft.jar https://scriptcraftjs.org/download/latest/scriptcraft-3.2.1/scriptcraft.jar 2>> ../install.log
 
-echo "Installing PiMPCraft onto server... (not implemented yet!)"
-#Starting here, copy PiMPCraft into appropriate folders before initialising
+echo "Installing PiMPCraft onto server..."
 mkdir -p scriptcraft/plugins
+ln -s $STARTDIR/pimpcraft scriptcraft/plugins/
 mkdir scriptcraft/modules
+ln -s $STARTDIR/modules/* scriptcraft/modules
 
 echo "Initialising server..." | tee -a ../install.log
 
-java -jar $(ls | grep spigot- ) |
-while read -r line
+screen -dmS initServer
+screen -S initServer -p 0 -X stuff "exec java -jar $(ls | grep spigot- )
+"
+screen -S initServer -p 0 -X stuff "gamerule doDaylightCycle false
+"
+screen -S initServer -p 0 -X stuff "gamerule doWeatherCycle false
+"
+screen -S initServer -p 0 -X stuff "time set 6000
+"
+screen -S initServer -p 0 -X stuff "stop
+"
+
+while screen -ls | grep -q initServer
 do
-  echo $line >> ../install.log
-  if echo $line | grep -q Done
-  then
-    sleep 1;
-    pkill -f java.*jar.*spigot
-  fi
+  sleep 1;
 done
 
-#This is a far more elegant solution, but it doesn't work with the
-#ancient screen version still shipped with macOS...
-#screen -dmS initServer
-#screen -S initServer -X stuff "exec java -jar $(ls | grep spigot- ) \n"
-#screen -S initServer -X stuff "stop \n"
-#
-#while screen -ls | grep -q initServer
-#do
-#  sleep 1;
-#done
-#
-#cat logs/latest.log >> ../install.log
+cat logs/latest.log >> ../install.log
+
+echo "Installing missing R packages (if any)..." | tee -a ../install.log
+
+for i in igraph jsonlite shiny plumber
+do
+  Rscript -e "if(!require($i)){install.packages(\"$i\", repos = \"https://cloud.r-project.org/\")}" > /dev/null 2>&1
+done
 
 echo "Done!" | tee -a ../install.log
