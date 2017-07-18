@@ -6,7 +6,10 @@ library("jsonlite")
 #bioSource <- commandArgs(trailingOnly = TRUE)[1]
 #pathName <- commandArgs(trailingOnly = TRUE)[2]
 
-outputSink = paste0("../cache/pathGraph_", pathName, ".json")
+bioSource <- 4324
+pathName <- "Sphingolipid metabolism"
+
+outputSink = paste0("../cache/pathGraph_", bioSource, "_", pathName, ".json")
 if(file.exists(outputSink)){
   graphOut <- fromJSON(outputSink)
 } else {
@@ -35,8 +38,8 @@ if(file.exists(outputSink)){
     }
   }
   
-  pathwayListOutSink = paste0("../cache/pathwayList_",bioSource,".json")
-  
+  pathwayListOutSink <- paste0("../cache/pathwayList_",bioSource,".json")
+  inchiListOutSink <- paste0("../cache/inchiList_",bioSource,".json")
   if(file.exists(pathwayListOutSink)){
     pathwayListSource <- pathwayListOutSink
     pathList <- fromJSON(pathwayListSource)
@@ -45,9 +48,19 @@ if(file.exists(outputSink)){
     pathList <- fromJSON(pathwayListSource)
     write_json(pathList, pathwayListOutSink, pretty = TRUE)
   }
+  
   pathId <- pathList[which(pathList$name == pathName),]$id
   
-  inputSource = paste0("http://metexplore.toulouse.inra.fr:8080/metExploreWebService/graph/1363/filteredbypathway?pathwayidlist=(", pathId, ")")
+  if(file.exists(inchiListOutSink)){
+    inchiListSource <- inchiListOutSink
+    inchiList <- fromJSON(inchiListSource)
+  } else {
+    inchiListSource <- paste0("http://metexplore.toulouse.inra.fr:8080/metExploreWebService/link/",bioSource,"/metabolites/inchikey")
+    inchiList <- fromJSON(inchiListSource)
+    write_json(inchiList, inchiListOutSink, pretty = TRUE)
+  }
+  
+  inputSource = paste0("http://metexplore.toulouse.inra.fr:8080/metExploreWebService/graph/", bioSource, "/filteredbypathway?pathwayidlist=(", pathId, ")")
   
   #Read input file, create graph from the source and target of each interaction, build layout
   #TODO: experiment with graphing algorithms. Drl looks promising for large networks but let's get there first.
@@ -92,6 +105,10 @@ if(file.exists(outputSink)){
   nodesout$chemName <- allNodes$chemName[as.integer(as.character(nodesout$localID)) + 1]
   nodesout$biologicalType <- allNodes$biologicalType[as.integer(as.character(nodesout$localID)) + 1]
   nodesout$globalID <- allNodes$globalID[as.integer(as.character(nodesout$localID)) + 1]
+  
+  rownames(inchiList) <- inchiList$idMetabolite
+  nodesout$inchikey <- inchiList[nodesout$globalID, "inchikey"]
+  nodesout$globalID <- NULL
   
   nodesout <- nodesout[order(as.integer(as.character(nodesout$localID))),]
   
