@@ -2,9 +2,10 @@
 
 screen -S pimpcraftSpigot -p 0 -X stuff "stop
 "
-
-screen -S pimpcraftPlumber -p 0 -X kill
-screen -S pimpcraftShiny -p 0 -X kill
+screen -S pimpcraftPlumber -p 0 -X stuff 'kill $! ; exit
+'
+screen -S pimpcraftShiny -p 0 -X stuff 'kill $! ; exit
+'
 
 sleep 5;
 
