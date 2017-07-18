@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 printf "\nWelcome to the PiMPCraft installer!\nThis script will download, compile and install everything you need\nto run PiMPCraft on your local computer.\nPlease read the documentation before proceeding!\n\n" | tee install.log
 printf "In order to run the Spigot server, necesssary to run PiMPCraft,\nyou need to agree to the Minecraft EULA, which you can read at\nhttps://account.mojang.com/documents/minecraft_eula\n\n!!!BY PROCEEDING YOU INDICATE YOUR AGREEMENT TO THE MINECRAFT EULA!!!\n" | tee install.log
@@ -51,7 +51,7 @@ echo "Downloading ScriptCraft..." | tee -a ../install.log
 mkdir plugins
 curl -f -o plugins/scriptcraft.jar https://scriptcraftjs.org/download/latest/scriptcraft-3.2.1/scriptcraft.jar 2>> ../install.log
 
-echo "Installing PiMPCraft onto server..."
+echo "Installing PiMPCraft onto server..." | tee -a ../install.log
 mkdir -p scriptcraft/plugins
 ln -s $STARTDIR/pimpcraft scriptcraft/plugins/
 mkdir scriptcraft/modules
@@ -73,16 +73,27 @@ screen -S initServer -p 0 -X stuff "stop
 
 while screen -ls | grep -q initServer
 do
-  sleep 1;
+  sleep 1
 done
 
 cat logs/latest.log >> ../install.log
 
 echo "Installing missing R packages (if any)..." | tee -a ../install.log
 
-for i in igraph jsonlite shiny plumber
-do
-  Rscript -e "if(!require($i)){install.packages(\"$i\", repos = \"https://cloud.r-project.org/\")}" > /dev/null 2>&1
-done
+#If we are on Linux and the R library is not in a home directory, assume it is not user-writable and do not attempt to install
+#There could be other configurations on which this check is not enough!
+if [ $(uname) = "Linux" ] && ! Rscript -e '.libPaths()' | grep -q home
+then
+  for i in igraph jsonlite shiny plumber
+  do
+    Rscript -e "if(length(find.package(\"$i\", quiet = TRUE))){writeLines(\"Checking for $i... OK\")}else{writeLines(\"Checking for $i... NOT FOUND\")}"  | tee -a ../install.log
+  done
+  printf "It looks like your R library is not user-writable!\nIF any packages were marked as not found, please install them.\n" | tee -a ../install.log
+else
+  for i in igraph jsonlite shiny plumber
+  do
+    Rscript -e "if(length(find.package(\"$i\", quiet = TRUE))){writeLines(\"Checking for $i... OK\")}else{writeLines(\"Checking for $i... Not found, installing...\");install.packages(\"$i\", repos = \"https://cloud.r-project.org/\")}" | tee -a ../install.log
+  done
+fi
 
 echo "Done!" | tee -a ../install.log
