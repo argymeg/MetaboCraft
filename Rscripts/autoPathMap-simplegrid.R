@@ -14,8 +14,8 @@ excludedPaths <- c("Unassigned","Miscellaneous")
 #compaListSource <- paste0("http://metexplore.toulouse.inra.fr:8080/metExploreWebService/biosources/",bioSource,"/compartments") #Keep for future error checking
 pathwayListSource <- paste0("http://metexplore.toulouse.inra.fr:8080/metExploreWebService/biosources/",bioSource,"/pathways")
 metaboliteListSource <- paste0("http://metexplore.toulouse.inra.fr:8080/metExploreWebService/graph/",bioSource)
-mapOutSink = paste0("~/pimpcraft_working/data/outOfR_pathMap_",bioSource,".json")
-pathListOutSink = paste0("~/pimpcraft_working/data/outOfR_pathList_",bioSource,".json")
+mapOutSink = paste0("../cache/pathMap_",bioSource,".json")
+pathListOutSink = paste0("../cache/pathList_",bioSource,".json")
   
 pathList <- fromJSON(pathwayListSource)
 metList <- fromJSON(metaboliteListSource)$nodes
