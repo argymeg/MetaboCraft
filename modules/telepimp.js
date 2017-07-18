@@ -12,9 +12,9 @@ function telepimp(player){
     tp(player, newLocation);
   }
   else {
-    store[player.name]['location']['x'] = store[player.name]['location'][x] + 2000;
+    store[player.name]['location']['x'] = store[player.name]['location']['x'] + 2000;
     store[player.name]['location']['y'] = 4;
-    store[player.name]['location']['z'] = store[player.name]['location'][z] + 2000;
+    store[player.name]['location']['z'] = store[player.name]['location']['z'] + 2000;
     var newLocation = utils.locationFromJSON(store[player.name]['location'])
     tp(player, newLocation);
   }
