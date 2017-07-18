@@ -2,6 +2,7 @@
 
 var store = require('storage');
 var http = require('http');
+var Drone = require('drone');
 var player, playerFiles;
 
 function myJoinHook(event){
@@ -33,6 +34,9 @@ function showGreeting(){
     store[player.name]['changeDataEnabled'] = false;
     echo(player, "You do not have any currently uploaded files.")
   }
+
+  var d = new Drone(player)
+  d.pullFromRAndBuildNetwork(store[player.name]['bioSource'])
 }
 
 events.playerJoin(myJoinHook);
