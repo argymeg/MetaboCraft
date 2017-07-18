@@ -3,6 +3,7 @@
 var store = require('storage');
 var http = require('http');
 var Drone = require('drone');
+var telepimp = require('telepimp');
 var player, playerFiles;
 
 function myJoinHook(event){
@@ -35,6 +36,7 @@ function showGreeting(){
     echo(player, "You do not have any currently uploaded files.")
   }
 
+  telepimp(player);
   var d = new Drone(player)
   d.pullFromRAndBuildNetwork(store[player.name]['bioSource'])
 }
