@@ -65,7 +65,7 @@ function actuallyBuild(droneb){
       dim = 3;
       if(changeData){
         for(var m = 0; m < changeData.length; m++){
-          if(data.nodes[i].ink == changeData[m].ink){ //NOT ACTUALLY THERE YET!
+          if(data.nodes[i].inchikey == changeData[m].ink){
             if(changeData[m].pos == true){
               material = 133; //emerald
             }

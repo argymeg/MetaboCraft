@@ -10,7 +10,7 @@ function myJoinHook(event){
   player = event.player;
   var playerFileSource = 'http://localhost:32908/listplayerfiles?player=' + player.name;
   store[player.name] = {};
-  store[player.name]['bioSource'] = 1363;//4324;
+  store[player.name]['bioSource'] = 4324;
 
   http.request(playerFileSource,
   function(responseCode, responseBody){
