@@ -8,14 +8,15 @@ Should be merged with the pathway builder
 var Drone = require('drone');
 var http = require('http');
 var store = require('storage');
-var data;
-var pathMapSource;
+var data, compartmentList;
+var pathMapSource, compartmentSource;
 
 function pullFromRAndBuildNetwork(bioSource, compartment){
   pathMapSource = 'http://localhost:32908/pathmap?biosource=' + bioSource;
   if(compartment){
     pathMapSource = pathMapSource + '&compartment=' + compartment
   }
+  compartmentSource = 'http://metexplore.toulouse.inra.fr:8080/metExploreWebService/biosources/' + bioSource + '/Compartment';
   startPulling(this);
 }
 
@@ -23,13 +24,30 @@ function startPulling(dronea){
 
   http.request(pathMapSource,
   function(responseCode, responseBody){
-    data = JSON.parse(responseBody);
-    actuallyBuild(dronea);
+    try{
+      data = JSON.parse(responseBody);
+      pullCompartments(dronea);
+    }
+    catch(err){
+      handleError(dronea);
+    }
+  });
+}
+function pullCompartments(droneb){
+  http.request(compartmentSource,
+  function(responseCode,responseBody){
+    try{
+      compartmentList = JSON.parse(responseBody);
+      actuallyBuild(droneb);
+    }
+    catch(err){
+      handleError(droneb);
+    }
   });
 }
 
-function actuallyBuild(droneb){
-  droneb.chkpt('pointzero');
+function actuallyBuild(dronec){
+  dronec.chkpt('pointzero');
 
   /*
     Main node drawing loop!
@@ -41,15 +59,15 @@ function actuallyBuild(droneb){
     var dim = 2;
 
     //Move drone to node coordinates
-    droneb.right(parseInt(data.nodes[i].x));
-    droneb.fwd(parseInt(data.nodes[i].z));
+    dronec.right(parseInt(data.nodes[i].x));
+    dronec.fwd(parseInt(data.nodes[i].z));
 
     //Draw node as cube of arbitrary dimensions
-    droneb.cuboidX(material, '', dim, dim, dim, true);
+    dronec.cuboidX(material, '', dim, dim, dim, true);
 
-    droneb.up(Math.floor(dim / 2));
-    droneb.fwd(Math.floor(dim / 2));
-    var location = droneb.getLocation() ;
+    dronec.up(Math.floor(dim / 2));
+    dronec.fwd(Math.floor(dim / 2));
+    var location = dronec.getLocation();
     var ars = location.world.spawnEntity(location, org.bukkit.entity.EntityType.ARMOR_STAND)
     ars.setVisible(false);
     ars.setGravity(false);
@@ -57,8 +75,45 @@ function actuallyBuild(droneb){
     ars.setCustomName(data.nodes[i].name);
     ars.setCustomNameVisible(true);
 
-    droneb.move('pointzero');
+    dronec.move('pointzero');
   }
+
+  dronec.back(5);
+  dronec.right(10);
+
+  for(var j = 0; j <= compartmentList.length; j++){
+    if(j == compartmentList.length){
+      var thisName = "Everything";
+    }
+    else if(compartmentList[j].name == 'fake compartment'){
+      continue;
+    }
+    else{
+      var thisName = compartmentList[j].name;
+    }
+    dronec.cuboidX(86, '', 1, 1, 1, true);
+    var location = dronec.getLocation() ;
+    var ars = location.world.spawnEntity(location, org.bukkit.entity.EntityType.ARMOR_STAND)
+    ars.setVisible(false);
+    ars.setGravity(false);
+    ars.setInvulnerable(true);
+    ars.setCustomName(thisName);
+    ars.setCustomNameVisible(true);
+    dronec.right(3);
+  }
+}
+
+function handleError(errdrone){
+//  console.log(errdrone.getLocation());
+//  var playerName = errdrone.getLocation().world.getNearbyEntities(errdrone.getLocation(), 10, 10, 10)[0].getName();
+//  console.log(playerName);
+//  echo(playerName, 'Something has gone wrong! Right click the box in front of you to go back to the start.');
+  errdrone.fwd(5);
+  errdrone.signpost(['Something has', 'gone wrong!', 'Right-click']);
+  errdrone.right(1);
+  errdrone.signpost('HERE');
+  errdrone.right(1);
+  errdrone.signpost(['to go back', 'to the start.'])
 }
 
 Drone.extend(pullFromRAndBuildNetwork);

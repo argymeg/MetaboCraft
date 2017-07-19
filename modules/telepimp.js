@@ -5,7 +5,6 @@ var utils = require('utils')
 function telepimp(player, vantage){
 
   if(vantage == 'map'){
-    echo(player, "shouldbemap");
     var vantagePoint = store[player.name]['location']
     vantagePoint['y'] = 11;
     vantagePoint['pitch'] = 42;
