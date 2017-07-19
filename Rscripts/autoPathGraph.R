@@ -9,7 +9,7 @@ library("jsonlite")
 #bioSource <- 4324
 #pathName <- "Arginine and Proline Metabolism"
 
-outputSink = paste0("../cache/pathGraph_", bioSource, "_", pathName, ".json")
+outputSink <- paste0("../cache/pathGraph_", bioSource, "_", gsub("/","--", pathName, fixed = TRUE), ".json")
 if(file.exists(outputSink)){
   graphOut <- fromJSON(outputSink)
 } else {

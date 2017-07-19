@@ -10,7 +10,7 @@ library("jsonlite")
 #bioSource <- 1363
 #compartmentWanted <- "mitochondrion"
 
-mapOutSink = paste0("../cache/pathMap_",bioSource,"_",compartmentWanted,".json")
+mapOutSink = paste0("../cache/pathMap_",bioSource,"_", gsub("/","--", compartmentWanted, fixed = TRUE),".json")
 if(file.exists(mapOutSink)){
   mapOut <- fromJSON(mapOutSink) #If the map is already there, we're done!
 } else {
