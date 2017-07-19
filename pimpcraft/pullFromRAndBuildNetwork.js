@@ -16,7 +16,7 @@ function pullFromRAndBuildNetwork(bioSource, compartment){
   if(compartment){
     pathMapSource = pathMapSource + '&compartment=' + compartment
   }
-  compartmentSource = 'http://metexplore.toulouse.inra.fr:8080/metExploreWebService/biosources/' + bioSource + '/Compartment';
+  compartmentSource = 'http://metexplore.toulouse.inra.fr:8080/metExploreWebService/biosources/' + bioSource + '/Compartment'; //TODO: build a thin plumber proxy for this, for uniformity and caching
   startPulling(this);
 }
 
@@ -83,7 +83,7 @@ function actuallyBuild(dronec){
 
   for(var j = 0; j <= compartmentList.length; j++){
     if(j == compartmentList.length){
-      var thisName = "Everything";
+      var thisName = 'Everything';
     }
     else if(compartmentList[j].name == 'fake compartment'){
       continue;

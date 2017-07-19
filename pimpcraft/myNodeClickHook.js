@@ -22,8 +22,9 @@ function myNodeClickHook(event){
       if(event.getHand() == 'HAND'){
         var location = event.getClickedBlock().getLocation();
         var selection = location.world.getNearbyEntities(location, 1, 1, 1)[0].getCustomName();
-        //selection = selection.replace(/ /g, "%20");
-
+        if(selection == 'Everything'){
+          selection = '';
+        }
         telepimp(player);
         var d = new Drone(player);
         d.pullFromRAndBuildNetwork(store[player.name]['bioSource'], selection);
