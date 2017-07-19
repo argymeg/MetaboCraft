@@ -15,6 +15,7 @@ function myNodeClickHook(event){
         telepimp(player);
         var d = new Drone(player);
         d.pullFromRAndBuildThis(store[player.name]['bioSource'], selection, player.name);
+        telepimp(player, 'graph');
       }
     }
     else if(event.getClickedBlock().getType() == 'SIGN_POST'){
@@ -23,6 +24,7 @@ function myNodeClickHook(event){
           telepimp(player);
           var d = new Drone(player)
           d.pullFromRAndBuildNetwork(store[player.name]['bioSource'])
+          telepimp(player, 'map');
         }
       }
     }

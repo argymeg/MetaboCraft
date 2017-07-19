@@ -39,6 +39,7 @@ function showGreeting(){
   telepimp(player);
   var d = new Drone(player)
   d.pullFromRAndBuildNetwork(store[player.name]['bioSource'])
+  telepimp(player, 'map');
 }
 
 events.playerJoin(myJoinHook);
