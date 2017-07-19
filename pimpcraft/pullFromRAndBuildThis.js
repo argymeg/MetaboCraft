@@ -21,22 +21,27 @@ function pullFromRAndBuildThis(bioSource, pathName, playerName){
 }
 
 function startPulling(dronea){
-  http.request(dataSource,
-    function(responseCode, responseBody){
-      data = JSON.parse(responseBody);
-      if(changeDataSource){
-        http.request(changeDataSource,
-          function(responseCode, responseBody){
-            changeData = JSON.parse(responseBody);
-            actuallyBuild(dronea);
-          }
-        );
+  try{
+    http.request(dataSource,
+      function(responseCode, responseBody){
+        data = JSON.parse(responseBody);
+        if(changeDataSource){
+          http.request(changeDataSource,
+            function(responseCode, responseBody){
+              changeData = JSON.parse(responseBody);
+              actuallyBuild(dronea);
+            }
+          );
+        }
+        else{
+          actuallyBuild(dronea);
+        }
       }
-      else{
-        actuallyBuild(dronea);
-      }
-    }
-  );
+    );
+  }
+  catch(err){
+    handleError(dronea);
+  }
 }
 
 function actuallyBuild(droneb){
@@ -204,6 +209,15 @@ function actuallyBuild(droneb){
 
     droneb.move('pointzero');
   }
+}
+
+function handleError(errdrone){
+  errdrone.fwd(5);
+  errdrone.signpost(['Something has', 'gone wrong!', 'Right-click']);
+  errdrone.right(1);
+  errdrone.signpost('HERE');
+  errdrone.right(1);
+  errdrone.signpost(['to go back', 'to the start.'])
 }
 
 Drone.extend(pullFromRAndBuildThis);
