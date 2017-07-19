@@ -6,8 +6,8 @@ library("jsonlite")
 #bioSource <- commandArgs(trailingOnly = TRUE)[1]
 #pathName <- commandArgs(trailingOnly = TRUE)[2]
 
-bioSource <- 4324
-pathName <- "Sphingolipid metabolism"
+#bioSource <- 4324
+#pathName <- "Arginine and Proline Metabolism"
 
 outputSink = paste0("../cache/pathGraph_", bioSource, "_", pathName, ".json")
 if(file.exists(outputSink)){
