@@ -43,6 +43,10 @@ function actuallyBuild(droneb){
   droneCheck.startPoint = utils.locationToJSON(droneb.getLocation());
   droneb.chkpt('pointzero');
 
+  droneb.fwd(5);
+  droneb.signpost('Back to map');
+  droneb.back(5);
+
   /*
     Main node drawing loop!
   */

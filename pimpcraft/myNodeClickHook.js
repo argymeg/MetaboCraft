@@ -17,6 +17,15 @@ function myNodeClickHook(event){
         d.pullFromRAndBuildThis(store[player.name]['bioSource'], selection, player.name);
       }
     }
+    else if(event.getClickedBlock().getType() == 'SIGN_POST'){
+      if(event.getHand() == 'HAND'){
+        if(event.getClickedBlock().getState().getLine(0) == 'Back to map'){
+          telepimp(player);
+          var d = new Drone(player)
+          d.pullFromRAndBuildNetwork(store[player.name]['bioSource'])
+        }
+      }
+    }
   }
 }
 events.playerInteract(myNodeClickHook);
