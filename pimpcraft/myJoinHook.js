@@ -8,6 +8,10 @@ var player, playerFiles;
 
 function myJoinHook(event){
   player = event.player;
+  getPlayerInfo();
+}
+
+function getPlayerInfo(){
   var playerFileSource = 'http://localhost:32908/listplayerfiles?player=' + player.name;
   store[player.name] = {};
   store[player.name]['bioSource'] = 4324;
@@ -43,3 +47,9 @@ function showGreeting(){
 }
 
 events.playerJoin(myJoinHook);
+
+function refresh(parameters, player){
+    getPlayerInfo();
+}
+
+command(refresh);
