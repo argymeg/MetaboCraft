@@ -8,6 +8,7 @@ Should be merged with the pathway builder
 var Drone = require('drone');
 var http = require('http');
 var store = require('storage');
+var telepimp = require('telepimp');
 var data, compartmentList;
 var pathMapSource, compartmentSource;
 
@@ -119,8 +120,10 @@ function handleError(errdrone){
 Drone.extend(pullFromRAndBuildNetwork);
 
 function buildMap(parameters, player){
+  telepimp(player);
   var d = new Drone(player);
   d.pullFromRAndBuildNetwork(store[player.name]['bioSource'], parameters[0]);
+  telepimp(player, 'map');
 }
 
 command(buildMap);
