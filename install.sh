@@ -55,7 +55,7 @@ java -jar BuildTools.jar --rev 1.11.2 >> ../install.log 2>&1
 echo "Cleaning up build environment..." | tee -a ../install.log
 ls | grep -v spigot- | xargs rm -r
 echo "eula=true" > eula.txt
-printf "allow-nether=false\ngamemode=1\nlevel-type=FLAT\nspawn-monsters=false\nspawn-npcs=false\nspawn-animals=false\ngenerate-structures=false\npvp=false" > server.properties
+printf "allow-nether=false\ngamemode=1\nlevel-type=FLAT\nspawn-monsters=false\nspawn-npcs=false\nspawn-animals=false\ngenerate-structures=false\npvp=false\ngenerator-settings=3;minecraft:bedrock,2*minecraft:stone,minecraft:grass,minecraft:snow_layer;12;biome_1,village" > server.properties
 
 echo "Downloading ScriptCraft..." | tee -a ../install.log
 mkdir plugins
