@@ -4,7 +4,7 @@ var store = require('storage');
 var http = require('http');
 var Drone = require('drone');
 var telepimp = require('telepimp');
-var player, playerFiles;
+var player;
 
 function myJoinHook(event){
   player = event.player;
@@ -18,7 +18,8 @@ function getPlayerInfo(){
 
   http.request(playerFileSource,
   function(responseCode, responseBody){
-    playerFiles = JSON.parse(responseBody);
+    var playerFiles = JSON.parse(responseBody);
+    store[player.name]['fileList'] = playerFiles;
     store[player.name]['currentFile'] = playerFiles[0];
     showGreeting();
   });
@@ -27,11 +28,11 @@ function getPlayerInfo(){
 function showGreeting(){
   echo(player, "Welcome to PiMPCraft, " + player.name + "!");
   echo(player, "You are seeing BioSource " + store[player.name]['bioSource'] + ".");
-  if(playerFiles.length > 0){
+  if(store[player.name]['fileList'].length > 0){
     store[player.name]['changeDataEnabled'] = true;
     echo(player, "Your currently available files are:");
-    for(var i = 0; i < playerFiles.length; i++){
-      echo(player, playerFiles[i]);
+    for(var i = 0; i < store[player.name]['fileList'].length; i++){
+      echo(player, store[player.name]['fileList'][i]);
     }
     echo(player, "Your currently selected file is " + store[player.name]['currentFile']);
   }
