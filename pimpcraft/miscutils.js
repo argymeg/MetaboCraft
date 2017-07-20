@@ -2,14 +2,15 @@ var store = require('storage');
 
 function chooseFile(parameters, player){
   if(parameters[0]){
+    var targetFile = 'changeData_' + player.name + '-' + parameters[0] + '.json'
     for(var i = 0; i <= store[player.name]['fileList'].length; i++)
     if(i == store[player.name]['fileList'].length){
       echo(player, "File not found!");
     }
-    else if(parameters[0] == store[player.name]['fileList'][i]){
-      store[player.name]['currentFile'] = parameters[0];
+    else if(targetFile == store[player.name]['fileList'][i]){
+      store[player.name]['currentFile'] = targetFile;
       store[player.name]['changeDataEnabled'] = true;
-      echo(player, "Selected file: " + store[player.name]['currentFile']);
+      echo(player, "Selected file: " + store[player.name]['currentFile'].match(/changeData.+-(.+)\./)[1]);
       break;
     }
   }

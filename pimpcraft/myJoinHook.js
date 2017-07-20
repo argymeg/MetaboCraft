@@ -32,9 +32,9 @@ function showGreeting(){
     store[player.name]['changeDataEnabled'] = true;
     echo(player, "Your currently available files are:");
     for(var i = 0; i < store[player.name]['fileList'].length; i++){
-      echo(player, store[player.name]['fileList'][i]);
+      echo(player, store[player.name]['fileList'][i].match(/changeData.+-(.+)\./)[1]);
     }
-    echo(player, "Your currently selected file is " + store[player.name]['currentFile']);
+    echo(player, "Your currently selected file is " + store[player.name]['currentFile'].match(/changeData.+-(.+)\./)[1]);
   }
   else{
     store[player.name]['changeDataEnabled'] = false;
