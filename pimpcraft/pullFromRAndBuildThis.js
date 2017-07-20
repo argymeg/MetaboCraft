@@ -3,6 +3,7 @@ var Drone = require('drone');
 var http = require('http');
 var utils = require('utils');
 var store = require('storage');
+var telepimp = require('telepimp');
 var droneCheck = persist('droneCheck',{});
 var data, changeData;
 var dataSource, changeDataSource;
@@ -21,15 +22,20 @@ function pullFromRAndBuildThis(bioSource, pathName, playerName){
 }
 
 function startPulling(dronea){
-  try{
-    http.request(dataSource,
-      function(responseCode, responseBody){
+  http.request(dataSource,
+    function(responseCode, responseBody){
+      try{
         data = JSON.parse(responseBody);
         if(changeDataSource){
           http.request(changeDataSource,
             function(responseCode, responseBody){
-              changeData = JSON.parse(responseBody);
-              actuallyBuild(dronea);
+              try{
+                changeData = JSON.parse(responseBody);
+                actuallyBuild(dronea);
+              }
+              catch(err){
+                handleError(dronea);
+              }
             }
           );
         }
@@ -37,11 +43,11 @@ function startPulling(dronea){
           actuallyBuild(dronea);
         }
       }
-    );
-  }
-  catch(err){
-    handleError(dronea);
-  }
+      catch(err){
+        handleError(dronea);
+      }
+    }
+  );
 }
 
 function actuallyBuild(droneb){
@@ -212,7 +218,8 @@ function actuallyBuild(droneb){
 }
 
 function handleError(errdrone){
-  errdrone.fwd(5);
+  errdrone.fwd(3);
+  errdrone.right(3);
   errdrone.signpost(['Something has', 'gone wrong!', 'Right-click']);
   errdrone.right(1);
   errdrone.signpost('HERE');
@@ -222,45 +229,17 @@ function handleError(errdrone){
 
 Drone.extend(pullFromRAndBuildThis);
 
-
 function buildPath(parameters, player){
+  var pathNameBuilder = '';
+  for(var n = 0; n < parameters.length; n++){
+    pathNameBuilder += parameters[n] + ' '
+  }
+  pathNameBuilder = pathNameBuilder.substr(0, pathNameBuilder.length - 1)
+
+  telepimp(player);
   var d = new Drone(player);
-  d.pullFromRAndBuildThis(store[player.name]['bioSource'], parameters[0], player.name);
+  d.pullFromRAndBuildThis(store[player.name]['bioSource'], pathNameBuilder, player.name);
+  telepimp(player, 'graph');
 }
 
 command(buildPath);
-
-
-//Removed for now to make life easier
-/*
-//Draw edge as a whole if it is a straight line
-//Otherwise call bresenham and draw block by block
-//Adds complexity but is probably measurably cheaper. Revisit.
-//UPDATE 01/06: in real data probably very few edges will be straight
-//Shortlist for removal after settling on plotting algorithm.
-if((frontx - backx === 0) && (fronty - backy === 0)){
-  droneb.move('pointzero');
-  droneb.right(backx).up(backy).fwd(backz + 3);
-  droneb.cuboidX(reMat, '', 1, 1, frontz - backz - 3, true);
-}
-else if ((frontx - backx === 0) && (frontz - backz === 0)) {
-  droneb.move('pointzero');
-  droneb.right(backx).up(backy + 3).fwd(backz);
-  droneb.cuboidX(reMat, '', 1, fronty - backy - 3, 1, true);
-}
-else if ((fronty - backy === 0) && (frontz - backz === 0)) {
-  droneb.move('pointzero');
-  droneb.right(backx + 3).up(backy).fwd(backz);
-  droneb.cuboidX(reMat, '', frontx - backx - 3, 1, 1, true);
-}
-else{
-  var points = bresenham([backx, backy, backz], [frontx, fronty, frontz]);
-  for(var l = 3; l < points.length - 1; l++){
-    droneb.move('pointzero');
-    droneb.right(points[l][0]);
-    droneb.up(points[l][1]);
-    droneb.fwd(points[l][2]);
-    droneb.cuboidX(reMat, '', 1, 1, 1, true);
-  }
-}
-*/
