@@ -9,6 +9,12 @@ then
   exit
 fi
 
+if [ ! -d pimpcraft ] || [ ! -d Rscripts ] || [ ! -d modules ]
+then
+  printf "PiMPCraft files missing!\nEnsure you are running the install script inside\nthe full PiMPCraft directory as downloaded and try again.\n" | tee -a install.log
+  exit
+fi
+
 if [ -d "spigot" ]
 then
   printf "You seem to be running the installer in a directory containing\nan existing installation. This will be WIPED if you proceed.\n" | tee -a install.log
@@ -36,7 +42,11 @@ STARTDIR=$PWD
 
 mkdir cache > /dev/null 2>&1
 mkdir spigot > /dev/null 2>&1
-cd spigot
+if ! cd spigot > /dev/null 2>&1
+then
+  printf "Something went wrong creating the directory structure!\nEnsure you have write permissions for this location\nand try again.\n" | tee -a install.log
+  exit
+fi
 
 echo "Downloading BuildTools..." | tee -a ../install.log
 curl -f -o BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar 2>> ../install.log
