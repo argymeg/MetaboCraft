@@ -45,7 +45,7 @@ Available commands are:
 
 * `/jsp refresh`
 
-Reinitialises the user's view of the PiMPCraft world, including reloading the list of uploaded files
+Reinitialises the user's view of the PiMPCraft world from scratch.
 
 * `/jsp buildMap <compartment name (optional)>`
 
@@ -58,10 +58,10 @@ Draws a view of the specified pathway
 
 * `/jsp chooseFile <filename>`
 
-Allows choosing between different user-uploaded files for displaying changes in pathways. Leaving the filename blank will revert to a vanilla view of the network. Implies `/jsp refresh`. (???)
+Allows choosing between different user-uploaded files for displaying changes in pathways. Leaving the filename blank will revert to a vanilla view of the network.
 
 * `/jsp changeBioSource <id>`
 
-Allows changing the BioSource to explore the metabolome of different organisms. This option is currently **experimental**. Applying user-provided data, in particular, is **not** expected to work properly beyond the default BioSource. Implies `/jsp refresh`.
+Allows changing the BioSource to explore the metabolome of different organisms. This option is currently **experimental**. Applying user-provided data, in particular, is **not** expected to work properly beyond the default BioSource.
 
 ### License
