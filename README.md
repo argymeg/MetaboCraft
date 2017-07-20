@@ -7,14 +7,14 @@
 #### Requirements:
 
 * A recent computer with at least 2 GB of RAM
-* A *nix OS (tested on macOS and Linux)**
+* A *nix OS (tested on macOS and Linux)
 * Outbound HTTP access on port 8080
 * Java (version 8 **strongly** recommended)
 * R
 * GNU Screen
 * curl
 
-There are no concrete CPU or storage space requirements, however a fast CPU can have a significant effect on performance. The base installation takes up around 50 MB of disk space, however the Minecraft world files can increase in size rapidly with usage - do plan accordingly.
+There are no concrete CPU or storage space requirements, although a fast CPU can have a significant effect on performance. The base installation takes up around 50 MB of disk space, however the Minecraft world files can increase in size rapidly with usage - do plan accordingly.
 
 Four shell scripts are provided with the server:
 * An installer script (*install.sh*)
@@ -28,7 +28,8 @@ The PiMPCraft stack is comprised of three distinct components: the [Spigot](http
 ### The client side
 
 #### Requirements:
-* A computer able to run [Minecraft](https://minecraft.net/)
+* [Minecraft](https://minecraft.net/) version 1.11.2
+* A computer meeting its [system requirements](https://help.mojang.com/customer/en/portal/articles/325948-minecraft-system-requirements)
 * That's it!
 
 #### User interface
