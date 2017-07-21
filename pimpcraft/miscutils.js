@@ -1,4 +1,6 @@
 var store = require('storage');
+var teleport = require('teleport')
+var utils = require('utils');
 
 function chooseFile(parameters, player){
   if(parameters[0]){
@@ -33,3 +35,24 @@ function changeBioSource(parameters, player){
 
 }
 command(changeBioSource);
+
+function teleportMe(parameters, player){
+  if(parameters[0]){
+    var players = utils.players();
+    for(var j = 0; j <= players.length; j++){
+      if(j == players.length){
+        echo(player, "Player not found!");
+      }
+      else if(parameters[0] === players[j].name){
+        var otherPlayerLocation = utils.getPlayerPos(parameters[0]);
+        teleport(player.name, otherPlayerLocation);
+        break;
+      }
+    }
+  }
+  else{
+    echo(player, "Enter another player\'s name!")
+  }
+}
+
+command(teleportMe);

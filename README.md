@@ -61,6 +61,10 @@ Draws a view of the specified pathway
 
 Allows choosing between different user-uploaded files for displaying changes in pathways. Leaving the filename blank will revert to a vanilla view of the network.
 
+* `/jsp teleportMe <playername>`
+
+Teleports player to the location of another player
+
 * `/jsp changeBioSource <id>`
 
 Allows changing the BioSource to explore the metabolome of different organisms. This option is currently **experimental**. Applying user-provided data, in particular, is **not** expected to work properly beyond the default BioSource.
