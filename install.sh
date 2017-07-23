@@ -52,8 +52,15 @@ echo "Downloading BuildTools..." | tee -a ../install.log
 curl -fL -o BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar 2>> ../install.log
 echo "Starting Spigot build - this may take a few minutes..." | tee -a ../install.log
 java -jar BuildTools.jar --rev 1.11.2 >> ../install.log 2>&1
+
+if ! ls | grep spigot-*.jar > /dev/null
+then
+  echo "Error building Spigot! Check the log for details." | tee -a ../install.log
+  exit
+fi
+
 echo "Cleaning up build environment..." | tee -a ../install.log
-ls | grep -v spigot- | xargs rm -r
+ls | grep -v spigot-*.jar | xargs rm -r
 
 echo "Downloading ScriptCraft..." | tee -a ../install.log
 mkdir plugins
