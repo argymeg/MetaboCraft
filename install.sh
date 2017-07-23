@@ -49,17 +49,27 @@ then
 fi
 
 echo "Downloading BuildTools..." | tee -a ../install.log
-curl -f -o BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar 2>> ../install.log
+curl -fL -o BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar 2>> ../install.log
 echo "Starting Spigot build - this may take a few minutes..." | tee -a ../install.log
 java -jar BuildTools.jar --rev 1.11.2 >> ../install.log 2>&1
 echo "Cleaning up build environment..." | tee -a ../install.log
 ls | grep -v spigot- | xargs rm -r
-echo "eula=true" > eula.txt
-printf "allow-nether=false\ngamemode=1\nlevel-type=FLAT\nspawn-monsters=false\nspawn-npcs=false\nspawn-animals=false\ngenerate-structures=false\npvp=false\ngenerator-settings=3;minecraft:bedrock,2*minecraft:stone,minecraft:grass,minecraft:snow_layer;12;biome_1,village" > server.properties
 
 echo "Downloading ScriptCraft..." | tee -a ../install.log
 mkdir plugins
-curl -f -o plugins/scriptcraft.jar https://scriptcraftjs.org/download/latest/scriptcraft-3.2.1/scriptcraft.jar 2>> ../install.log
+curl -fL -o plugins/scriptcraft.jar https://scriptcraftjs.org/download/latest/scriptcraft-3.2.1/scriptcraft.jar 2>> ../install.log
+
+echo "Downloading WorldEdit..." | tee -a ../install.log
+curl -fL -o plugins/worldedit-bukkit-6.1.5.jar https://dev.bukkit.org/projects/worldedit/files/956525/download 2>> ../install.log
+
+echo "Downloading WorldGuard..."
+curl -fL -o plugins/worldguard-6.2.jar https://dev.bukkit.org/projects/worldguard/files/956770/download 2>> ../install.log
+
+echo "Initialising config files..."  | tee -a ../install.log
+echo "eula=true" > eula.txt
+printf "allow-nether=false\ngamemode=1\nlevel-type=FLAT\nspawn-monsters=false\nspawn-npcs=false\nspawn-animals=false\ngenerate-structures=false\npvp=false\ngenerator-settings=3;minecraft:bedrock,2*minecraft:stone,minecraft:grass,minecraft:snow_layer;12;biome_1,village" > server.properties
+mkdir plugins/WorldGuard
+printf "build-permission-nodes:\n    enable: true\n    deny-message: \'\'\n" > plugins/WorldGuard/config.yml
 
 echo "Installing PiMPCraft onto server..." | tee -a ../install.log
 mkdir -p scriptcraft/plugins
