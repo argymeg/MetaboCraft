@@ -62,18 +62,27 @@ function actuallyBuild(dronec){
   for(var i = 0; i < data.nodes.length; i++){
 
     //Assign material to node types, TODO: pull externally
-    var material = 152; //redstone
-    var dim = 2;
+    var material = 47; //bookshelf
+//    var dim = 2;
 
     //Move drone to node coordinates
     dronec.right(parseInt(data.nodes[i].x));
     dronec.fwd(parseInt(data.nodes[i].z));
 
     //Draw node as cube of arbitrary dimensions
-    dronec.cuboidX(material, '', dim, dim, dim, true);
+    dronec.cuboidX(material, '', 1, 2, 1, true);
 
-    dronec.up(Math.floor(dim / 2));
-    dronec.fwd(Math.floor(dim / 2));
+/*
+    dronec.cuboidX(108, Drone.PLAYER_STAIRS_FACING[dronec.dir], 1, 1, 1, true); //brickstairs
+    dronec.fwd(1);
+    dronec.cuboidX(45, '', 1, 1, 1, true); //brickblock
+    dronec.up(1);
+    dronec.cuboidX(108, Drone.PLAYER_STAIRS_FACING[dronec.dir], 1, 1, 1, true);
+*/
+
+//    dronec.up(Math.floor(dim / 2));
+//    dronec.fwd(Math.floor(dim / 2));
+    dronec.up(1);
     var location = dronec.getLocation();
     var ars = location.world.spawnEntity(location, org.bukkit.entity.EntityType.ARMOR_STAND)
     ars.setVisible(false);

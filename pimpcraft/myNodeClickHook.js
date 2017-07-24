@@ -6,20 +6,25 @@ var telepimp = require('telepimp');
 function myNodeClickHook(event){
   var player = event.player;
   if(event.getAction() == 'RIGHT_CLICK_BLOCK'){
-    if(event.getClickedBlock().getType() == 'REDSTONE_BLOCK'){
+    if(event.getClickedBlock().getType() == 'BOOKSHELF'){
       if(event.getHand() == 'HAND'){
         var location = event.getClickedBlock().getLocation();
-        var selection = location.world.getNearbyEntities(location, 2, 2, 2)[0].getCustomName();
-
-        if(selection){
-          telepimp(player);
-          var d = new Drone(player);
-          d.pullFromRAndBuildThis(store[player.name]['bioSource'], selection, player.name);
-          telepimp(player, 'graph');
+        var entList = location.world.getNearbyEntities(location, 2, 2, 2);
+        for(var i = 0; i <= entList.length; i++){
+          if(i === entList.length){
+            echo(player, 'Could not select a pathway! Try again?');
+          }
+          else{
+            var selection = entList[i].getCustomName();
+            if(selection){
+              telepimp(player);
+              var d = new Drone(player);
+              d.pullFromRAndBuildThis(store[player.name]['bioSource'], selection, player.name);
+              telepimp(player, 'graph');
+              break;
+            }
+          }
         }
-        else{
-          echo(player, 'Could not select anything! Try again?')
-        }        
       }
     }
     else if(event.getClickedBlock().getType() == 'PUMPKIN'){
