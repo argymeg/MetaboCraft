@@ -66,7 +66,7 @@ function actuallyBuild(droneb){
   for(var i = 0; i < data.nodes.length; i++){
 
     //Assign material to node types, TODO: pull externally
-    var material, dim;
+    var material, dim, meta;
 
     //For now, loop over the entire change file for every metabolite node -
     //will probably not scale too well.
@@ -78,28 +78,32 @@ function actuallyBuild(droneb){
     //minimise overhead at the expense of flexibility
 
     if(data.nodes[i].biologicalType === "metabolite"){
-      material = 3; //dirt
+      material = 35; //dirt
       dim = 3;
+      meta = 7;
       if(changeData){
         for(var m = 0; m < changeData.length; m++){
           if(data.nodes[i].inchikey == changeData[m].ink){
             if(changeData[m].pos == true){
-              material = 133; //emerald
+              material = 35; //wool
+              meta = 11; //blue
             }
             else {
-              material = 152; //redstone
+              material = 35; //wool
+              meta = 14; //red
             }
           }
         }
       }
     }
     else if(data.nodes[i].biologicalType === "reaction"){
-      material = 35; //wool
+      material = 89; //glowstone
       dim = 4;
     }
     else if(data.nodes[i].biologicalType === "sideMetabolite"){
-      material = 24; //sandstone
+      material = 35; //wool
       dim = 2;
+      meta = 0; //white
     }
     else{
       echo('Undefined node type!');
@@ -118,10 +122,10 @@ function actuallyBuild(droneb){
     droneb.fwd(parseInt(data.nodes[i].z));
 
     //Draw node as cube of arbitrary dimensions
-    droneb.cuboidX(material, '', dim, dim, dim, true);
+    droneb.cuboidX(material, meta, dim, dim, dim, true);
 
     //Create invisible armor stand that displays the node name
-    droneb.up(Math.floor(dim / 2));
+    droneb.up(dim - 1);
     droneb.fwd(Math.floor(dim / 2));
     var location = droneb.getLocation() ;
     var ars = location.world.spawnEntity(location, org.bukkit.entity.EntityType.ARMOR_STAND)
@@ -140,13 +144,15 @@ function actuallyBuild(droneb){
   for(var j = 0; j < data.edges.length; j++){
 
     //Assign material to edge types, TODO: pull externally
-    var reMat;
+    var reMat, meta;
 
     if(data.edges[j].linkType === "in"){
-      reMat = 22; //blue
+      reMat = 35; //wool
+      meta = 6; //pink
     }
     else if(data.edges[j].linkType === "out"){
-      reMat = 201; //purple
+      reMat = 35; //wool
+      meta = 5; //green
     }
     else{
       echo('Undefined edge type!');
@@ -211,7 +217,7 @@ function actuallyBuild(droneb){
       droneb.right(points[l][0]);
       droneb.up(points[l][1]);
       droneb.fwd(points[l][2]);
-      droneb.cuboidX(reMat, '', 1, 1, 1, true);
+      droneb.cuboidX(reMat, meta, 1, 1, 1, true);
     }
 
 
