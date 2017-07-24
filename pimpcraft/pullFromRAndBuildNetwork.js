@@ -14,7 +14,7 @@ var pathMapSource, compartmentSource;
 
 function pullFromRAndBuildNetwork(bioSource, compartment){
   pathMapSource = 'http://localhost:32908/pathmap?biosource=' + bioSource;
-  compartmentSource = 'http://metexplore.toulouse.inra.fr:8080/metExploreWebService/biosources/' + bioSource + '/Compartment'; //TODO: build a thin plumber proxy for this, for uniformity and caching
+  compartmentSource = 'http://localhost:32908/compartmentlist?biosource=' + bioSource;
 
   var message = 'Showing network map for BioSource: ' + bioSource;
   if(compartment){

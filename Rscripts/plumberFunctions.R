@@ -27,3 +27,17 @@ function(file){
   library(jsonlite)
   return(fromJSON(paste0("../cache/", file)))
 }
+
+#* @get /compartmentlist
+function(biosource){
+  compartmentListOutSink <- paste0("../cache/compartmentList_",biosource,".json")
+  if(file.exists(compartmentListOutSink)){
+    compartmentListSource <- compartmentListOutSink
+    compartmentList <- fromJSON(compartmentListSource)
+  } else {
+    compartmentListSource <- paste0("http://metexplore.toulouse.inra.fr:8080/metExploreWebService/biosources/",biosource,"/Compartment")
+    compartmentList <- fromJSON(compartmentListSource)
+    write_json(compartmentList, compartmentListOutSink, pretty = TRUE)
+  }
+  return(compartmentList)
+}
