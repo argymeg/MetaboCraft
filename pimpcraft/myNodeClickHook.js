@@ -11,10 +11,15 @@ function myNodeClickHook(event){
         var location = event.getClickedBlock().getLocation();
         var selection = location.world.getNearbyEntities(location, 2, 2, 2)[0].getCustomName();
 
-        telepimp(player);
-        var d = new Drone(player);
-        d.pullFromRAndBuildThis(store[player.name]['bioSource'], selection, player.name);
-        telepimp(player, 'graph');
+        if(selection){
+          telepimp(player);
+          var d = new Drone(player);
+          d.pullFromRAndBuildThis(store[player.name]['bioSource'], selection, player.name);
+          telepimp(player, 'graph');
+        }
+        else{
+          echo(player, 'Could not select anything! Try again?')
+        }        
       }
     }
     else if(event.getClickedBlock().getType() == 'PUMPKIN'){
