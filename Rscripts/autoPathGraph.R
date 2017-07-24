@@ -94,7 +94,8 @@ if(file.exists(outputSink)){
     }
   }
   graph <- graph_from_data_frame(allLinks, directed = FALSE)
-  lo <- layout_(graph, with_fr(dim = 3), normalize(xmin = 0, xmax = 100))
+  xMaxCustom <- 36 * log(length(allNodes$localID)) - 66 #An empirically derived equation that tries to accomodate the varying pathway sizes
+  lo <- layout_(graph, with_fr(dim = 3), normalize(xmin = 0, xmax = xMaxCustom))
   
   #Build the node part of the output, with node id, coordinates, chemical name. Sort output by id for readability.
   #TODO: as.integer(as.character) is rather ugly. Is there no better way?
