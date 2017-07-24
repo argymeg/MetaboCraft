@@ -67,7 +67,7 @@ if(file.exists(mapOutSink)){
   diag(pathMat) <- 0
   
   pathMap <- graph_from_adjacency_matrix(pathMat, weighted = TRUE)
-  mapLo <- layout_(pathMap, on_grid(dim = 2), normalize(xmin = 0, xmax = length(pathList$name) / 2))
+  mapLo <- layout_(pathMap, on_grid(dim = 2), normalize(xmin = 0, xmax =  0.4 * length(pathList$name) + 9 ))
  
   pathNodesOut <- as.data.frame(cbind((as_data_frame(pathMap, what ="vertices")$name), mapLo[,1], mapLo[,2]))
   colnames(pathNodesOut) <- c("name", "x", "z")
