@@ -14,10 +14,16 @@ var pathMapSource, compartmentSource;
 
 function pullFromRAndBuildNetwork(bioSource, compartment){
   pathMapSource = 'http://localhost:32908/pathmap?biosource=' + bioSource;
-  if(compartment){
-    pathMapSource = pathMapSource + '&compartment=' + compartment
-  }
   compartmentSource = 'http://metexplore.toulouse.inra.fr:8080/metExploreWebService/biosources/' + bioSource + '/Compartment'; //TODO: build a thin plumber proxy for this, for uniformity and caching
+
+  var message = 'Showing network map for BioSource: ' + bioSource;
+  if(compartment){
+    pathMapSource = pathMapSource + '&compartment=' + compartment;
+    message += ', compartment: ' + compartment;
+  }
+
+  echo(this.player, message);
+
   startPulling(this);
 }
 
@@ -109,6 +115,7 @@ function handleError(errdrone){
 //  var playerName = errdrone.getLocation().world.getNearbyEntities(errdrone.getLocation(), 10, 10, 10)[0].getName();
 //  console.log(playerName);
 //  echo(playerName, 'Something has gone wrong! Right click the box in front of you to go back to the start.');
+  echo(errdrone.player, 'Something has gone wrong!');
   errdrone.fwd(5);
   errdrone.signpost(['Something has', 'gone wrong!', 'Right-click']);
   errdrone.right(1);

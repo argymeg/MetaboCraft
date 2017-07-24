@@ -12,6 +12,8 @@ function pullFromRAndBuildThis(bioSource, pathName, playerName){
   changeDataSource = null; //Otherwise it uses changeData from the last run
   changeData = null;
 
+  echo(this.player, "Showing pathway: " + pathName);
+
   pathName = pathName.replace(/ /g, "%20");
   dataSource = 'http://localhost:32908/pathgraph?biosource=' + bioSource + '&pathname=' + pathName;
 
@@ -218,6 +220,7 @@ function actuallyBuild(droneb){
 }
 
 function handleError(errdrone){
+  echo(errdrone.player, 'Something has gone wrong!');
   errdrone.fwd(3);
   errdrone.right(3);
   errdrone.signpost(['Something has', 'gone wrong!', 'Right-click']);
