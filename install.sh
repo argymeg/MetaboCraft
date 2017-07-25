@@ -48,43 +48,71 @@ then
   exit
 fi
 
-echo "Downloading BuildTools..." | tee -a ../install.log
+printf "Downloading BuildTools... " | tee -a ../install.log
 curl -fL -o BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar 2>> ../install.log
-echo "Starting Spigot build - this may take a few minutes..." | tee -a ../install.log
-java -jar BuildTools.jar --rev 1.11.2 >> ../install.log 2>&1
+if [ ! -f BuildTools.jar ]
+then
+  echo "Error downloading BuildTools! Check the log for details." | tee -a ../install.log
+  exit
+fi
+echo "OK" | tee -a ../install.log
 
+printf "Building Spigot - this may take a few minutes... " | tee -a ../install.log
+java -jar BuildTools.jar --rev 1.11.2 >> ../install.log 2>&1
 if ! ls | grep spigot-*.jar > /dev/null
 then
   echo "Error building Spigot! Check the log for details." | tee -a ../install.log
   exit
 fi
+echo "OK" | tee -a ../install.log
 
-echo "Cleaning up build environment..." | tee -a ../install.log
+printf "Cleaning up build environment... " | tee -a ../install.log
 ls | grep -v spigot-*.jar | xargs rm -r
+echo "OK" | tee -a ../install.log
 
-echo "Downloading ScriptCraft..." | tee -a ../install.log
+printf "Downloading ScriptCraft... " | tee -a ../install.log
 mkdir plugins
 curl -fL -o plugins/scriptcraft.jar https://scriptcraftjs.org/download/latest/scriptcraft-3.2.1/scriptcraft.jar 2>> ../install.log
+if [ ! -f plugins/scriptcraft.jar ]
+then
+  echo "Error downloading ScriptCraft! Check the log for details." | tee -a ../install.log
+  exit
+fi
+echo "OK" | tee -a ../install.log
 
-echo "Downloading WorldEdit..." | tee -a ../install.log
+printf "Downloading WorldEdit... " | tee -a ../install.log
 curl -fL -o plugins/worldedit-bukkit-6.1.5.jar https://dev.bukkit.org/projects/worldedit/files/956525/download 2>> ../install.log
+if [ ! -f plugins/worldedit-bukkit-6.1.5.jar ]
+then
+  echo "Error downloading WorldEdit! Check the log for details." | tee -a ../install.log
+  exit
+fi
+echo "OK" | tee -a ../install.log
 
-echo "Downloading WorldGuard..."
+printf "Downloading WorldGuard... " | tee -a ../install.log
 curl -fL -o plugins/worldguard-6.2.jar https://dev.bukkit.org/projects/worldguard/files/956770/download 2>> ../install.log
+if [ ! -f plugins/worldguard-6.2.jar ]
+then
+  echo "Error downloading WorldGuard! Check the log for details." | tee -a ../install.log
+  exit
+fi
+echo "OK" | tee -a ../install.log
 
-echo "Initialising config files..."  | tee -a ../install.log
+printf "Initialising config files... "  | tee -a ../install.log
 echo "eula=true" > eula.txt
 printf "allow-nether=false\ngamemode=1\nlevel-type=FLAT\nspawn-monsters=false\nspawn-npcs=false\nspawn-animals=false\ngenerate-structures=false\npvp=false\ngenerator-settings=3;minecraft:bedrock,2*minecraft:stone,minecraft:grass,minecraft:snow_layer;12;biome_1,village" > server.properties
 mkdir plugins/WorldGuard
 printf "build-permission-nodes:\n    enable: true\n    deny-message: \'\'\n" > plugins/WorldGuard/config.yml
+echo "OK" | tee -a ../install.log
 
-echo "Installing PiMPCraft onto server..." | tee -a ../install.log
+printf "Installing PiMPCraft on server... " | tee -a ../install.log
 mkdir -p scriptcraft/plugins
 ln -s $STARTDIR/pimpcraft scriptcraft/plugins/
 mkdir scriptcraft/modules
 ln -s $STARTDIR/modules/* scriptcraft/modules
+echo "OK" | tee -a ../install.log
 
-echo "Initialising server..." | tee -a ../install.log
+printf "Initialising server... " | tee -a ../install.log
 
 screen -dmS initServer
 screen -S initServer -p 0 -X stuff "exec java -jar $(ls | grep spigot- )
@@ -104,8 +132,9 @@ do
 done
 
 cat logs/latest.log >> ../install.log
+echo "OK" | tee -a ../install.log
 
-echo "Installing missing R packages (if any)..." | tee -a ../install.log
+echo "Checking for missing R packages..." | tee -a ../install.log
 
 #If we are on Linux and the R library is not in a home directory, assume it is not user-writable and do not attempt to install
 #There could be other configurations on which this check is not enough!
