@@ -1,19 +1,19 @@
 #!/bin/sh
 
-spigScrName=pimpcraftSpigot
-plumScrName=pimpcraftPlumber
-shinScrName=pimpcraftShiny
+readonly SPIGOT_SCREEN_NAME=pimpcraftSpigot
+readonly PLUMBER_SCREEN_NAME=pimpcraftPlumber
+readonly SHINY_SCREEN_NAME=pimpcraftShiny
 
-screen -S $spigScrName -p 0 -X stuff "stop
+screen -S $SPIGOT_SCREEN_NAME -p 0 -X stuff "stop
 "
-screen -S $plumScrName -p 0 -X stuff 'kill $! ; exit
+screen -S $PLUMBER_SCREEN_NAME -p 0 -X stuff 'kill $! ; exit
 '
-screen -S $shinScrName -p 0 -X stuff 'kill $! ; exit
+screen -S $SHINY_SCREEN_NAME -p 0 -X stuff 'kill $! ; exit
 '
 
 sleep 5;
 
-if ! screen -ls | grep -q $spigScrName && ! screen -ls | grep -q $plumScrName && ! screen -ls | grep -q $shinScrName
+if ! screen -ls | grep -q $SPIGOT_SCREEN_NAME && ! screen -ls | grep -q $PLUMBER_SCREEN_NAME && ! screen -ls | grep -q $SHINY_SCREEN_NAME
 then
   echo "PiMPCraft has stopped."
 else
