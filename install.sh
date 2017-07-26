@@ -2,6 +2,8 @@
 
 startDir=$PWD
 logFile="$startDir/install.log"
+spigotVer='1.11.2'
+spigotFname="spigot-$spigotVer.jar"
 buildtoolsSource='https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar'
 buildtoolsDest='BuildTools.jar'
 scriptcraftSource='https://scriptcraftjs.org/download/latest/scriptcraft-3.2.1/scriptcraft.jar'
@@ -81,7 +83,7 @@ downloadFile $buildtoolsDest $buildtoolsSource
 
 printf "Building Spigot - this may take a few minutes... " | tee -a $logFile
 java -jar $buildtoolsDest --rev 1.11.2 >> $logFile 2>&1
-if ! ls | grep spigot-*.jar > /dev/null
+if [ ! -f $spigotFname ]
 then
   echo "Error building Spigot! Check the log for details." | tee -a $logFile
   exit
@@ -90,7 +92,7 @@ else
 fi
 
 printf "Cleaning up build environment... " | tee -a $logFile
-ls | grep -v spigot-*.jar | xargs rm -r
+ls | grep -v $spigotFname | xargs rm -r
 echo "OK" | tee -a $logFile
 
 mkdir plugins #Hardcoding since it's determined by Spigot, not us!
@@ -122,7 +124,7 @@ echo "OK" | tee -a $logFile
 
 printf "Initialising server... " | tee -a $logFile
 screen -dmS $initScrName
-screen -S $initScrName -p 0 -X stuff "exec java -jar $(ls | grep spigot- )
+screen -S $initScrName -p 0 -X stuff "exec java -jar $spigotFname
 "
 screen -S $initScrName -p 0 -X stuff "gamerule doDaylightCycle false
 "
