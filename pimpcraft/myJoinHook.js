@@ -51,8 +51,8 @@ function showGreeting(){
 
 events.playerJoin(myJoinHook);
 
-function refresh(parameters, player){
+function reset(parameters, player){
     getPlayerInfo();
 }
 
-command(refresh);
+command(reset);
