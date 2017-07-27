@@ -31,15 +31,15 @@ function showGreeting(){
   echo(player, "You are seeing BioSource " + store[player.name]['bioSource'] + ".");
   echo(player, "Your selected map layout is: " + store[player.name]['mapMode'] + ".");
   if(store[player.name]['fileList'].length > 0){
-    store[player.name]['changeDataEnabled'] = true;
+    store[player.name]['userDataEnabled'] = true;
     echo(player, "Your currently available files are:");
     for(var i = 0; i < store[player.name]['fileList'].length; i++){
-      echo(player, store[player.name]['fileList'][i].match(/changeData.+-(.+)\./)[1]);
+      echo(player, store[player.name]['fileList'][i].match(/userData.+-(.+)\./)[1]);
     }
-    echo(player, "Your currently selected file is " + store[player.name]['currentFile'].match(/changeData.+-(.+)\./)[1] + ".");
+    echo(player, "Your currently selected file is " + store[player.name]['currentFile'].match(/userData.+-(.+)\./)[1] + ".");
   }
   else{
-    store[player.name]['changeDataEnabled'] = false;
+    store[player.name]['userDataEnabled'] = false;
     echo(player, "You do not have any currently uploaded files.")
   }
 

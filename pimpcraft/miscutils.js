@@ -4,21 +4,21 @@ var utils = require('utils');
 
 function chooseFile(parameters, player){
   if(parameters[0]){
-    var targetFile = 'changeData_' + player.name + '-' + parameters[0] + '.json'
+    var targetFile = 'userData_' + player.name + '-' + parameters[0] + '.json'
     for(var i = 0; i <= store[player.name]['fileList'].length; i++)
     if(i == store[player.name]['fileList'].length){
       echo(player, "File not found!");
     }
     else if(targetFile == store[player.name]['fileList'][i]){
       store[player.name]['currentFile'] = targetFile;
-      store[player.name]['changeDataEnabled'] = true;
-      echo(player, "Selected file: " + store[player.name]['currentFile'].match(/changeData.+-(.+)\./)[1]);
+      store[player.name]['userDataEnabled'] = true;
+      echo(player, "Selected file: " + store[player.name]['currentFile'].match(/userData.+-(.+)\./)[1]);
       break;
     }
   }
   else{
     store[player.name]['currentFile'] = '';
-    store[player.name]['changeDataEnabled'] = false;
+    store[player.name]['userDataEnabled'] = false;
     echo(player, "User data disabled")
   }
 }

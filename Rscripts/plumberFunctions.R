@@ -20,7 +20,7 @@ function(biosource, pathname){
 #* @get /listplayerfiles
 function(player){
   #return(list.files(pattern = paste0("^", player)))
-  return(list.files(path = "../cache/", pattern = paste0("^changeData_", player)))
+  return(list.files(path = "../cache/", pattern = paste0("^userData_", player)))
 }
 
 #* @get /getplayerfile

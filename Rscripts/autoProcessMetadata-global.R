@@ -11,7 +11,7 @@ library("jsonlite")
 #alias <- testdata
 
 #metadataSource = paste0("~/pimpcraft_working/data/", mdataFile)
-outputSink = paste0("../../cache/changeData_", playerName, "-", alias, ".json")
+outputSink = paste0("../../cache/userData_", playerName, "-", alias, ".json")
 
 #Import sample data and calculate a crude metric of positive or negative change (more than 2-fold)
 sampleData <- read.csv(metadataSource)

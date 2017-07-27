@@ -5,20 +5,20 @@ var utils = require('utils');
 var store = require('storage');
 var telepimp = require('telepimp');
 var droneCheck = persist('droneCheck',{});
-var data, changeData;
-var dataSource, changeDataSource;
+var data, userData;
+var dataSource, userDataSource;
 
 function pullFromRAndBuildThis(bioSource, pathName, playerName){
-  changeDataSource = null; //Otherwise it uses changeData from the last run
-  changeData = null;
+  userDataSource = null; //Otherwise it uses userData from the last run
+  userData = null;
 
   echo(this.player, "Showing pathway: " + pathName);
 
   pathName = pathName.replace(/ /g, "%20");
   dataSource = 'http://localhost:32908/pathgraph?biosource=' + bioSource + '&pathname=' + pathName;
 
-  if(store[playerName]['changeDataEnabled']){
-    changeDataSource = 'http://localhost:32908/getplayerfile?file=' + store[playerName]['currentFile'];
+  if(store[playerName]['userDataEnabled']){
+    userDataSource = 'http://localhost:32908/getplayerfile?file=' + store[playerName]['currentFile'];
   }
   startPulling(this);
 }
@@ -28,11 +28,11 @@ function startPulling(dronea){
     function(responseCode, responseBody){
       try{
         data = JSON.parse(responseBody);
-        if(changeDataSource){
-          http.request(changeDataSource,
+        if(userDataSource){
+          http.request(userDataSource,
             function(responseCode, responseBody){
               try{
-                changeData = JSON.parse(responseBody);
+                userData = JSON.parse(responseBody);
                 actuallyBuild(dronea);
               }
               catch(err){
@@ -81,10 +81,10 @@ function actuallyBuild(droneb){
       material = 35; //dirt
       dim = 3;
       meta = 7;
-      if(changeData){
-        for(var m = 0; m < changeData.length; m++){
-          if(data.nodes[i].inchikey == changeData[m].ink){
-            if(changeData[m].pos == true){
+      if(userData){
+        for(var m = 0; m < userData.length; m++){
+          if(data.nodes[i].inchikey == userData[m].ink){
+            if(userData[m].pos == true){
               material = 35; //wool
               meta = 11; //blue
             }
