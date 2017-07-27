@@ -16,7 +16,6 @@ function myNodeClickHook(event){
             echo(player, 'Could not select a pathway! Try again?');
           }
           else{
-            console.log(entList[i].getType());
             var selection = entList[i].getCustomName();
             if(selection){
               telepimp(player);
