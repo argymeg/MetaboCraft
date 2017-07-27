@@ -56,3 +56,16 @@ function teleportMe(parameters, player){
 }
 
 command(teleportMe);
+
+function toggleMapMode(parameters, player){
+  if(store[player.name]['mapMode'] === 'forcedirected'){
+    store[player.name]['mapMode'] = 'alphabetical';
+    echo(player, "Switched map to alphabetical mode");
+  }
+  else{
+    store[player.name]['mapMode'] = 'forcedirected';
+    echo(player, "Switched map to force-directed layout mode");
+  }
+}
+
+command(toggleMapMode);

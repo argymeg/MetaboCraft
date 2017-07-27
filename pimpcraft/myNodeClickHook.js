@@ -9,12 +9,14 @@ function myNodeClickHook(event){
     if(event.getClickedBlock().getType() == 'BOOKSHELF'){
       if(event.getHand() == 'HAND'){
         var location = event.getClickedBlock().getLocation();
-        var entList = location.world.getNearbyEntities(location, 2, 2, 2);
+        var entList = location.world.getNearbyEntities(location, 0.6, 2, 0.6);
         for(var i = 0; i <= entList.length; i++){
+
           if(i === entList.length){
             echo(player, 'Could not select a pathway! Try again?');
           }
           else{
+            console.log(entList[i].getType());
             var selection = entList[i].getCustomName();
             if(selection){
               telepimp(player);

@@ -15,6 +15,7 @@ function getPlayerInfo(){
   var playerFileSource = 'http://localhost:32908/listplayerfiles?player=' + player.name;
   store[player.name] = {};
   store[player.name]['bioSource'] = 4324;
+  store[player.name]['mapMode'] = 'forcedirected';
 
   http.request(playerFileSource,
   function(responseCode, responseBody){
@@ -28,13 +29,14 @@ function getPlayerInfo(){
 function showGreeting(){
   echo(player, "Welcome to PiMPCraft, " + player.name + "!");
   echo(player, "You are seeing BioSource " + store[player.name]['bioSource'] + ".");
+  echo(player, "Your selected map layout is: " + store[player.name]['mapMode'] + ".");
   if(store[player.name]['fileList'].length > 0){
     store[player.name]['changeDataEnabled'] = true;
     echo(player, "Your currently available files are:");
     for(var i = 0; i < store[player.name]['fileList'].length; i++){
       echo(player, store[player.name]['fileList'][i].match(/changeData.+-(.+)\./)[1]);
     }
-    echo(player, "Your currently selected file is " + store[player.name]['currentFile'].match(/changeData.+-(.+)\./)[1]);
+    echo(player, "Your currently selected file is " + store[player.name]['currentFile'].match(/changeData.+-(.+)\./)[1] + ".");
   }
   else{
     store[player.name]['changeDataEnabled'] = false;

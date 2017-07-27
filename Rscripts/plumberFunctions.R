@@ -1,9 +1,10 @@
 #http://localhost:32908/pathmap?biosource=1363&compartment=mitochondrion
 
 #* @get /pathmap
-function(biosource, compartment = NA){
+function(biosource, compartment = NA, mode = "forcedirected"){
   bioSource <- biosource
   compartmentWanted <- compartment
+  mapMode <- mode
   source("autoPathMap-simplegrid.R", local = TRUE)
   return(mapOut)
 }

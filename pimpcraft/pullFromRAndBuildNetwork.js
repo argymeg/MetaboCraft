@@ -13,7 +13,7 @@ var data, compartmentList;
 var pathMapSource, compartmentSource;
 
 function pullFromRAndBuildNetwork(bioSource, compartment){
-  pathMapSource = 'http://localhost:32908/pathmap?biosource=' + bioSource;
+  pathMapSource = 'http://localhost:32908/pathmap?biosource=' + bioSource + '&mode=' + store[this.player.name]['mapMode'];
   compartmentSource = 'http://localhost:32908/compartmentlist?biosource=' + bioSource;
 
   var message = 'Showing network map for BioSource: ' + bioSource;

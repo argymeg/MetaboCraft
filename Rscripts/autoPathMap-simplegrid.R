@@ -9,8 +9,13 @@ library("jsonlite")
 
 #bioSource <- 1363
 #compartmentWanted <- "mitochondrion"
+#mapMode <- "forcedirected"
 
-mapOutSink = paste0("../cache/pathMap_",bioSource,"_", gsub("/","--", compartmentWanted, fixed = TRUE),".json")
+if(!exists("mapMode") || mapMode != "alphabetical"){
+  mapMode <- "forcedirected"
+}
+
+mapOutSink = paste0("../cache/pathMap_",bioSource,"_", gsub("/","--", compartmentWanted, fixed = TRUE), "_", mapMode, ".json")
 if(file.exists(mapOutSink)){
   mapOut <- fromJSON(mapOutSink) #If the map is already there, we're done!
 } else {
@@ -55,19 +60,28 @@ if(file.exists(mapOutSink)){
   } else {
     metList <- metList[metList$biologicalType == "metabolite",]
   }
-  pathMat <- matrix(data = 0, nrow = length(pathList$name), ncol = length(pathList$name), dimnames = list(pathList$name, pathList$name))
   
-  #Make weighted graph
-  for(i in metList$pathways){
-    pList <- setdiff(i, excludedPaths)
-    if(length(pList) > 1){
-      pathMat[pList,pList] = pathMat[pList,pList] + 1
+  
+  if(mapMode == "alphabetical"){
+    pathMat <- matrix(data = 1, nrow = length(pathList$name), ncol = length(pathList$name), dimnames = list(pathList$name[order(pathList$name)], pathList$name[order(pathList$name)]))
+    pathMap <- graph_from_adjacency_matrix(pathMat)
+    mapLo <- layout_(pathMap, on_grid(dim = 2), normalize(xmin = 0, xmax =  0.4 * length(pathList$name) + 9 ))
+  } else {
+    pathMat <- matrix(data = 0, nrow = length(pathList$name), ncol = length(pathList$name), dimnames = list(pathList$name, pathList$name))
+    
+    #Make weighted graph
+    for(i in metList$pathways){
+      pList <- setdiff(i, excludedPaths)
+      if(length(pList) > 1){
+        pathMat[pList,pList] = pathMat[pList,pList] + 1
+      }
     }
+    diag(pathMat) <- 0
+    
+    pathMap <- graph_from_adjacency_matrix(pathMat, weighted = TRUE)
+    mapLo <- layout_(pathMap, with_kk(dim = 2, weights = E(pathMap)$weight), normalize(xmin = 0, xmax =  0.4 * length(pathList$name) + 9 ))
   }
-  diag(pathMat) <- 0
   
-  pathMap <- graph_from_adjacency_matrix(pathMat, weighted = TRUE)
-  mapLo <- layout_(pathMap, on_grid(dim = 2), normalize(xmin = 0, xmax =  0.4 * length(pathList$name) + 9 ))
  
   pathNodesOut <- as.data.frame(cbind((as_data_frame(pathMap, what ="vertices")$name), mapLo[,1], mapLo[,2]))
   colnames(pathNodesOut) <- c("name", "x", "z")
