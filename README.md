@@ -33,7 +33,7 @@ Apart from needing to agree to the Minecraft EULA before beginning the installat
 
 It is recommended to regularly clean the server cache, conveniently located under the *cache* directory. **At a minimum**, if the server is externally accessible, user-uploaded data (identified by the "userData" prefix) should be regularly cleaned.
 
-The PiMPCraft stack is comprised of three distinct components: the [Spigot](https://www.spigotmc.org/) Minecraft server, with the [ScriptCraft](https://scriptcraftjs.org/) plugin installed, a [plumber](https://www.rplumber.io/) server and a [Shiny](https://shiny.rstudio.com/) server. Access to the Spigot console, as well as the logging output of the other two components, is provided via separate GNU Screen sessions.
+The PiMPCraft stack is comprised of three distinct components: the [Spigot](https://www.spigotmc.org/) Minecraft server, with the [ScriptCraft](https://scriptcraftjs.org/), [WorldEdit](https://dev.bukkit.org/projects/worldedit) and [WorldGuard](https://dev.bukkit.org/projects/worldguard) plugins installed, a [plumber](https://www.rplumber.io/) server and a [Shiny](https://shiny.rstudio.com/) server. Access to the Spigot console, as well as the logging output of the other two components, is provided via separate GNU Screen sessions.
 
 [1]: Individual components are cross-platform and have been tested on Windows, however no installation or launch infrastructure is currently provided for that platform.
 
@@ -85,6 +85,8 @@ Teleports player to the location of another player
 * `/jsp changeBioSource <id>`
 
 Allows changing the BioSource to explore the metabolome of different organisms. This option is currently **experimental**. Applying user-provided data, in particular, is **not** expected to work properly beyond the default BioSource.
+
+Building and breaking blocks is disabled by default. Server administrators can give full op privileges to particular players wishing to get creative, using the command `op <playername>` on the server console, or customise the WorldGuard configuration for more advanced setups. Note that ops get full access to the ScriptCraft API, allowing the execution of arbitrary JavaScript code - be selective.
 
 ### License
 
