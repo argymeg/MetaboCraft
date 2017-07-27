@@ -1,8 +1,7 @@
-#library(shiny)
+library(markdown)
 
 server <- function(input, output) {
   output$fdout <- renderTable(input$fileDetails) #Remove as soon as I'm sure of everything else!
-
   
   observe({
     input$act
@@ -26,19 +25,27 @@ server <- function(input, output) {
 ui <- fluidPage(
   titlePanel("PiMPCraft Home"),
   sidebarLayout(position = "right",
-    sidebarPanel(h1("info1"),
-                 "detinfo1",
-                 h2("info2"),
-                 "detinfo2"
+    sidebarPanel(h4("This is the PiMPCraft file uploader."),
+                 "Data uploaded only be available to the player with the specified username, so ensure it is entered correctly.",
+                 br(), br(),
+                 "After uploading your data, you can view it by connecting to the Minecraft server located on the same host as this page.",
+                 br(), br(),
+                 "The PiMPCraft README is included on this page. Full documentation and source code are available on ",
+                 a(href = 'http://example.com', 'GitHub'),
+                 ".",
+                 br(), br(),
+                 includeMarkdown('../../servermessage.md')
     ),
-    mainPanel(p("Select a file to be uploaded, THEN enter your Minecraft player name and a memorable file identifier and click Submit."),
+    mainPanel(p("Select a file to be uploaded, then enter your Minecraft player name and a memorable file identifier and click Submit."),
               fileInput("fileDetails", label = "File"),
               textInput("text1", label = "Minecraft player name"),
               textInput("text2", label = "Data file alias"),
               actionButton("act","Submit!"),
               tableOutput("fdout"),
               textOutput("verifier"),
-              textOutput("infoOut")
+              textOutput("infoOut"),
+              hr(style="color: black;"),
+              includeMarkdown('../../README.md')
     )
   )
 )
