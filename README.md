@@ -2,17 +2,18 @@
 
 ## More coming soon.
 
-### The server side
+## The server side
 
-#### Requirements:
+### Requirements:
 
 * A recent computer with at least 2 GB of RAM
-* A *nix OS (tested on macOS and Linux)
-* Outbound HTTP access on port 8080
-* Java (version 8 **strongly** recommended)
-* R
+* A *nix OS (tested on macOS and Linux) <sup>1</sup>
+* Outbound HTTP access on port 8080 <sup>2</sup>
 * GNU Screen
 * curl
+* [Java](https://www.java.com/) (SE 8)
+* [R](https://www.r-project.org/)
+
 
 There are no concrete CPU or storage space requirements, although a fast CPU can have a significant effect on performance. The base installation takes up around 50 MB of disk space, however the Minecraft world files can increase in size rapidly with usage - do plan accordingly.
 
@@ -21,18 +22,31 @@ Four shell scripts are provided with the server:
 * A launcher and stopper for the full PiMPCraft stack (*start.sh* and *stop.sh*, respectively)
 * A maintenance script to clear the Minecraft world (*clearworld.sh*). It is recommended to run this script regularly.
 
-It is also recommended to regularly clean the server cache, conveniently located under the *cache* directory. **At a minimum**, if the server is used by more than one person, user-uploaded data (identified by the XXX???!!! prefix) should be regularly cleaned.
+Certain R packages need to be installed before using the PiMPCraft server. The installer script will attempt to detect and install them, however depending on the R configuration they might have to be installed  manually. Those are:
+
+* [igraph](http://igraph.org/r/)
+* [jsonlite](https://cran.r-project.org/web/packages/jsonlite/)
+* [plumber](https://www.rplumber.io/)
+* [shiny](https://shiny.rstudio.com/)
+
+Apart from needing to agree to the Minecraft EULA before beginning the installation, all scripts are non-interactive and self-documenting.
+
+It is recommended to regularly clean the server cache, conveniently located under the *cache* directory. **At a minimum**, if the server is externally accessible, user-uploaded data (identified by the "userData" prefix) should be regularly cleaned.
 
 The PiMPCraft stack is comprised of three distinct components: the [Spigot](https://www.spigotmc.org/) Minecraft server, with the [ScriptCraft](https://scriptcraftjs.org/) plugin installed, a [plumber](https://www.rplumber.io/) server and a [Shiny](https://shiny.rstudio.com/) server. Access to the Spigot console, as well as the logging output of the other two components, is provided via separate GNU Screen sessions.
 
-### The client side
+[1]: Individual components are cross-platform and have been tested on Windows, however no installation or launch infrastructure is currently provided for that platform.
 
-#### Requirements:
+[2]: Eduroam is known to block this port in some locations.
+
+## The client side
+
+### Requirements:
 * [Minecraft](https://minecraft.net/) version 1.11.2
 * A computer meeting its [system requirements](https://help.mojang.com/customer/en/portal/articles/325948-minecraft-system-requirements)
 * That's it!
 
-#### User interface
+### User interface
 
 The PiMPCraft landing page, which can be accessed using a web browser on port 32909 if the server is running on the local computer, provides an interface for uploading user data, as well as handy access to the PiMPCraft documentation.
 
@@ -44,7 +58,7 @@ A command line interface is provided via the Minecraft console (accessible by pr
 
 Available commands are:
 
-* `/jsp refresh`
+* `/jsp reset`
 
 Reinitialises the user's view of the PiMPCraft world from scratch.
 
@@ -52,10 +66,13 @@ Reinitialises the user's view of the PiMPCraft world from scratch.
 
 Redraws the network map. If no compartment name is specified, it draws the entire network.
 
+* `/jsp toggleMapMode`
+
+Toggles the map view between a force-directed layout (default) and an alphabetical grid.
+
 * `/jsp buildPath <pathway name>`
 
 Draws a view of the specified pathway
-
 
 * `/jsp chooseFile <filename>`
 
@@ -70,3 +87,7 @@ Teleports player to the location of another player
 Allows changing the BioSource to explore the metabolome of different organisms. This option is currently **experimental**. Applying user-provided data, in particular, is **not** expected to work properly beyond the default BioSource.
 
 ### License
+
+When released, PiMPCraft will (probably) be available under the GNU GPL. No promises.
+
+Incorporates code from bresenham-js, available under the MIT license.
