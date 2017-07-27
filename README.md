@@ -28,6 +28,7 @@ Certain R packages need to be installed before using the PiMPCraft server. The i
 * [jsonlite](https://cran.r-project.org/web/packages/jsonlite/)
 * [plumber](https://www.rplumber.io/)
 * [shiny](https://shiny.rstudio.com/)
+* [markdown](https://github.com/rstudio/markdown)
 
 Apart from needing to agree to the Minecraft EULA before beginning the installation, all scripts are non-interactive and self-documenting.
 
