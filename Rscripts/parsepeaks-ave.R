@@ -14,10 +14,8 @@ userdata[is.na(userdata)] <- 2000
 
 #GREATER MEANS GREATER IN X!!!!!!
 #LESS MEANS SMALLER IN X!!!!!
-print(cond2colsIn)
-print(cond1colsIn)
-cond1cols <- as.vector(read.csv(text = gsub(" ", "", cond2colsIn, fixed = TRUE), header = FALSE, stringsAsFactors = FALSE), mode = "character")
-cond2cols <- as.vector(read.csv(text = gsub(" ", "", cond1colsIn, fixed = TRUE), header = FALSE, stringsAsFactors = FALSE), mode = "character")
+cond1cols <- as.vector(read.csv(text = gsub(" ", "", cond1colsIn, fixed = TRUE), header = FALSE, stringsAsFactors = FALSE), mode = "character")
+cond2cols <- as.vector(read.csv(text = gsub(" ", "", cond2colsIn, fixed = TRUE), header = FALSE, stringsAsFactors = FALSE), mode = "character")
 datacols <- c(cond2cols, cond1cols)
 
 greaters <- apply(userdata[,datacols], 1, function(x) {t.test(x[cond2cols], x[cond1cols], alternative = "greater")$p.value})

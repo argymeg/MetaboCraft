@@ -7,18 +7,24 @@ server <- function(input, output) {
     input$act
     if(input$act > 0){
       if(isolate(!is.null(input$fileDetails$name))){
-        playerName <- isolate(input$playerntext)
-        alias <- isolate(input$aliastext)
-        userdataSource <- isolate(input$fileDetails$datapath)
-        cond1colsIn <- isolate(input$cond1coltext)
-        cond2colsIn <- isolate(input$cond2coltext)
-        
-        source("../parsepeaks-ave.R", local = TRUE)
-        output$verifier <- renderText("Success!")
-        output$infoOut <- renderText(isolate(paste("Your PiMPCraft file identifier is: ", playerName, "-", alias, sep = "")))
+        tryCatch({
+          playerName <- isolate(input$playerntext)
+          alias <- isolate(input$aliastext)
+          userdataSource <- isolate(input$fileDetails$datapath)
+          cond1colsIn <- isolate(input$cond1coltext)
+          cond2colsIn <- isolate(input$cond2coltext)
+          
+          source("../parsepeaks-ave.R", local = TRUE)
+          output$verifier <- renderText("Success!")
+          output$infoOut <- renderText(isolate(paste("Your PiMPCraft file identifier is: ", playerName, "-", alias, sep = "")))
+        }, error = function(e){
+          output$verifier <- renderText('<span style="color:red">Something went wrong! Please check that your submitted column names correspond to your submitted CSV file.</span>')
+          output$infoOut <- renderText("")
+        })
       }
       else{
-        output$infoOut <- renderText("Upload a file first!")
+        output$verifier <- renderText("Please upload a file first!")
+        output$infoOut <- renderText("")
       }
     }
   })
@@ -46,7 +52,7 @@ ui <- fluidPage(
               textInput("cond2coltext", label = "Column names for condition 2"),
               actionButton("act","Submit!"),
               tableOutput("fdout"),
-              textOutput("verifier"),
+              htmlOutput("verifier"),
               textOutput("infoOut"),
               hr(style="color: black;"),
               includeMarkdown('../../README.md')
