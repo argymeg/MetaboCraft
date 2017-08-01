@@ -1,26 +1,28 @@
 library(markdown)
 
 server <- function(input, output) {
-  output$fdout <- renderTable(input$fileDetails) #Remove as soon as I'm sure of everything else!
-  
   observe({
     input$act
     if(input$act > 0){
       if(isolate(!is.null(input$fileDetails$name))){
-        tryCatch({
-          playerName <- isolate(input$playerntext)
-          alias <- isolate(input$aliastext)
-          userdataSource <- isolate(input$fileDetails$datapath)
-          cond1colsIn <- isolate(input$cond1coltext)
-          cond2colsIn <- isolate(input$cond2coltext)
-          
-          source("../parsepeaks-ave.R", local = TRUE)
-          output$verifier <- renderText("Success!")
-          output$infoOut <- renderText(isolate(paste("Your PiMPCraft file identifier is: ", playerName, "-", alias, sep = "")))
-        }, error = function(e){
-          output$verifier <- renderText('<span style="color:red">Something went wrong! Please check that your submitted column names correspond to your submitted CSV file.</span>')
-          output$infoOut <- renderText("")
-        })
+        withProgress(
+          message = "Processing file...", {
+            tryCatch({
+              playerName <- isolate(input$playerntext)
+              alias <- isolate(input$aliastext)
+              userdataSource <- isolate(input$fileDetails$datapath)
+              cond1colsIn <- isolate(input$cond1coltext)
+              cond2colsIn <- isolate(input$cond2coltext)
+              
+              source("../parsepeaks-ave.R", local = TRUE)
+              output$verifier <- renderText('<span style="color:green">Done!</span>')
+              output$infoOut <- renderText(paste("Your PiMPCraft file identifier is: ", playerName, "-", alias, sep = ""))
+            }, error = function(e){
+              output$verifier <- renderText('<span style="color:red">Something went wrong! Please check that your submitted column names correspond to your submitted CSV file.</span>')
+              output$infoOut <- renderText("")
+            })
+          }
+        )
       }
       else{
         output$verifier <- renderText("Please upload a file first!")
