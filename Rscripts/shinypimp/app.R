@@ -7,11 +7,13 @@ server <- function(input, output) {
     input$act
     if(input$act > 0){
       if(isolate(!is.null(input$fileDetails$name))){
-        playerName <- input$text1
-        alias <- input$text2
-        metadataSource <- input$fileDetails$datapath
+        playerName <- isolate(input$playerntext)
+        alias <- isolate(input$aliastext)
+        userdataSource <- isolate(input$fileDetails$datapath)
+        cond1colsIn <- isolate(input$cond1coltext)
+        cond2colsIn <- isolate(input$cond2coltext)
         
-        source("../autoProcessMetadata-global.R", local = TRUE)
+        source("../parsepeaks-ave.R", local = TRUE)
         output$verifier <- renderText("Success!")
         output$infoOut <- renderText(isolate(paste("Your PiMPCraft file identifier is: ", playerName, "-", alias, sep = "")))
       }
@@ -38,8 +40,10 @@ ui <- fluidPage(
     ),
     mainPanel(p("Select a file to be uploaded, then enter your Minecraft player name and a memorable file identifier and click Submit."),
               fileInput("fileDetails", label = "File"),
-              textInput("text1", label = "Minecraft player name"),
-              textInput("text2", label = "Data file alias"),
+              textInput("playerntext", label = "Minecraft player name"),
+              textInput("aliastext", label = "Data file alias"),
+              textInput("cond1coltext", label = "Column names for condition 1"),
+              textInput("cond2coltext", label = "Column names for condition 2"),
               actionButton("act","Submit!"),
               tableOutput("fdout"),
               textOutput("verifier"),
