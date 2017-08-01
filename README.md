@@ -45,7 +45,7 @@ The PiMPCraft stack is comprised of three distinct components: the [Spigot](http
 ## The client side
 
 ### Requirements:
-* [Minecraft](https://minecraft.net/) version 1.11.2
+* [Minecraft](https://minecraft.net/) version 1.11.2 (see [here](https://help.mojang.com/customer/portal/articles/1475923-changing-game-versions) for help)
 * A computer meeting its [system requirements](https://help.mojang.com/customer/en/portal/articles/325948-minecraft-system-requirements)
 * That's it!
 
