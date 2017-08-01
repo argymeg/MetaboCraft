@@ -1,6 +1,18 @@
 library(markdown)
 
 server <- function(input, output) {
+  output$ex1data <- downloadHandler(
+    filename = "example1.csv",
+    content = function(file){
+      file.copy("../../examples/example1.csv", file)
+    }
+  )
+  output$ex1names <- downloadHandler(
+    filename = "example1-filenames.txt",
+    content = function(file){
+      file.copy("../../examples/example1-filenames.txt", file)
+    }
+  )
   observe({
     input$act
     if(input$act > 0){
@@ -36,13 +48,19 @@ ui <- fluidPage(
   titlePanel("PiMPCraft Home"),
   sidebarLayout(position = "right",
     sidebarPanel(h4("This is the PiMPCraft file uploader."),
-                 "Data uploaded only be available to the player with the specified username, so ensure it is entered correctly.",
+                 "Data uploaded will only be available to the player with the specified username, so ensure it is entered correctly.",
                  br(), br(),
                  "After uploading your data, you can view it by connecting to the Minecraft server located on the same host as this page.",
                  br(), br(),
                  "The PiMPCraft README is included on this page. Full documentation and source code are available on ",
                  a(href = 'http://example.com', 'GitHub'),
                  ".",
+                 br(), br(),
+                 h4("Example datasets"),
+                 h5("Example 1"),
+                 downloadLink("ex1data", label = "Download data"),
+                 br(),
+                 downloadLink("ex1names", label = "Download column names"),
                  br(), br(),
                  includeMarkdown('../../servermessage.md')
     ),
@@ -52,7 +70,7 @@ ui <- fluidPage(
               textInput("aliastext", label = "Data file alias"),
               textInput("cond1coltext", label = "Column names for condition 1"),
               textInput("cond2coltext", label = "Column names for condition 2"),
-              actionButton("act","Submit!"),
+              actionButton("act","Submit!", icon("upload"), style="color: white; background-color: black"),
               tableOutput("fdout"),
               htmlOutput("verifier"),
               textOutput("infoOut"),
