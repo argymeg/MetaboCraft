@@ -40,6 +40,8 @@ The PiMPCraft stack is comprised of three distinct components: the [Spigot](http
 
 [2]: Eduroam is known to block this port in some locations.
 
+<a name ="the-client-side"></a>
+
 ## The client side
 
 ### Requirements:
