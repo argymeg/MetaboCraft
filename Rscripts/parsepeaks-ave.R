@@ -1,15 +1,22 @@
 library(jsonlite)
 
-pimpData <- read.csv("peaks.csv", stringsAsFactors = FALSE)
-pimpData[is.na(pimpData)] <- 0
+pimpData <- read.csv("../examples/example1.csv", stringsAsFactors = FALSE)
+pimpData[is.na(pimpData)] <- 2000
+
+cond1colsIn <- "P1.mzXML,P2.mzXML,P3.mzXML,P4.mzXML,P5.mzXML,P6.mzXML,P7.mzXML,P8.mzXML,P9.mzXML,P10.mzXML"
+cond2colsIn <- "B1.mzXML,B2.mzXML,B3.mzXML,B4.mzXML,B5.mzXML,B6.mzXML,B7.mzXML,B8.mzXML,B9.mzXML,B10.mzXML"
 
 #GREATER MEANS GREATER IN X!!!!!!
 #LESS MEANS SMALLER IN X!!!!!
-datacols <- grep("mzXML", colnames(pimpData))
-pcols <- grep("^P.+mzXML", colnames(pimpData[,datacols]))
-bcols <- grep("^B.+mzXML", colnames(pimpData[,datacols]))
-greaters <- apply(pimpData[,datacols], 1, function(x) {t.test(x[pcols], x[bcols], alternative = "greater")$p.value})
-lessers <- apply(pimpData[,datacols], 1, function(x) {t.test(x[pcols], x[bcols], alternative = "less")$p.value})
+cond1cols <- as.vector(read.csv(text = cond1colsIn, header = FALSE, stringsAsFactors = FALSE), mode = "character")
+cond2cols <- as.vector(read.csv(text = cond2colsIn, header = FALSE, stringsAsFactors = FALSE), mode = "character")
+datacols <- c(cond2cols, cond1cols)
+
+greaters <- apply(pimpData[,datacols], 1, function(x) {t.test(x[cond2cols], x[cond1cols], alternative = "greater")$p.value})
+lessers <- apply(pimpData[,datacols], 1, function(x) {t.test(x[cond2cols], x[cond1cols], alternative = "less")$p.value})
+
+greaters <- p.adjust(greaters, method = "BH")
+lessers <- p.adjust(lessers, method = "BH")
 
 greaters <- greaters < 0.05
 lessers <- lessers < 0.05
@@ -21,14 +28,14 @@ inksup <- unique(unlist(strsplit(inksup, ",")))
 inksdown <- unique(unlist(strsplit(inksdown, ",")))
 inksambig <- intersect(inksup, inksdown)
 
-#using datacols, pcols, bcols from before!
+#using datacols, cond2cols, cond1cols from before!
 for(thisink in inksambig){
-  candidates <- pimpData[grep(thisink, pimpData$InChI.Key),]
+  candidates <- pimpData[grep(thisink, pimpData$InChI.Key, fixed = TRUE),]
   candidates <- candidates[,datacols]
-  if (t.test(candidates[pcols], candidates[bcols], alternative = "greater")$p.value < 0.05){
-    inksup <- append(inksup, thisink)
-  } else if (t.test(candidates[pcols], candidates[bcols], alternative = "less")$p.value < 0.05) {
-    inksdown <- append(inksdown, thisink)
+  if (t.test(candidates[cond2cols], candidates[cond1cols], alternative = "greater")$p.value < 0.05){
+    inksup <- c(inksup, thisink)
+  } else if (t.test(candidates[cond2cols], candidates[cond1cols], alternative = "less")$p.value < 0.05) {
+    inksdown <- c(inksdown, thisink)
   }
 }
 
