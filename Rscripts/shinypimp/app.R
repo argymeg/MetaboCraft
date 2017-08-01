@@ -28,7 +28,8 @@ server <- function(input, output) {
               
               source("../parsepeaks-ave.R", local = TRUE)
               output$verifier <- renderText('<span style="color:green">Done!</span>')
-              output$infoOut <- renderText(paste("Your PiMPCraft file identifier is: ", playerName, "-", alias, sep = ""))
+              output$infoOut <- renderText(paste('Your data can be accessed by player <span style="font-weight:bold">', playerName,
+                                                 '</span> using the alias <span style="font-weight:bold">', alias, '</span>.', sep = ""))
             }, error = function(e){
               output$verifier <- renderText('<span style="color:red">Something went wrong! Please check that your submitted column names correspond to your submitted CSV file.</span>')
               output$infoOut <- renderText("")
@@ -37,7 +38,7 @@ server <- function(input, output) {
         )
       }
       else{
-        output$verifier <- renderText("Please upload a file first!")
+        output$verifier <- renderText('<span style="color:red">Please upload a file first!</span>')
         output$infoOut <- renderText("")
       }
     }
@@ -70,9 +71,8 @@ ui <- fluidPage(
               textInput("cond1coltext", label = "Column names for condition 1"),
               textInput("cond2coltext", label = "Column names for condition 2"),
               actionButton("act","Submit!", icon("upload"), style="color: white; background-color: black"),
-              tableOutput("fdout"),
               htmlOutput("verifier"),
-              textOutput("infoOut"),
+              htmlOutput("infoOut"),
               hr(style="color: black;"),
               includeMarkdown('../../README.md')
     )
