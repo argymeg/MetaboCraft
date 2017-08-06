@@ -112,12 +112,6 @@ function buildNodes(dronec){
       echo('Undefined node type!');
       throw 'Undefined node type!';
     }
-    /*
-    //Unused types
-    else if(data.nodes[i].type === "yellow"){
-      material = 41;
-    }
-    */
 
     //Move drone to node coordinates
     dronec.right(parseInt(data.nodes[i].x));
@@ -164,12 +158,6 @@ function buildEdges(droned){
       echo('Undefined edge type!');
       throw 'Undefined edge type!';
     }
-    /*
-    //Unused types
-    else if(data.edges[j].type === "grey"){
-      reMat = 1;
-    }
-    */
 
     //Set start and end coordinates for this edge
     var frontx, fronty, backx, backy, frontz, backz, nDim;

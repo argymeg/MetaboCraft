@@ -62,25 +62,15 @@ function actuallyBuild(dronec){
 
     //Assign material to node types, TODO: pull externally
     var material = 47; //bookshelf
-//    var dim = 2;
 
     //Move drone to node coordinates
     dronec.right(parseInt(data.nodes[i].x));
     dronec.fwd(parseInt(data.nodes[i].z));
 
-    //Draw node as cube of arbitrary dimensions
+    //Draw node as cuboid. Dimensions hardcoded as they are constant, could
+    //switch to variable in the future (as is the case for pathway graphs).
     dronec.cuboidX(material, '', 1, 2, 1, true);
 
-/*
-    dronec.cuboidX(108, Drone.PLAYER_STAIRS_FACING[dronec.dir], 1, 1, 1, true); //brickstairs
-    dronec.fwd(1);
-    dronec.cuboidX(45, '', 1, 1, 1, true); //brickblock
-    dronec.up(1);
-    dronec.cuboidX(108, Drone.PLAYER_STAIRS_FACING[dronec.dir], 1, 1, 1, true);
-*/
-
-//    dronec.up(Math.floor(dim / 2));
-//    dronec.fwd(Math.floor(dim / 2));
     dronec.up(1);
     var location = dronec.getLocation();
     var ars = location.world.spawnEntity(location, org.bukkit.entity.EntityType.ARMOR_STAND)
@@ -119,10 +109,6 @@ function actuallyBuild(dronec){
 }
 
 function handleError(errdrone){
-//  console.log(errdrone.getLocation());
-//  var playerName = errdrone.getLocation().world.getNearbyEntities(errdrone.getLocation(), 10, 10, 10)[0].getName();
-//  console.log(playerName);
-//  echo(playerName, 'Something has gone wrong! Right click the box in front of you to go back to the start.');
   echo(errdrone.player, 'Something has gone wrong!');
   errdrone.fwd(5);
   errdrone.signpost(['Something has', 'gone wrong!', 'Right-click']);
