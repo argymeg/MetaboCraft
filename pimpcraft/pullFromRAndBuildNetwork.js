@@ -1,8 +1,7 @@
 /*
 Build metabolic network map
-Will do for now but far too much code duplication!
-Should be merged with the pathway builder
-(and possibly the deleter as well)
+Core functionality same as building graph, but too much divergence
+to merge code just now. Might be worth the effort in the future.
 */
 
 var Drone = require('drone');

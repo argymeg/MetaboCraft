@@ -74,14 +74,11 @@ function buildNodes(dronec){
     //Assign material to node types, TODO: pull externally
     var material, dim, meta;
 
-    //For now, loop over the entire change file for every metabolite node -
-    //will probably not scale too well.
-    //Two obvious ways out:
-    //1)Split loop into 3 parts: loop over all nodes to assign initial values
+    //Loop over the entire change file for every metabolite node -
+    //not necessarily the most efficient way. Potential alternative:
+    //Split loop into 3 parts: loop over all nodes to assign initial values
     //then over all changed nodes to assign changes
     //then over all nodes again to draw them
-    //2)Collate change data with core data in the input -
-    //minimise overhead at the expense of flexibility
 
     if(data.nodes[i].biologicalType === "metabolite"){
       material = 35; //dirt
