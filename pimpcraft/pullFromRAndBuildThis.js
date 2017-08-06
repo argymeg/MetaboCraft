@@ -60,8 +60,8 @@ function actuallyBuild(droneb){
   droneb.signpost('Back to map');
   droneb.back(5);
 
-  buildNodes(droneb);
   buildEdges(droneb);
+  buildNodes(droneb);
 
 }
 
