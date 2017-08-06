@@ -60,6 +60,12 @@ function actuallyBuild(droneb){
   droneb.signpost('Back to map');
   droneb.back(5);
 
+  buildNodes(droneb);
+  buildEdges(droneb);
+
+}
+
+function buildNodes(dronec){
   /*
     Main node drawing loop!
   */
@@ -117,17 +123,17 @@ function actuallyBuild(droneb){
     */
 
     //Move drone to node coordinates
-    droneb.right(parseInt(data.nodes[i].x));
-    droneb.up(parseInt(data.nodes[i].y));
-    droneb.fwd(parseInt(data.nodes[i].z));
+    dronec.right(parseInt(data.nodes[i].x));
+    dronec.up(parseInt(data.nodes[i].y));
+    dronec.fwd(parseInt(data.nodes[i].z));
 
     //Draw node as cube of arbitrary dimensions
-    droneb.cuboidX(material, meta, dim, dim, dim, true);
+    dronec.cuboidX(material, meta, dim, dim, dim, true);
 
     //Create invisible armor stand that displays the node name
-    droneb.up(dim - 1);
-    droneb.fwd(Math.floor(dim / 2));
-    var location = droneb.getLocation() ;
+    dronec.up(dim - 1);
+    dronec.fwd(Math.floor(dim / 2));
+    var location = dronec.getLocation() ;
     var ars = location.world.spawnEntity(location, org.bukkit.entity.EntityType.ARMOR_STAND)
     ars.setVisible(false);
     ars.setGravity(false);
@@ -135,9 +141,12 @@ function actuallyBuild(droneb){
     ars.setCustomName(data.nodes[i].chemName);
     ars.setCustomNameVisible(true);
 
-    droneb.move('pointzero');
+    dronec.move('pointzero');
   }
 
+}
+
+function buildEdges(droned){
   /*
     Main edge drawing loop!
   */
@@ -213,15 +222,15 @@ function actuallyBuild(droneb){
 
     var points = bresenham([backx, backy, backz], [frontx, fronty, frontz]);
     for(var l = 0; l < points.length - 1; l++){
-      droneb.move('pointzero');
-      droneb.right(points[l][0]);
-      droneb.up(points[l][1]);
-      droneb.fwd(points[l][2]);
-      droneb.cuboidX(reMat, meta, 1, 1, 1, true);
+      droned.move('pointzero');
+      droned.right(points[l][0]);
+      droned.up(points[l][1]);
+      droned.fwd(points[l][2]);
+      droned.cuboidX(reMat, meta, 1, 1, 1, true);
     }
 
 
-    droneb.move('pointzero');
+    droned.move('pointzero');
   }
 }
 
