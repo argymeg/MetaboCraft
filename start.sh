@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 readonly SPIGOT_VER=1.11.2
 readonly SPIGOT_FILENAME=spigot-$SPIGOT_VER.jar

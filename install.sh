@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 readonly INST_START_DIR=$PWD
 readonly INST_LOG_FILE=$INST_START_DIR/install.log

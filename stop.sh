@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 readonly SPIGOT_SCREEN_NAME=pimpcraftSpigot
 readonly PLUMBER_SCREEN_NAME=pimpcraftPlumber
