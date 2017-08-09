@@ -13,7 +13,7 @@ readonly WORLDEDIT_DEST=worldedit-bukkit-6.1.5.jar
 readonly WORLDGUARD_SOURCE=https://dev.bukkit.org/projects/worldguard/files/956770/download
 readonly WORLDGUARD_DEST=worldguard-6.2.jar
 readonly -a INST_DEPENDS=( curl java screen Rscript )
-readonly -a INST_RDEPENDS=( igraph jsonlite shiny plumber markdown )
+readonly -a INST_RDEPENDS=( igraph jsonlite shiny plumber markdown curl )
 readonly JSCRIPT_DIR=pimpcraft
 readonly RSCRIPT_DIR=Rscripts
 readonly MODULE_DIR=modules
@@ -124,6 +124,7 @@ echo "OK" | tee -a $INST_LOG_FILE
 
 printf "Initialising server... " | tee -a $INST_LOG_FILE
 screen -dmS $INIT_SCREEN_NAME
+sleep 1
 screen -S $INIT_SCREEN_NAME -p 0 -X stuff "exec java -jar $SPIGOT_FILENAME
 "
 screen -S $INIT_SCREEN_NAME -p 0 -X stuff "gamerule doDaylightCycle false

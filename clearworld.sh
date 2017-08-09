@@ -6,6 +6,7 @@ cd spigot
 rm -r world*
 
 screen -dmS initServer
+sleep 1
 screen -S initServer -p 0 -X stuff "exec java -jar $(ls | grep spigot- )
 "
 screen -S initServer -p 0 -X stuff "gamerule doDaylightCycle false

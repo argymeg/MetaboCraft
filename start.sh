@@ -11,6 +11,7 @@ readonly SHINY_SCREEN_NAME=pimpcraftShiny
 
 cd $SPIGOT_DIR
 screen -dmS $SPIGOT_SCREEN_NAME
+sleep 1
 screen -S $SPIGOT_SCREEN_NAME -p 0 -X stuff "cd spigot
 "
 screen -S $SPIGOT_SCREEN_NAME -p 0 -X stuff "exec java -jar $SPIGOT_FILENAME
@@ -22,9 +23,11 @@ screen -S $SPIGOT_SCREEN_NAME -p 0 -X stuff "exec java -jar $SPIGOT_FILENAME
 #started correctly, which is A Bad Idea(tm).
 cd ../Rscripts
 screen -dmS $PLUMBER_SCREEN_NAME
+sleep 1
 screen -S $PLUMBER_SCREEN_NAME -p 0 -X stuff "./$PLUMBER_FILENAME &
 "
 screen -dmS $SHINY_SCREEN_NAME
+sleep 1
 screen -S $SHINY_SCREEN_NAME -p 0 -X stuff "./$SHINY_FILENAME &
 "
 
