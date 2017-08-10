@@ -11,6 +11,7 @@
 * Outbound HTTP access on port 8080 <sup>2</sup>
 * GNU Screen
 * curl
+* [Git](https://www.git-scm.com/)
 * [Java](https://www.java.com/) (SE 8)
 * [R](https://www.r-project.org/)
 
