@@ -25,7 +25,7 @@ server <- function(input, output) {
               userdataSource <- isolate(input$fileDetails$datapath)
               cond1colsIn <- isolate(input$cond1coltext)
               cond2colsIn <- isolate(input$cond2coltext)
-              
+
               source("../parsepeaks-ave.R", local = TRUE)
               output$verifier <- renderText('<span style="color:green">Done!</span>')
               output$infoOut <- renderText(paste('Your data can be accessed by player <span style="font-weight:bold">', playerName,
@@ -54,7 +54,7 @@ ui <- fluidPage(
                  "After uploading your data, you can view it by connecting to the Minecraft server located on the same host as this page.",
                  br(), br(),
                  HTML('The PiMPCraft README is included on this page (you might want to jump to the <a href="#the-client-side">client section</a>).
-                      Full documentation and source code are available on <a href = "http://example.com">GitHub</a>.'),
+                      Full documentation and source code are available on <a href = "https://github.com/argymeg/PiMPCraft">GitHub</a>.'),
                  br(), br(),
                  h4("Example datasets"),
                  h5("Example 1"),
