@@ -9,6 +9,8 @@ library("jsonlite")
 #bioSource <- 4324
 #pathName <- "Arginine and Proline Metabolism"
 
+knownSides <- c("proton","h+","water","h2o","nicotinamide adenine dinucleotide","nad+","nicotinamide adenine dinucleotide - reduced","nadh")
+
 outputSink <- paste0("../cache/pathGraph_", bioSource, "_", gsub("/","--", pathName, fixed = TRUE), ".json")
 if(file.exists(outputSink)){
   graphOut <- fromJSON(outputSink)
@@ -71,7 +73,9 @@ if(file.exists(outputSink)){
   allNodes <- as.data.frame(cbind(c(0:(length(graphData$nodes$name) - 1)), graphData$nodes$name, graphData$nodes$biologicalType, graphData$nodes$id), stringsAsFactors = FALSE)
   colnames(allNodes) <- c("localID","chemName","biologicalType","globalID")
   
-  #Only process node if it crosses the threshold for total number of connections - but we don't know how many times in each side.
+  #Process node if it is a known side compound, or if it crosses
+  #the threshold for total number of connections - but we don't know how many times in each side.
+  #If it only occurs once, change it to side and leave it alone
   #If there's more than one occurrence in sources, duplicate all but the first
   #Then if there are more occurrences in targets, duplicate them
   #Else, if there's only one occurrence in sources, leave that alone and duplicate targets
@@ -79,17 +83,19 @@ if(file.exists(outputSink)){
   #TODO1: PROPERLY DETERMINE THRESHOLD
   #TODO2: IMPLEMENT LIST-BASED NODE FILTERING
   for(i in 0:(length(allNodes$localID) - 1)){
-    if(sum(allLinks$source == i) + sum(allLinks$target == i) > 5 && allNodes[i+1,]$biologicalType == "metabolite"){
+    if(tolower(allNodes[i+1,]$chemName) %in% knownSides || (sum(allLinks$source == i) + sum(allLinks$target == i) > 5 && allNodes[i+1,]$biologicalType == "metabolite")){
       allNodes[i+1,]$biologicalType <- "sideMetabolite"
-      if(sum(allLinks$source == i) > 1){
-        duplicateSources(2)
-        if(sum(allLinks$target == i) > 1){
+      if(sum(allLinks$source == i) + sum(allLinks$target == i) > 1){
+        if(sum(allLinks$source == i) > 1){
+          duplicateSources(2)
+          if(sum(allLinks$target == i) > 0){
+            duplicateTargets(1)
+          }
+        } else if (sum(allLinks$source == i) == 1){
           duplicateTargets(1)
+        } else {
+          duplicateTargets(2)
         }
-      } else if (sum(allLinks$source == i) == 1){
-        duplicateTargets(1)
-      } else {
-        duplicateTargets(2)
       }
     }
   }
