@@ -26,7 +26,7 @@ server <- function(input, output) {
               cond1colsIn <- isolate(input$cond1coltext)
               cond2colsIn <- isolate(input$cond2coltext)
 
-              source("../parsepeaks-ave.R", local = TRUE)
+              source("parsepeaks-ave.R", local = TRUE)
               output$verifier <- renderText('<span style="color:green">Done!</span>')
               output$infoOut <- renderText(paste('Your data can be accessed by player <span style="font-weight:bold">', playerName,
                                                  '</span> using the alias <span style="font-weight:bold">', alias, '</span>.', sep = ""))
