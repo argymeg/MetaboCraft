@@ -5,48 +5,56 @@ var telepimp = require('telepimp');
 
 function myNodeClickHook(event){
   var player = event.player;
+  //Fire on right-clicks only
   if(event.getAction() == 'RIGHT_CLICK_BLOCK'){
-    if(event.getClickedBlock().getType() == 'BOOKSHELF'){
-      if(event.getHand() == 'HAND'){
+    //Right-clicks normally fire two events, one for each hand - only process one!
+    if(event.getHand() == 'HAND'){
+      //Bookshelves are pathways on map, process accordingly
+      if(event.getClickedBlock().getType() == 'BOOKSHELF'){
         var location = event.getClickedBlock().getLocation();
+        /**
+         * For some reason, getNearbyEntities works on a cuboid of 2X the given dimensions
+         * This matches the dimensions of the pathway map nodes (0.6 is rounded down
+         * to 1, 0.5 fails due to double math). Sometimes, apparently at random,
+         * this will fail to select a node. This is to be treated as a known bug.
+         */
         var entList = location.world.getNearbyEntities(location, 0.6, 2, 0.6);
         for(var i = 0; i <= entList.length; i++){
-
           if(i === entList.length){
             echo(player, 'Could not select a pathway! Try again?');
           }
-          else{
+          else {
             var selection = entList[i].getCustomName();
+            //The armor stand should be the only entity in the area with a custom name
             if(selection){
               telepimp(player);
               var d = new Drone(player);
-              d.pullFromRAndBuildThis(store[player.name]['bioSource'], selection, player.name);
+              d.buildGraph(store[player.name]['bioSource'], selection, player.name);
               telepimp(player, 'graph');
               break;
             }
           }
         }
       }
-    }
-    else if(event.getClickedBlock().getType() == 'PUMPKIN'){
-      if(event.getHand() == 'HAND'){
+      //Pumpkins are compartments, process accordingly
+      else if(event.getClickedBlock().getType() == 'PUMPKIN'){
         var location = event.getClickedBlock().getLocation();
         var selection = location.world.getNearbyEntities(location, 1, 1, 1)[0].getCustomName();
-        if(selection == 'Everything'){
+        if(selection === 'Everything'){
           selection = '';
         }
         telepimp(player);
         var d = new Drone(player);
-        d.pullFromRAndBuildNetwork(store[player.name]['bioSource'], selection);
+        d.buildMap(store[player.name]['bioSource'], selection);
         telepimp(player, 'map');
       }
-    }
-    else if(event.getClickedBlock().getType() == 'SIGN_POST'){
-      if(event.getHand() == 'HAND'){
-        if(event.getClickedBlock().getState().getLine(0) == 'Back to map' || event.getClickedBlock().getState().getLine(0) == 'HERE'){
+      //Sign posts are currently only used for the back to map button as part of an error message.
+      //Could have alternative uses in the future.
+      else if(event.getClickedBlock().getType() == 'SIGN_POST'){
+        if(event.getClickedBlock().getState().getLine(0) === 'Back to map' || event.getClickedBlock().getState().getLine(0) === 'HERE'){
           telepimp(player);
           var d = new Drone(player)
-          d.pullFromRAndBuildNetwork(store[player.name]['bioSource']);
+          d.buildMap(store[player.name]['bioSource']);
           telepimp(player, 'map');
         }
       }

@@ -11,6 +11,7 @@ function myJoinHook(event){
   getPlayerInfo();
 }
 
+//Get list of player files and set initial settings in store
 function getPlayerInfo(){
   var playerFileSource = 'http://localhost:32908/listplayerfiles?player=' + player.name;
   store[player.name] = {};
@@ -26,6 +27,7 @@ function getPlayerInfo(){
   });
 }
 
+//Show welcome message and player info
 function showGreeting(){
   echo(player, "Welcome to PiMPCraft, " + player.name + "!");
   echo(player, "You are seeing BioSource " + store[player.name]['bioSource'] + ".");
@@ -43,16 +45,16 @@ function showGreeting(){
     echo(player, "You do not have any currently uploaded files.")
   }
 
+  //After showing player info, move to new location and build the network map
   telepimp(player);
   var d = new Drone(player)
-  d.pullFromRAndBuildNetwork(store[player.name]['bioSource'])
+  d.buildMap(store[player.name]['bioSource'])
   telepimp(player, 'map');
 }
-
 events.playerJoin(myJoinHook);
 
+//Add the reset function to simulate the join events on command
 function reset(parameters, player){
     getPlayerInfo();
 }
-
 command(reset);
