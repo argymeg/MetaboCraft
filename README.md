@@ -122,7 +122,7 @@ The PiMPCraft stack is comprised of three distinct components: the [Spigot](http
 <a name ="known-bugs"></a>
 
 ### Known bugs
-* Pathway selection from the network map may occasionally malfunction and produce an error message. Redrawing the map should fix the issue.
+* Pathway selection from the network map may occasionally malfunction and produce an error message. Resetting the session, either by using the `/jsp reset` command or by quitting and rejoining the server, fixes the issue.
 
 <a name ="license"></a>
 
