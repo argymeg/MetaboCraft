@@ -21,7 +21,7 @@ function myNodeClickHook(event){
         var entList = location.world.getNearbyEntities(location, 0.6, 2, 0.6);
         for(var i = 0; i <= entList.length; i++){
           if(i === entList.length){
-            echo(player, 'Could not select a pathway! Try again?');
+            echo(player, 'Something has gone wrong with your session!\nPlease use /jsp reset or disconnect and\nreconnect to the server to try again.');
           }
           else {
             var selection = entList[i].getCustomName();
