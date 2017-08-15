@@ -82,7 +82,7 @@ printf "Downloading BuildTools... " | tee -a $INST_LOG_FILE
 downloadFile $BUILDTOOLS_DEST $BUILDTOOLS_SOURCE
 
 printf "Building Spigot - this may take a few minutes... " | tee -a $INST_LOG_FILE
-java -jar $BUILDTOOLS_DEST --rev 1.11.2 >> $INST_LOG_FILE 2>&1
+java -jar $BUILDTOOLS_DEST --rev $SPIGOT_VER >> $INST_LOG_FILE 2>&1
 if [ ! -f $SPIGOT_FILENAME ]
 then
   echo "Error building Spigot! Check the log for details." | tee -a $INST_LOG_FILE
