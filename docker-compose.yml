@@ -1,0 +1,14 @@
+version: '3.3'
+
+services:
+#    spigot:
+#    plumber:
+#    shiny:
+
+    pimpcraft:
+        image: ${PIMPCRAFT_IMAGE}
+        build: .
+        ports:
+            - "${EXTERNAL_PORT}:32909"
+            - "25565:25565"
+        command: ./start_docker.sh
