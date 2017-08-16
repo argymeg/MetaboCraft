@@ -38,7 +38,7 @@ Available commands are:
 
 Reinitialises the user's view of the PiMPCraft world from scratch.
 
-* `/jsp buildMap <compartment name (optional)>`
+* `/jsp buildNetwork <compartment name (optional)>`
 
 Redraws the network map. If no compartment name is specified, it draws the entire network.
 
