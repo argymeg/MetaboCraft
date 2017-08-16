@@ -155,11 +155,16 @@ then
   do
     Rscript -e "if(length(find.package(\"$i\", quiet = TRUE))){writeLines(\"Checking for $i... OK\")}else{writeLines(\"Checking for $i... NOT FOUND\")}"  | tee -a $INST_LOG_FILE
   done
-  printf "It looks like your R library is not user-writable!\nIF any packages were marked as not found, please install them.\n" | tee -a $INST_LOG_FILE
+  printf "It looks like your R library is not user-writable!\nIf any packages were marked as not found, please install them.\n" | tee -a $INST_LOG_FILE
 else
   for i in ${INST_RDEPENDS[@]}
   do
     Rscript -e "if(length(find.package(\"$i\", quiet = TRUE))){writeLines(\"Checking for $i... OK\")}else{writeLines(\"Checking for $i... Not found, installing...\");install.packages(\"$i\", repos = \"https://cloud.r-project.org/\")}" | tee -a $INST_LOG_FILE
+  done
+  #Check for possible failures with installation!
+  for i in ${INST_RDEPENDS[@]}
+  do
+    Rscript -e "if(length(find.package(\"$i\", quiet = TRUE))){cat()}else{writeLines(\"Failed to install $i! Please install it manually.\")}" | tee -a $INST_LOG_FILE
   done
 fi
 
