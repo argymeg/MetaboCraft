@@ -6,3 +6,5 @@ spigot/
 cache/
 
 install.log
+
+.idea/
