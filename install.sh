@@ -149,7 +149,7 @@ echo "Checking for missing R packages..." | tee -a $INST_LOG_FILE
 
 #If we are on Linux and the R library is not in a home directory, assume it is not user-writable and do not attempt to install
 #There could be other configurations on which this check is not enough!
-if [ $(uname) = "Linux" ] && ! Rscript -e '.libPaths()' | grep -q home
+if [ $(uname) = "Linux" ] && ! Rscript -e '.libPaths()' 2> /dev/null | grep -q home
 then
   for i in ${INST_RDEPENDS[@]}
   do
