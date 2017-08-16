@@ -18,9 +18,9 @@ screen -S $SPIGOT_SCREEN_NAME -p 0 -X stuff "exec java -jar $SPIGOT_FILENAME
 "
 
 #Start plumber and shiny as background children in their own shells
-#This makes it A LOT easier to kill them when stopping (since they
-#refuse to die when their screen does) but we can't tell if they actually
-#started correctly, which is A Bad Idea(tm).
+#This is a temporary solution for being able to stop them at shutdown
+#(since they refuse to simply die when their screen does)
+#but we can't tell if they actually started correctly, which is far from ideal.
 cd ../Rscripts
 screen -dmS $PLUMBER_SCREEN_NAME
 sleep 1

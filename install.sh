@@ -82,7 +82,7 @@ printf "Downloading BuildTools... " | tee -a $INST_LOG_FILE
 downloadFile $BUILDTOOLS_DEST $BUILDTOOLS_SOURCE
 
 printf "Building Spigot - this may take a few minutes... " | tee -a $INST_LOG_FILE
-java -jar $BUILDTOOLS_DEST --rev 1.11.2 >> $INST_LOG_FILE 2>&1
+java -jar $BUILDTOOLS_DEST --rev $SPIGOT_VER >> $INST_LOG_FILE 2>&1
 if [ ! -f $SPIGOT_FILENAME ]
 then
   echo "Error building Spigot! Check the log for details." | tee -a $INST_LOG_FILE
@@ -149,17 +149,22 @@ echo "Checking for missing R packages..." | tee -a $INST_LOG_FILE
 
 #If we are on Linux and the R library is not in a home directory, assume it is not user-writable and do not attempt to install
 #There could be other configurations on which this check is not enough!
-if [ $(uname) = "Linux" ] && ! Rscript -e '.libPaths()' | grep -q home
+if [ $(uname) = "Linux" ] && ! Rscript -e '.libPaths()' 2> /dev/null | grep -q home
 then
   for i in ${INST_RDEPENDS[@]}
   do
     Rscript -e "if(length(find.package(\"$i\", quiet = TRUE))){writeLines(\"Checking for $i... OK\")}else{writeLines(\"Checking for $i... NOT FOUND\")}"  | tee -a $INST_LOG_FILE
   done
-  printf "It looks like your R library is not user-writable!\nIF any packages were marked as not found, please install them.\n" | tee -a $INST_LOG_FILE
+  printf "It looks like your R library is not user-writable!\nIf any packages were marked as not found, please install them.\n" | tee -a $INST_LOG_FILE
 else
   for i in ${INST_RDEPENDS[@]}
   do
     Rscript -e "if(length(find.package(\"$i\", quiet = TRUE))){writeLines(\"Checking for $i... OK\")}else{writeLines(\"Checking for $i... Not found, installing...\");install.packages(\"$i\", repos = \"https://cloud.r-project.org/\")}" | tee -a $INST_LOG_FILE
+  done
+  #Check for possible failures with installation!
+  for i in ${INST_RDEPENDS[@]}
+  do
+    Rscript -e "if(length(find.package(\"$i\", quiet = TRUE))){cat()}else{writeLines(\"Failed to install $i! Please install it manually.\")}" | tee -a $INST_LOG_FILE
   done
 fi
 

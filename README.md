@@ -1,54 +1,22 @@
-# This is the PiMPCraft readme.
+# PiMPCraft
 
-## More coming soon.
+PiMPCraft is a [Minecraft](https://www.minecraft.net/) plugin designed for visualisation of metabolomic data. It can plot metabolic network maps, as well as 3D graphs of individual metabolic pathways, from data provided by [MetExplore](http://metexplore.toulouse.inra.fr/). It can also display the effects of experimental conditions on the metabolome, using data obtained from [PiMP](http://polyomics.mvls.gla.ac.uk/).
 
-## The server side
+## Contents
+1. [The client side](#the-client-side)
+2. [The server side](#the-server-side)
+3. [Known bugs](#known-bugs)
+4. [License](#license)
 
-### Requirements:
-
-* A recent computer with at least 2 GB of RAM
-* A *nix OS (tested on macOS and Linux) <sup>1</sup>
-* Outbound HTTP access on port 8080 <sup>2</sup>
-* GNU Screen
-* curl
-* [Git](https://www.git-scm.com/)
-* [Java](https://www.java.com/) (SE 8)
-* [R](https://www.r-project.org/)
-
-
-There are no concrete CPU or storage space requirements, although a fast CPU can have a significant effect on performance. The base installation takes up around 50 MB of disk space, however the Minecraft world files can increase in size rapidly with usage - do plan accordingly.
-
-Four shell scripts are provided with the server:
-* An installer script (*install.sh*)
-* A launcher and stopper for the full PiMPCraft stack (*start.sh* and *stop.sh*, respectively)
-* A maintenance script to clear the Minecraft world (*clearworld.sh*). It is recommended to run this script regularly.
-
-Certain R packages need to be installed before using the PiMPCraft server. The installer script will attempt to detect and install them, however depending on the R configuration they might have to be installed  manually. Those are:
-
-* [igraph](http://igraph.org/r/)
-* [jsonlite](https://cran.r-project.org/web/packages/jsonlite/)
-* [plumber](https://www.rplumber.io/)
-* [shiny](https://shiny.rstudio.com/)
-* [markdown](https://github.com/rstudio/markdown)
-
-Apart from needing to agree to the Minecraft EULA before beginning the installation, all scripts are non-interactive and self-documenting.
-
-It is recommended to regularly clean the server cache, conveniently located under the *cache* directory. **At a minimum**, if the server is externally accessible, user-uploaded data (identified by the "userData" prefix) should be regularly cleaned.
-
-The PiMPCraft stack is comprised of three distinct components: the [Spigot](https://www.spigotmc.org/) Minecraft server, with the [ScriptCraft](https://scriptcraftjs.org/), [WorldEdit](https://dev.bukkit.org/projects/worldedit) and [WorldGuard](https://dev.bukkit.org/projects/worldguard) plugins installed, a [plumber](https://www.rplumber.io/) server and a [Shiny](https://shiny.rstudio.com/) server. Access to the Spigot console, as well as the logging output of the other two components, is provided via separate GNU Screen sessions.
-
-[1]: Individual components are cross-platform and have been tested on Windows, however no installation or launch infrastructure is currently provided for that platform.
-
-[2]: Eduroam is known to block this port in some locations.
 
 <a name ="the-client-side"></a>
 
 ## The client side
 
 ### Requirements:
+* A computer meeting the Minecraft [system requirements](https://help.mojang.com/customer/en/portal/articles/325948-minecraft-system-requirements)
 * [Minecraft](https://minecraft.net/) version 1.11.2 (see [here](https://help.mojang.com/customer/portal/articles/1475923-changing-game-versions) for help)
-* A computer meeting its [system requirements](https://help.mojang.com/customer/en/portal/articles/325948-minecraft-system-requirements)
-* That's it!
+* Any modern web browser
 
 ### User interface
 
@@ -56,7 +24,11 @@ The PiMPCraft landing page, which can be accessed using a web browser on port 32
 
 To access the PiMPCraft world from Minecraft, after logging in, select *Multiplayer*, then *Add server*, select a name for the server and enter its address (which will be simply *localhost* if running on your local computer). Then select the server you just added and click *Join server*.
 
-On joining the PiMPCraft server, you will be shown a welcome message informing you of the MetExplore Biosource you are currently viewing, as well as any files uploaded under your name. You will then given access to a map of the metabolic network, including switches to view the subset of the network corresponding to a particular cellular compartment. Selecting a node on this network, representing a specific pathway, will transport you to a view of this pathway. If you have previously uploaded a file of your own metabolomic data, this view will highlight the metabolites identified as changing.
+On joining the PiMPCraft server, you will be shown a welcome message informing you of the MetExplore BioSource you are currently viewing, as well as any files uploaded under your name. You will then given access to a map of the metabolic network, including switches to view the subset of the network corresponding to a particular cellular compartment. Selecting a node on this network, representing a specific pathway, will transport you to a view of this pathway. If you have previously uploaded a file of your own metabolomic data, this view will highlight the metabolites identified as changing.
+
+By default, PiMPCraft displays data from MetExplore's BioSource 4324, based on the [Recon 2](http://humanmetabolism.org/) reconstruction of human metabolism.
+
+Depending on your computer and network speed, building structures can take a few seconds, especially on the first time they are accessed.
 
 A command line interface is provided via the Minecraft console (accessible by pressing / on the keyboard), which provides direct access to the above, as well as exposing some additional functionality.
 
@@ -66,7 +38,7 @@ Available commands are:
 
 Reinitialises the user's view of the PiMPCraft world from scratch.
 
-* `/jsp buildMap <compartment name (optional)>`
+* `/jsp buildNetwork <compartment name (optional)>`
 
 Redraws the network map. If no compartment name is specified, it draws the entire network.
 
@@ -92,8 +64,74 @@ Allows changing the BioSource to explore the metabolome of different organisms. 
 
 Building and breaking blocks is disabled by default. Server administrators can give full op privileges to particular players wishing to get creative, using the command `op <playername>` on the server console, or customise the WorldGuard configuration for more advanced setups. Note that ops get full access to the ScriptCraft API, allowing the execution of arbitrary JavaScript code - be selective.
 
+#### Colour coding of pathway graphs
+
+| Entity type                | Colour |
+|----------------------------|--------|
+| Unchanging metabolite      | Black  |
+| Upregulated metabolite     | Blue   |
+| Downregulated metabolite   | Red    |
+| Side compound              | White  |
+| Edge - substrate to enzyme | Pink   |
+| Edge - enzyme to product   | Green  |
+
+<a name ="the-server-side"></a>
+
+## The server side
+
+This section will be of interest to users intending to run their own instance of the PiMPCraft server.
+
+### Requirements:
+
+* A recent computer with at least 2 GB of RAM
+* A *nix OS (tested on macOS and Linux) <sup>1</sup>
+* Outbound HTTP access on port 8080 <sup>2</sup>
+* GNU Screen
+* curl
+* [Git](https://www.git-scm.com/)
+* [Java](https://www.java.com/) (SE 8)
+* [R](https://www.r-project.org/)
+
+
+There are no concrete CPU or storage space requirements, although a fast CPU can have a significant effect on performance. The base installation takes up around 50 MB of disk space, however the Minecraft world files can increase in size rapidly with usage - do plan accordingly.
+
+Four shell scripts are provided with the server:
+* An installer script (*install.sh*)
+* A launcher and stopper for the full PiMPCraft stack (*start.sh* and *stop.sh*, respectively)
+* A maintenance script to clear the Minecraft world (*clearworld.sh*). It is recommended to run this script regularly.
+
+Certain R packages need to be installed before using the PiMPCraft server. The installer script will attempt to detect and install them, however depending on the R configuration they might have to be installed  manually - all are available on CRAN and can be installed using `install.packages()`. Those are:
+
+* [igraph](http://igraph.org/r/)
+* [jsonlite](https://github.com/jeroen/jsonlite/)
+* [plumber](https://www.rplumber.io/)
+* [shiny](https://shiny.rstudio.com/)
+* [markdown](https://github.com/rstudio/markdown)
+* [curl](https://github.com/jeroen/curl/)
+
+Apart from needing to agree to the Minecraft EULA before beginning the installation, all scripts are non-interactive and self-documenting.
+
+It is recommended to regularly clean the server cache, conveniently located under the *cache* directory. At a minimum, if the server is externally accessible, user-uploaded data (identified by the "userData" prefix) should be regularly scrubbed.
+
+The PiMPCraft stack is comprised of three distinct components: the [Spigot](https://www.spigotmc.org/) Minecraft server, with the [ScriptCraft](https://scriptcraftjs.org/), [WorldEdit](https://dev.bukkit.org/projects/worldedit) and [WorldGuard](https://dev.bukkit.org/projects/worldguard) plugins installed, a [plumber](https://www.rplumber.io/) server and a [Shiny](https://shiny.rstudio.com/) server. Access to the Spigot console, as well as the logging output of the other two components, is provided via separate GNU Screen sessions.
+
+[1]: Individual components are cross-platform and have been tested on Windows, however no installation or launch infrastructure is currently provided for that platform.
+
+[2]: Eduroam is known to block this port in some locations.
+
+<a name ="known-bugs"></a>
+
+### Known bugs
+* Pathway selection from the network map may occasionally malfunction and produce an error message. Resetting the session, either by using the `/jsp reset` command or by quitting and rejoining the server, fixes the issue.
+
+<a name ="license"></a>
+
 ### License
 
-When released, PiMPCraft will (probably) be available under the GNU GPL. No promises.
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Incorporates code from bresenham-js, available under the MIT license.
