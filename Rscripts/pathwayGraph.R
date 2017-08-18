@@ -78,8 +78,7 @@ if(file.exists(outputSink)){
   #Then if there are more occurrences in targets, duplicate them
   #Else, if there's only one occurrence in sources, leave that alone and duplicate targets
   #Else, duplicate all targets but the first
-  #TODO1: PROPERLY DETERMINE THRESHOLD
-  #TODO2: IMPLEMENT LIST-BASED NODE FILTERING
+  #NOTE: Threshold has been chosen empirically
   for(i in 0:(length(allNodes$localID) - 1)){
     if(tolower(allNodes[i+1,]$chemName) %in% knownSides || (sum(allLinks$source == i) + sum(allLinks$target == i) > 5 && allNodes[i+1,]$biologicalType == "metabolite")){
       allNodes[i+1,]$biologicalType <- "sideMetabolite"
