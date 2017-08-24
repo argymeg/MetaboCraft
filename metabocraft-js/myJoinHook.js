@@ -29,7 +29,7 @@ function getPlayerInfo(){
 
 //Show welcome message and player info
 function showGreeting(){
-  echo(player, "Welcome to PiMPCraft, " + player.name + "!");
+  echo(player, "Welcome to MetaboCraft, " + player.name + "!");
   echo(player, "You are seeing BioSource " + store[player.name]['bioSource'] + ".");
   echo(player, "Your selected map layout is: " + store[player.name]['mapMode'] + ".");
   if(store[player.name]['fileList'].length > 0){

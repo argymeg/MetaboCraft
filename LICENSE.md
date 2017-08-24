@@ -1,4 +1,4 @@
-## License for PiMPCraft
+## License for MetaboCraft
 
 ### GNU GENERAL PUBLIC LICENSE
 

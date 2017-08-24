@@ -5,9 +5,9 @@ readonly SPIGOT_FILENAME=spigot-$SPIGOT_VER.jar
 readonly PLUMBER_FILENAME=startPlumber.R
 readonly SHINY_FILENAME=startShiny.R
 readonly SPIGOT_DIR=spigot
-readonly SPIGOT_SCREEN_NAME=pimpcraftSpigot
-readonly PLUMBER_SCREEN_NAME=pimpcraftPlumber
-readonly SHINY_SCREEN_NAME=pimpcraftShiny
+readonly SPIGOT_SCREEN_NAME=metabocraftSpigot
+readonly PLUMBER_SCREEN_NAME=metabocraftPlumber
+readonly SHINY_SCREEN_NAME=metabocraftShiny
 
 cd $SPIGOT_DIR
 screen -dmS $SPIGOT_SCREEN_NAME
@@ -34,7 +34,7 @@ screen -S $SHINY_SCREEN_NAME -p 0 -X stuff "./$SHINY_FILENAME &
 sleep 5;
 if screen -ls | grep -q $SPIGOT_SCREEN_NAME && screen -ls | grep -q $PLUMBER_SCREEN_NAME && screen -ls | grep -q $SHINY_SCREEN_NAME
 then
-  printf "PiMPCraft is up and running!\nYou can now access your local PiMPCraft homepage at\nhttp://localhost:32909/\n"
+  printf "MetaboCraft is up and running!\nYou can now access your local MetaboCraft homepage at\nhttp://localhost:32909/\n"
 else
-  echo "Something went wrong. You can try starting the PiMPCraft components individually (see documentation)."
+  echo "Something went wrong. You can try starting the MetaboCraft components individually (see documentation)."
 fi

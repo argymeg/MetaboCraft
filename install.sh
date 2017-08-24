@@ -14,7 +14,7 @@ readonly WORLDGUARD_SOURCE=https://dev.bukkit.org/projects/worldguard/files/9567
 readonly WORLDGUARD_DEST=worldguard-6.2.jar
 readonly -a INST_DEPENDS=( curl java screen Rscript git )
 readonly -a INST_RDEPENDS=( igraph jsonlite shiny plumber markdown curl )
-readonly JSCRIPT_DIR=pimpcraft
+readonly JSCRIPT_DIR=metabocraft-js
 readonly RSCRIPT_DIR=Rscripts
 readonly MODULE_DIR=modules
 readonly SPIGOT_DIR=spigot
@@ -32,8 +32,8 @@ function downloadFile {
   fi
 }
 
-printf "\nWelcome to the PiMPCraft installer!\nThis script will download, compile and install everything you need\nto run PiMPCraft on your local computer.\nPlease read the documentation before proceeding!\n\n" | tee $INST_LOG_FILE
-printf "In order to run the Spigot server, necesssary to run PiMPCraft,\nyou need to agree to the Minecraft EULA, which you can read at\nhttps://account.mojang.com/documents/minecraft_eula\n\n!!!BY PROCEEDING YOU INDICATE YOUR AGREEMENT TO THE MINECRAFT EULA!!!\n" | tee $INST_LOG_FILE
+printf "\nWelcome to the MetaboCraft installer!\nThis script will download, compile and install everything you need\nto run MetaboCraft on your local computer.\nPlease read the documentation before proceeding!\n\n" | tee $INST_LOG_FILE
+printf "In order to run the Spigot server, necesssary to run MetaboCraft,\nyou need to agree to the Minecraft EULA, which you can read at\nhttps://account.mojang.com/documents/minecraft_eula\n\n!!!BY PROCEEDING YOU INDICATE YOUR AGREEMENT TO THE MINECRAFT EULA!!!\n" | tee $INST_LOG_FILE
 printf "Proceed? [y/N] "
 read answer
 if [ "$answer" != "y" ]
@@ -43,7 +43,7 @@ fi
 
 if [ ! -d $JSCRIPT_DIR ] || [ ! -d $RSCRIPT_DIR ] || [ ! -d $MODULE_DIR ]
 then
-  printf "PiMPCraft files missing!\nEnsure you are running the install script inside\nthe full PiMPCraft directory as downloaded and try again.\n" | tee -a $INST_LOG_FILE
+  printf "MetaboCraft files missing!\nEnsure you are running the install script inside\nthe full MetaboCraft directory as downloaded and try again.\n" | tee -a $INST_LOG_FILE
   exit
 fi
 
@@ -115,11 +115,11 @@ printf "build-permission-nodes:\n    enable: true\n    deny-message: \'\'\n" > p
 echo "OK" | tee -a $INST_LOG_FILE
 
 #And some hardcoded directories here
-printf "Installing PiMPCraft on server... " | tee -a $INST_LOG_FILE
+printf "Installing MetaboCraft on server... " | tee -a $INST_LOG_FILE
 mkdir -p scriptcraft/plugins
-ln -s $INST_START_DIR/pimpcraft scriptcraft/plugins/
+ln -s $INST_START_DIR/$JSCRIPT_DIR scriptcraft/plugins/
 mkdir scriptcraft/modules
-ln -s $INST_START_DIR/modules/* scriptcraft/modules
+ln -s $INST_START_DIR/$MODULE_DIR/* scriptcraft/modules
 echo "OK" | tee -a $INST_LOG_FILE
 
 printf "Initialising server... " | tee -a $INST_LOG_FILE

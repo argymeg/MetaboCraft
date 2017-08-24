@@ -51,15 +51,15 @@ server <- function(input, output) {
 }
 
 ui <- fluidPage(
-  titlePanel("PiMPCraft Home"),
+  titlePanel("MetaboCraft Home"),
   sidebarLayout(position = "right",
-    sidebarPanel(h4("This is the PiMPCraft file uploader."),
+    sidebarPanel(h4("This is the MetaboCraft file uploader."),
                  "Data uploaded will only be available to the player with the specified username, so ensure it is entered correctly.",
                  br(), br(),
                  "After uploading your data, you can view it by connecting to the Minecraft server located on the same host as this page.",
                  br(), br(),
-                 HTML('The PiMPCraft README is included on this page (you might want to jump to the <a href="#the-client-side">client section</a>).
-                      Full documentation and source code are available on <a href = "https://github.com/argymeg/PiMPCraft">GitHub</a>.'),
+                 HTML('The MetaboCraft README is included on this page (you might want to jump to the <a href="#the-client-side">client section</a>).
+                      Full documentation and source code are available on <a href = "https://github.com/argymeg/MetaboCraft">GitHub</a>.'),
                  br(), br(),
                  h4("Example datasets"),
                  h5("Example 1"),
