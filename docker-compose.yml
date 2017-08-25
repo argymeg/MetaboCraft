@@ -1,14 +1,10 @@
 version: '3.3'
 
 services:
-#    spigot:
-#    plumber:
-#    shiny:
-
     pimpcraft:
-        image: ${PIMPCRAFT_IMAGE}
+        image: ${METABOCRAFT_IMAGE-metabocraft:latest}
         build: .
         ports:
-            - "${EXTERNAL_PORT}:32909"
+            - "${EXTERNAL_PORT-80}:32909"
             - "25565:25565"
         command: ./start_docker.sh
