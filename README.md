@@ -126,7 +126,7 @@ The MetaboCraft stack is comprised of three distinct components: the [Spigot](ht
 
 MetaboCraft can be run as a [Docker](https://docker.com/) container. This contains everything needed
 to run the server. The image is at
-https://hub.docker.com/r/ronandaly/metabocraft/ and can be downloaded with ```docker pull ronandaly/metabocraft``` once Docker is installed correctly.
+https://hub.docker.com/r/ronandaly/metabocraft/ and can be downloaded with ```docker pull ronandaly/metabocraft``` once Docker is installed correctly. Note that you need to agree to the Minecraft EULA, which you can read at https://account.mojang.com/documents/minecraft_eula, in order to run a container.
 
 To run the container from [Kitematic](https://kitematic.com) (included with Docker installs), simply search for ```metabocraft``` and ```CREATE``` a
 container. Take note of the port mapped to 25565 - this is the host and port
