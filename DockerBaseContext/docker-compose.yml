@@ -1,0 +1,6 @@
+version: '3.3'
+
+services:
+    pimpcraft-base:
+        image: pimpcraft-base
+        build: .
