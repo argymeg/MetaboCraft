@@ -5,8 +5,9 @@ MetaboCraft is a [Minecraft](https://www.minecraft.net/) plugin designed for vis
 ## Contents
 1. [The client side](#the-client-side)
 2. [The server side](#the-server-side)
-3. [Known bugs](#known-bugs)
-4. [License](#license)
+3. [Running in Docker](#docker)
+4. [Known bugs](#known-bugs)
+5. [License](#license)
 
 
 <a name ="the-client-side"></a>
@@ -118,6 +119,24 @@ The MetaboCraft stack is comprised of three distinct components: the [Spigot](ht
 [1]: Individual components are cross-platform and have been tested on Windows, however no installation or launch infrastructure is currently provided for that platform.
 
 [2]: Eduroam is known to block this port in some locations.
+
+<a name ="docker"></a>
+
+### Docker
+
+MetaboCraft can be run as a [Docker](https://docker.com/) container. This contains everything needed
+to run the server. The image is at
+https://hub.docker.com/r/ronandaly/metabocraft/ and can be downloaded with ```docker pull ronandaly/metabocraft``` once Docker is installed correctly.
+
+To run the container from [Kitematic](https://kitematic.com) (included with Docker installs), simply search for ```metabocraft``` and ```CREATE``` a
+container. Take note of the port mapped to 25565 - this is the host and port
+that needs to be put into the minecraft client. Also take note of the port mapped to 32909 - this is the url that needs to be entered to upload data.
+
+To run the container from the command line, run
+
+    docker run -p 25565:25565 -p 80:32909 ronandaly/metabocraft
+
+This will set up a container, with default minecraft and webserver ports.
 
 <a name ="known-bugs"></a>
 
