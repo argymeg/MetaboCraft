@@ -39,6 +39,6 @@ COPY . /home/metabocraft/metabocraft
 RUN chown -R metabocraft:metabocraft /home/metabocraft
 USER metabocraft
 WORKDIR /home/metabocraft/metabocraft
-RUN ./install.sh
 EXPOSE 25565 32909
+ENV WEAREINDOCKER=1
 CMD ./start_docker.sh
