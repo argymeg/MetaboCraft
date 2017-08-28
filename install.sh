@@ -32,10 +32,7 @@ function downloadFile {
   fi
 }
 
-if [ $WEAREINDOCKER ]
-then
-  printf "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\nREMEMBER: BY RUNNING THIS CONTAINER,\nYOU ARE AGREEING TO THE MINECRAFT EULA AT:\nhttps://account.mojang.com/documents/minecraft_eula\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n"
-else
+if [ -z $WEAREINDOCKER ]; then
   printf "\nWelcome to the MetaboCraft installer!\nThis script will download, compile and install everything you need\nto run MetaboCraft on your local computer.\nPlease read the documentation before proceeding!\n\n" | tee $INST_LOG_FILE
   printf "In order to run the Spigot server, necesssary to run MetaboCraft,\nyou need to agree to the Minecraft EULA, which you can read at\nhttps://account.mojang.com/documents/minecraft_eula\n\n!!!BY PROCEEDING YOU INDICATE YOUR AGREEMENT TO THE MINECRAFT EULA!!!\n" | tee $INST_LOG_FILE
   printf "Proceed? [y/N] "
