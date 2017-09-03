@@ -34,7 +34,12 @@ screen -S $SHINY_SCREEN_NAME -p 0 -X stuff "./$SHINY_FILENAME &
 sleep 5;
 if screen -ls | grep -q $SPIGOT_SCREEN_NAME && screen -ls | grep -q $PLUMBER_SCREEN_NAME && screen -ls | grep -q $SHINY_SCREEN_NAME
 then
-  printf "MetaboCraft is up and running!\nYou can now access your local MetaboCraft homepage at\nhttp://localhost:32909/\n"
+  if [ $WEAREINDOCKER ]
+  then
+    printf "MetaboCraft is up and running!\nYou can now access your MetaboCraft homepage at\nport 32909 (or the port it is mapped to) on this server.\n"
+  else
+    printf "MetaboCraft is up and running!\nYou can now access your local MetaboCraft homepage at\nhttp://localhost:32909/\n"
+  fi
 else
   echo "Something went wrong. You can try starting the MetaboCraft components individually (see documentation)."
 fi
