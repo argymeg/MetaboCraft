@@ -122,7 +122,7 @@ The MetaboCraft stack is comprised of three distinct components: the [Spigot](ht
 
 <a name ="docker"></a>
 
-### Docker
+## Docker
 
 MetaboCraft can be run as a [Docker](https://docker.com/) container. This contains everything needed
 to run the server. The image is at
@@ -140,12 +140,12 @@ This will set up a container, with default minecraft and webserver ports.
 
 <a name ="known-bugs"></a>
 
-### Known bugs
+## Known bugs
 * Pathway selection from the network map may occasionally malfunction and produce an error message. Resetting the session, either by using the `/jsp reset` command or by quitting and rejoining the server, fixes the issue.
 
 <a name ="license"></a>
 
-### License
+## License
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
