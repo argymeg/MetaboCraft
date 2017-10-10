@@ -15,8 +15,8 @@ MetaboCraft is a [Minecraft](https://www.minecraft.net/) plugin designed for vis
 ## The client side
 
 ### Requirements:
-* A computer meeting the Minecraft [system requirements](https://help.mojang.com/customer/en/portal/articles/325948-minecraft-system-requirements)
-* [Minecraft](https://minecraft.net/) version 1.11.2 (see [here](https://help.mojang.com/customer/portal/articles/1475923-changing-game-versions) for help)
+* A computer meeting the Minecraft [system requirements](https://help.mojang.com/customer/en/portal/articles/325948-minecraft-system-requirements) - mobile and console editions are not currently supported
+* [Minecraft](https://minecraft.net/) version 1.11.2 (see [here](https://help.mojang.com/customer/portal/articles/1475923-changing-game-versions) for help) and a valid Minecraft account
 * Any modern web browser
 
 ### User interface
@@ -123,6 +123,8 @@ The MetaboCraft stack is comprised of three distinct components: the [Spigot](ht
 <a name ="docker"></a>
 
 ## Docker
+
+> NOTE: You will still need to separately install the Minecraft client to access MetaboCraft.
 
 MetaboCraft can be run as a [Docker](https://docker.com/) container. This contains everything needed
 to run the server. The image is at
