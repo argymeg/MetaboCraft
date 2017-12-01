@@ -1,7 +1,7 @@
 version: '3.3'
 
 services:
-    pimpcraft:
+    metabocraft:
         image: ${METABOCRAFT_IMAGE-metabocraft:latest}
         build: .
         ports:

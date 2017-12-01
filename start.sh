@@ -36,7 +36,10 @@ if screen -ls | grep -q $SPIGOT_SCREEN_NAME && screen -ls | grep -q $PLUMBER_SCR
 then
   if [ $WEAREINDOCKER ]
   then
-    printf "MetaboCraft is up and running!\nYou can now access your MetaboCraft homepage at\nport 32909 (or the port it is mapped to) on this server.\n"
+    printf "MetaboCraft is up and running!\nYou can now access your MetaboCraft homepage at the port it is mapped to on this server.\n"
+    printf "For example if you published the service at port 80,\n"
+    printf "using docker run -p 25565:25565 -p 80:32909 ronandaly/metabocraft\n"
+    printf "you can access the homepage at http://localhost/\n"
   else
     printf "MetaboCraft is up and running!\nYou can now access your local MetaboCraft homepage at\nhttp://localhost:32909/\n"
   fi

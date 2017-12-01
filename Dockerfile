@@ -31,14 +31,13 @@ RUN wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/downloa
     chmod +x /usr/local/bin/gosu
 
 COPY docker-entrypoint.sh /usr/local/bin/
-RUN groupadd metabocraft && useradd -g metabocraft -m metabocraft
 #RUN mkdir -m o-w -p /home/pimpcraft/static /home/pimpcraft/media
-COPY install_r_packages.sh /home/metabocraft/metabocraft/install_r_packages.sh
+RUN groupadd metabocraft && useradd -g metabocraft -m metabocraft
+COPY --chown=metabocraft:metabocraft install_r_packages.sh /home/metabocraft/metabocraft/install_r_packages.sh
 RUN /home/metabocraft/metabocraft/install_r_packages.sh
-COPY . /home/metabocraft/metabocraft
-RUN chown -R metabocraft:metabocraft /home/metabocraft
 USER metabocraft
 WORKDIR /home/metabocraft/metabocraft
+COPY --chown=metabocraft:metabocraft . /home/metabocraft/metabocraft
 ENV WEAREINDOCKER=1
 RUN ./install.sh
 EXPOSE 25565 32909
