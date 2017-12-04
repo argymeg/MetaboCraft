@@ -39,6 +39,8 @@ USER metabocraft
 WORKDIR /home/metabocraft/metabocraft
 COPY --chown=metabocraft:metabocraft . /home/metabocraft/metabocraft
 ENV WEAREINDOCKER=1
+ENV DISALLOW_PLACING_BLOCKS=true
 RUN ./install.sh
 EXPOSE 25565 32909
-CMD ./start_docker.sh
+#CMD ./start_docker.sh
+CMD /bin/bash -c "envsubst < /home/metabocraft/metabocraft/spigot/plugins/WorldGuard/config.yml.template > /home/metabocraft/metabocraft/spigot/plugins/WorldGuard/config.yml && ./start_docker.sh"

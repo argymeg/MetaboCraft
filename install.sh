@@ -171,4 +171,8 @@ else
   done
 fi
 
+# This is to enable dynamically changing whether to be able to place blocks
+# inside the docker container
+tr '\n' '\t' <  plugins/WorldGuard/config.yml | sed 's/build-permission-nodes:\t    enable: true/build-permission-nodes:\t    enable: ${DISALLOW_PLACING_BLOCKS}/' | tr '\t' '\n' >  plugins/WorldGuard/config.yml.template
+
 echo "Done!" | tee -a $INST_LOG_FILE
