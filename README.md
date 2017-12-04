@@ -2,6 +2,8 @@
 
 MetaboCraft is a [Minecraft](https://www.minecraft.net/) plugin designed for visualisation of metabolomic data. It can plot metabolic network maps, as well as 3D graphs of individual metabolic pathways, from data provided by [MetExplore](http://metexplore.toulouse.inra.fr/). It can also display the effects of experimental conditions on the metabolome, using data obtained from [PiMP](http://polyomics.mvls.gla.ac.uk/).
 
+A short demonstration video for MetaboCraft is available [here](https://youtu.be/fKgERGLc6Nc).
+
 ## Contents
 1. [The client side](#the-client-side)
 2. [The server side](#the-server-side)
