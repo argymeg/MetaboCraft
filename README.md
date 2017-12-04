@@ -140,6 +140,18 @@ To run the container from the command line, run
 
 This will set up a container, with default minecraft and webserver ports.
 
+## Block editing
+
+If you wish to allow block editing, a configuration file needs to be changed. The
+file ```spigot/plugins/WorldGuard/config.yml``` needs to be changed, and the key
+```enable```, under ```build-permission-nodes``` must be set to false.
+
+If running under docker, this can be achieved by passing the environment variable
+DISALLOW_PLACING_BLOCKS set to false. This can be done by
+
+    docker run -e DISALLOW_PLACING_BLOCKS=false -p 25565:25565 -p 80:32909 ronandaly/metabocraft
+
+
 <a name ="known-bugs"></a>
 
 ## Known bugs
